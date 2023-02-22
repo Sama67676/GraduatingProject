@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1049085657671",
+    "project_id": "transformediraqiaproject",
+    "storage_bucket": "transformediraqiaproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1049085657671:android:437069d6f05cb861182762",
+        "android_client_info": {
+          "package_name": "com.example.graduating_project_transformed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1049085657671-o2h8andaugfe0trv219oqb2vktc6oqsk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvTvNadP6zjX7YdjM8Vfyl8FgPRXjMPm0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1049085657671-o2h8andaugfe0trv219oqb2vktc6oqsk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
