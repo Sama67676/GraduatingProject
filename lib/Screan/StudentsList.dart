@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../Others/auth_notifier.dart';
+import 'Chat_screan.dart';
 
 class StudentsListScreen extends StatelessWidget {
   const StudentsListScreen({super.key});
@@ -74,6 +78,7 @@ class StudentsListScreen extends StatelessWidget {
                                 child: Text(
                                   'Students',
                                   style: TextStyle(
+                                     fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                       fontSize: 20, color: Colors.black),
                                 ),
                               ),
@@ -197,7 +202,9 @@ class StudentLine extends StatelessWidget {
                   width: 180,
                   child: Text(
                     '$userName',
-                    style: const TextStyle(fontSize: 20, color: Colors.black),
+                    style: const TextStyle(
+                       fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                      fontSize: 20, color: Colors.black),
                     maxLines: 2,
                     overflow: TextOverflow.fade,
                   ),
@@ -206,8 +213,80 @@ class StudentLine extends StatelessWidget {
             ]),
           ),
         ),
-        onTap: () {},
+   onTap: () {
+ AuthNotifier _authNotifer =
+              Provider.of<AuthNotifier>(context, listen: false);
+          if (_authNotifer.user != null) {
+            final String? currentUserName =
+                _authNotifer.userDetails!.displayName;
+            generateChatRoomId(
+                context,
+                currentUserName!,
+                userName!,
+                uid,
+                _authNotifer,
+                imageUrl,
+                FirebaseAuth.instance.currentUser!.uid);
+          }
+        },
       ),
     );
   }
+}
+
+
+void generateChatRoomId(BuildContext context, String currentUserName,
+    String friendName, frienduid, _authNotifer, profilePic, currentUser) async {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+  String chatRoomId= getChatRoomId(currentUserName, friendName);
+  List<String?> chatUsers = [friendName, currentUserName];
+  List<dynamic> usersId = [frienduid,currentUser];
+  Map<String, dynamic> chatRoomMap = {'chatRoomId':chatRoomId,'users': chatUsers, 'uids': usersId};
+
+DocumentSnapshot chatRoomExisting= await firestore.collection('chatRoom').doc(chatRoomId).get();
+  if (chatRoomExisting.exists){
+   // ignore: use_build_context_synchronously
+   callChatScreen(context, friendName, frienduid, _authNotifer, profilePic,
+            chatRoomId, currentUser);}
+            else if(!chatRoomExisting.exists){
+              Map<String, dynamic> myDetails ={'chatRoom': chatRoomId, 'friend': currentUser};
+              firestore.collection('users').doc(frienduid).update({
+             "friendsId": FieldValue.arrayUnion([myDetails])
+           
+            });
+             Map<String, dynamic> friendDetails ={'chatRoom': chatRoomId, 'friend': frienduid};
+            firestore.collection('users').doc(currentUser).update({
+              "friendsId": FieldValue.arrayUnion([friendDetails])
+            });
+              firestore.collection('chatRoom').doc(chatRoomId).set(chatRoomMap).then((value) => callChatScreen(context, friendName, frienduid, _authNotifer, profilePic,
+            chatRoomId, currentUser));
+
+            
+            }
+}
+
+
+String getChatRoomId(String user1, String user2){
+  if (user1[0].toLowerCase().codeUnits[0] > user2[0].toLowerCase().codeUnits[0]){
+    return "$user1$user2";
+  }else{
+    return '$user2$user1';
+  }
+}
+
+
+void callChatScreen(BuildContext context, Name, frienduid, _authNotifer, profilePic,
+    chatRoomId, currentUser) {
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (contex) => Cahtscrean(
+                friendName: Name,
+                frienduid: frienduid,
+                authNotifier: _authNotifer,
+                profilePic: profilePic,
+                chatRoomId: chatRoomId,
+                currentUser: currentUser,
+           
+              )));
 }

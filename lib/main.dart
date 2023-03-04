@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,10 +16,11 @@ import 'Screan/Signin.dart';
 import 'Screan/menuScreen.dart';
 import 'Screan/newUserScreen.dart';
 
-import 'Others/allUsers.dart';
+import 'Screan/ChatList.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 
+import 'Widgets/MyIcons.dart';
 import 'others/groupList.dart';
 
 void main() async {
@@ -35,21 +38,33 @@ class My extends StatefulWidget {
 
 class _MyState extends State<My> {
   final _auth = FirebaseAuth.instance;
+  late StreamSubscription<User?> user;
+  
 
   @override
   void initState() {
     super.initState();
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
+         user = FirebaseAuth.instance.authStateChanges().listen((user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        print('User is signed in!');
+      }
+    });
+        
   }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
+    
     return MaterialApp(
+      
       home: const ButtomNavigationBar(),
-      initialRoute: AuthNotifier().user == null
+      initialRoute: FirebaseAuth.instance.currentUser == null 
           ? SignIn.ScreanRoute
           : ButtomNavigationBar.ScreanRoute,
       routes: {
@@ -88,7 +103,7 @@ class _ButtomNavigationBarState extends State<ButtomNavigationBar> with WidgetsB
 void setStatus(String status)async{
   AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
- await _firestore.collection('users').doc(authNotifier.userDetails!.uid).update({'onlineStatus': status});
+ await _firestore.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update({'onlineStatus': status});
 }
 
 @override
@@ -99,14 +114,16 @@ void setStatus(String status)async{
     setStatus('online');
   }
 
-@override
-void didChangeAppLifecycleState(AppLifecycleState state) {
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      setStatus('online');
-    }else{
-setStatus('offline');
+      // online
+      setStatus("Online");
+    } else {
+      // offline
+      setStatus("Offline");
     }
-   
   }
 
 
@@ -127,34 +144,40 @@ setStatus('offline');
           items: [
             /// Home
             SalomonBottomBarItem(
-              icon: const Icon(Icons.home),
-              title: const Text("Home"),
-              selectedColor: Colors.indigo.shade900,
+              icon: const Icon(MyFlutterApp.home_circled,),
+              activeIcon: const Icon(MyFlutterApp.home_circled,color: Color.fromARGB(255, 8, 61, 104)),
+              title: const Text("Home", style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),  fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),),
+              unselectedColor: Color.fromARGB(255, 8, 61, 104),
+              selectedColor: Color.fromARGB(255, 8, 61, 104),
             ),
 
             /// Likes
             SalomonBottomBarItem(
               icon: const Icon(Icons.group),
-              title: const Text("groups"),
+          
+              title: const Text("Groups", style: TextStyle( fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),),
+               unselectedColor: Colors.indigo.shade900,
               selectedColor: Colors.indigo.shade900,
             ),
 
             /// Search
             SalomonBottomBarItem(
               icon: const Icon(Icons.book),
-              title: const Text("Clases"),
+              title: const Text("Clases", style: TextStyle( fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),),
+               unselectedColor: Colors.indigo.shade900,
               selectedColor: Colors.indigo.shade900,
             ),
             SalomonBottomBarItem(
               icon: const Icon(Icons.edit_calendar),
-              title: const Text("schedule"),
+              title: const Text("schedule", style: TextStyle( fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),),
               selectedColor: Colors.indigo.shade900,
             ),
 
             /// Profile
             SalomonBottomBarItem(
               icon: const Icon(Icons.menu),
-              title: const Text("Menu"),
+              title: const Text("Menu", style: TextStyle( fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),),
+               unselectedColor: Colors.indigo.shade900,
               selectedColor: Colors.indigo.shade900,
             ),
           ],

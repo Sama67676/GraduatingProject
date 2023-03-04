@@ -69,11 +69,13 @@ class MenuScreen extends StatelessWidget {
                                     Text(
                                       'Name',
                                       style: TextStyle(
+                                         fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                           fontSize: 20, color: Colors.black),
                                     ),
                                     Text(
                                       'See your profile',
                                       style: TextStyle(
+                                         fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                           fontSize: 15, color: Colors.black26),
                                     ),
                                   ],
@@ -230,8 +232,9 @@ class MenuScreen extends StatelessWidget {
                           const Expanded(
                             flex: 4,
                             child: Text(
-                              'Settings & privacy',
+                              'Help & Support',
                               style: TextStyle(
+                                 fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                 color: Color.fromARGB(255, 8, 61, 104),
                                 fontSize: 18,
                               ),
@@ -275,6 +278,7 @@ class MenuScreen extends StatelessWidget {
                         child: Text(
                           'Settings & privacy',
                           style: TextStyle(
+                             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                             color: Color.fromARGB(255, 8, 61, 104),
                             fontSize: 18,
                           ),
@@ -324,7 +328,8 @@ Container creatMenu(String MenuName, Image image) {
               padding: const EdgeInsets.all(8),
               child: Text(
                 '$MenuName',
-                style: const TextStyle(fontSize: 20, color: Colors.black),
+                style: const TextStyle(fontSize: 20, color: Colors.black,
+                 fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),
               ),
             ),
           ],

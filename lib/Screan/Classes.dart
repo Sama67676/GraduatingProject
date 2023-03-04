@@ -55,6 +55,7 @@ class ClassesScreen extends StatelessWidget {
                           Text('Internet Programming',
                               style: TextStyle(
                                 fontSize: 25,
+                                 fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                 color: Colors.indigo[900],
                               )),
                           const SizedBox(
@@ -63,6 +64,7 @@ class ClassesScreen extends StatelessWidget {
                           Text(
                             'HTML - JavaScript',
                             style: TextStyle(
+                               fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                               fontSize: 15,
                               color: Colors.indigo[900],
                             ),
@@ -85,6 +87,7 @@ class ClassesScreen extends StatelessWidget {
                               ),
                               Text('Wasseem Nahi',
                                   style: TextStyle(
+                                     fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                     fontSize: 15,
                                     color: Colors.black45,
                                   ))

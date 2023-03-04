@@ -179,6 +179,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           '$Name',
                           textAlign: TextAlign.start,
                           style: TextStyle(
+                             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                               fontSize: 20, color: Colors.indigo[900]),
                         ),
                       ),
@@ -191,6 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           '$department' + ' ' + '$year' + ' ' + 'year',
                           textAlign: TextAlign.start,
                           style: TextStyle(
+                             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                               fontSize: 20, color: Colors.indigo[900]),
                         ),
                       ),
@@ -203,6 +205,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           'bio',
                           textAlign: TextAlign.start,
                           style: TextStyle(
+                             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                               fontSize: 20, color: Colors.indigo[900]),
                         ),
                       ),
@@ -224,6 +227,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Text('$status',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
+                                   fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                     fontSize: 20, color: Colors.indigo[900])),
                           ),
                         ),
@@ -242,16 +246,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onPressed: () {
                           AuthNotifier authNotifier =
                               Provider.of<AuthNotifier>(context, listen: false);
-                          if (authNotifier.user != null) {
+                          
                             _authintication.signout(authNotifier, context);
-                          }
+                          
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: const Text(
                             'Log out',
                             style: TextStyle(
-                                color: Color.fromARGB(255, 22, 20, 20),
+                               fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                color: Colors.white,
                                 fontSize: 15),
                           ),
                         ),
@@ -267,27 +272,3 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
-
-// String? StatusChanges;
-// Future openDialog() => showDialog(
-//     context: context,
-//     builder: (context) => AlertDialog(
-//           title: const Text("Change Status"),
-//           content: TextField(
-//             autofocus: true,
-//             decoration: InputDecoration(hintText: 'Enter your new status'),
-//             onChanged:  (value) {
-//                       StatusChanges = value;
-//                     },
-//           ),
-//           actions: [
-//             IconButton(
-//                 icon: Icon(Icons.check_box),
-//                 onPressed: () {
-//                   final DocUser =
-//                       FirebaseFirestore.instance.collection('users').doc('uid');
-//                   DocUser.update({'Status': StatusChanges});
-//                   Navigator.pop(context);
-//                 })
-//           ],
-//         ));

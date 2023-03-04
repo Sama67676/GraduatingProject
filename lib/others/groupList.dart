@@ -92,7 +92,7 @@ class groupStreamBuilder extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            List<userLine> userWidgets = [];
+            List<groupLine> userWidgets = [];
             final groups = snapshot.data!.docs;
             for (var group in groups) {
               final groupName = group.get('groupName');
@@ -100,7 +100,7 @@ class groupStreamBuilder extends StatelessWidget {
               final groupPic = group.get('groupImage');
     
 
-              final userWidget = userLine(
+              final userWidget = groupLine(
                   groupName: groupName,
                   groupId: groupId,
                   groupPic: groupPic,
@@ -121,8 +121,8 @@ class groupStreamBuilder extends StatelessWidget {
   }
 }
 
-class userLine extends StatelessWidget {
-   userLine(
+class groupLine extends StatelessWidget {
+   groupLine(
       {  this.groupName,  this.groupId,  this.groupPic, super.key, });
 
   final String? groupName;
@@ -182,7 +182,7 @@ class userLine extends StatelessWidget {
         onTap: () {
        AuthNotifier _authNotifer =
               Provider.of<AuthNotifier>(context, listen: false);
-              callChatScreen(context, _authNotifer, groupName!, groupPic!, groupId!, uid);
+              callGroupChatScreen(context, _authNotifer, groupName!, groupPic!, groupId!, uid);
             
                       },
       ),
@@ -191,7 +191,7 @@ class userLine extends StatelessWidget {
 }
 
 
-void callChatScreen(BuildContext context, authNotifer, groupName, groupPic,
+void callGroupChatScreen(BuildContext context, authNotifer, groupName, groupPic,
     groupId, currentUser) {
   Navigator.push(
       context,

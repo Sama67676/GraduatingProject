@@ -1,10 +1,15 @@
 // ignore_for_file: sort_child_properties_last
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:graduating_project_transformed/Screan/Chat_screan.dart';
-import 'package:graduating_project_transformed/others/groupList.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 import '../main.dart';
 import 'AddPeople.dart';
@@ -48,6 +53,8 @@ final String? groupImage;
     });
   }
 
+
+  
   @override
   void initState() {
     super.initState();
@@ -112,11 +119,14 @@ final String? groupImage;
           ),
 ),
 onSelected: (result) {
+  if (result == '1'){
+    changeGroupDetails(context, groupId);
+  }
     if (result == '2') {
-      onAlert( context, groupId, 'Are you sure you want to delete this group?', onLeaveGroup(groupId, context) as Function);
+      AlertLeavingGroup( context, groupId,);
      
     } else if(result == '3'){
-      onAlert( context, groupId, 'Are you sure you want to delete this group?', onDeleteGroup(groupId, context) as Function);
+      AlertDeletingGroup(context, groupId);
     }
 },
                       ),
@@ -225,33 +235,6 @@ onSelected: (result) {
   }
 }
 
-
-
-
-
-// showPopupMenu(context){
-//     showMenu<String>(
-//       context: context,
-     
-//       position: const RelativeRect.fromLTRB(25.0, 40.0, 20.0, 0.0),  //position where you want to show the menu on screen
-//       items: [
-//         const PopupMenuItem(
-//            child: Text('Edit group Details', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104), fontSize: 20),), value: '1'),
-//         const PopupMenuItem<String>(
-//             child: Text('Leave Group', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104), fontSize: 20),), value: '2'),
-//         const PopupMenuItem<String>(
-//             child: Text('Delete group', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104), fontSize: 20),), value: '3'),
-//       ],
-//       elevation: 4,
-//         shape: const RoundedRectangleBorder(
-//           borderRadius: BorderRadius.all(
-//                Radius.circular(35),
-//           ),
-// ),
-//     );
-// }
-
-
   Future removeMembers(int index, String groupId ) async {
     String uid = membersList[index]['uid'];
     print(uid);
@@ -329,10 +312,10 @@ Future onLeaveGroup(groupId, context) async {
       );
   }
 
-Future<void> onAlert(context,groupId,String contextText, Function ApproveFunction) async{
+Future<void> AlertLeavingGroup(context,groupId) async{
        return showDialog<void>(
     context: context,
-    barrierDismissible: false, // user must tap button!
+    barrierDismissible: false, 
     builder: (BuildContext context) {
       return AlertDialog(
         contentPadding: const EdgeInsets.all(30),
@@ -340,7 +323,7 @@ Future<void> onAlert(context,groupId,String contextText, Function ApproveFunctio
        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(35))),
        
-        content:Text(contextText),
+        content:Text('Are you sure you want to leave this group?'),
         actions: <Widget>[
           TextButton(
             child: const Text('Cancel'),
@@ -352,7 +335,8 @@ Future<void> onAlert(context,groupId,String contextText, Function ApproveFunctio
           TextButton(
             child: const Text('Approve'),
             onPressed: () {
-               ApproveFunction;
+               
+               onLeaveGroup(groupId, context);
               Navigator.of(context).pop();
             },
           ),
@@ -360,6 +344,143 @@ Future<void> onAlert(context,groupId,String contextText, Function ApproveFunctio
       );
     },
   );
- 
-
   }
+  
+Future<void> AlertDeletingGroup(context,groupId) async{
+       return showDialog<void>(
+    context: context,
+    barrierDismissible: false, 
+    builder: (BuildContext context) {
+      return AlertDialog(
+        contentPadding: const EdgeInsets.all(30),
+        actionsPadding: const EdgeInsets.only(left:20, right: 20, bottom: 20),
+       shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(35))),
+       
+        content:Text('Are you sure you want to delete this group?'),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+             
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Approve'),
+            onPressed: () {
+              onDeleteGroup(groupId, context);
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+  }
+
+
+Future<void> changeGroupDetails(context,groupId) async{
+  final TextEditingController NewName = TextEditingController();
+       return showDialog<void>(
+    context: context,
+    barrierDismissible: false, 
+    builder: (BuildContext context) {
+      return AlertDialog(
+        contentPadding: const EdgeInsets.all(30),
+        actionsPadding: const EdgeInsets.only(left:20, right: 20, bottom: 20),
+       shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(35))),
+       
+        content: Row(
+          children: [
+            InkWell(child: CircleAvatar(radius: 20,
+             backgroundImage: photo != null 
+              ? FileImage(File(photo!.path))
+              : null,
+              child: photo == null
+              ? const Icon(
+                Icons.camera_alt,
+                 size: 35,
+                 color: Colors.white,
+                  )
+                  : null),
+                  onTap: () {
+                    pickImage();
+                    },
+            ),
+            SizedBox(width: 10,),
+            Container(
+              width: 120,
+              height: 60,
+              child: TextField(controller: NewName,
+               decoration: InputDecoration(hintText: 'New name'),
+              ),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+             
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Approve'),
+            onPressed: () async {
+               await uploadpfp().then((value) => {});
+              String? value = await getDowmload();
+              await firestore.collection('groups').doc(groupId).update({
+                'groupName':NewName.text,
+                'groupImage': value,
+              });
+              for(int i=0; i<=membersList.length; i++){
+                 String memberId = membersList[i]['uid'];
+      await firestore.collection('users').doc(memberId).collection('groups').doc(groupId).update({
+        'groupImage': value,
+        'groupName': NewName.text
+      });
+              }
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+  }
+
+  
+   XFile? photo;
+
+ void pickImage() async {
+    photo = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 25);
+    uploadpfp();
+  }
+
+  Future<void> uploadpfp() async {
+    File? imagefile = File(photo!.path);
+    try {
+      Reference ref = FirebaseStorage.instance.ref('files/${imagefile.path}');
+      UploadTask uploadTask = ref.putFile(imagefile);
+      final snapshot = await uploadTask.whenComplete(() => null);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<String> getDowmload() async {
+    File? imagefile = File(photo!.path);
+    return firebase_storage.FirebaseStorage.instance
+        .ref('files/${imagefile.path}')
+        .getDownloadURL();
+  }
+
+
+
+
+
+  

@@ -63,11 +63,13 @@ class _CahtscreanState extends State<Cahtscrean> {
 
 bool isRecording = false;
 bool isRequrderReady= false;
+ FocusNode _focus = FocusNode();
   @override
   
   void initState() {
     super.initState();
     initRecorder();
+ messageTextController.addListener(_printLatestValue);
     _authintication.initializeCurrentUser(authNotifier);
    FlutterDownloader.initialize(
     debug: true, // optional: set to false to disable printing logs to console (default: true)
@@ -98,8 +100,24 @@ uploadRecord(chatRoomId,currentUser, frienduid);
   void dispose(){
     recorder.stopRecorder();
     super.dispose();
-
+   messageTextController.dispose();
   }
+   void _printLatestValue() {
+        print('Second text field: ${messageTextController.text}');
+        if(messageTextController.text.isNotEmpty){
+             firestore.collection('users').doc(currentUser).update(
+                              {
+                                'typingTo': frienduid
+                              }
+                             );
+        }else{
+           firestore.collection('users').doc(currentUser).update(
+                              {
+                                'typingTo': null
+                              }
+                             );
+        }
+      }
 
 Future initRecorder()async{
 final status = await Permission.microphone.request();
@@ -116,40 +134,32 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        toolbarHeight: 80, 
         elevation: 0.6,
-        backgroundColor:Colors.white.withOpacity(0.1),
-        title: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(friendName,
-                      style:
-                          const TextStyle(fontSize: 20, color: Colors.black)),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Visibility(
-                    visible: setOnlineStatus(frienduid),
-                    child: Container(
-                      height: 10,
-                      width: 10,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.green,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const Text('typing...',
-                  style: TextStyle(fontSize: 16, color: Colors.black45))
-            ],
-          ),
+        backgroundColor:Color(0xFFCCCED3),
+        title:  StreamBuilder<DocumentSnapshot>(
+          stream:firestore.collection("users").doc(frienduid).snapshots(),
+           builder: (context, snapshot) {
+             if (snapshot.data != null) {
+          return Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                    Text(friendName,
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold)),
+                 Text( snapshot.data?['typingTo'] == currentUser?
+                 'typing ...': snapshot.data!['onlineStatus'],
+                    style: const TextStyle(fontSize: 16, color: Colors.black45, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold))
+              ],
+            ),
+          );
+             }else{
+              return  Container();
+             }
+           }
         ),
-        leadingWidth: 100,
+        leadingWidth: 80,
         leading: TextButton.icon(
           onPressed: () {
             Navigator.pop(context);
@@ -158,24 +168,20 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
               color: Color.fromARGB(255, 8, 61, 104)),
           label: const Text(
             'Back',
-            style: TextStyle(color: Color.fromARGB(255, 8, 61, 104)),
+            style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
+             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),
           ),
         ),
         actions: [
-          IconButton(
-            icon: Container(
-              height: 40,
-              width: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-              ),
+          GestureDetector(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
-                backgroundImage: NetworkImage(profilePic),
-                radius: 50.0,
-              ),
+                    backgroundImage: NetworkImage(profilePic),
+                    radius: 30.0,
+                  ),
             ),
-            onPressed: () {},
-          )
+          ),
         ],
       ),
       body: Container(
@@ -203,7 +209,7 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
                     color: Color(0xFFCCCED3),
                     border: Border(
                         top: BorderSide(
-                            color: Color.fromARGB(255, 8, 61, 104), width: 2))),
+                            color: Color(0xFFCCCED3), width: 2))),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -222,29 +228,31 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
                     Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical:3),
-                          child: TextField(
-                                              style: const TextStyle(color: Colors.white),
-                                              controller: messageTextController,
-                                              onChanged: (value) {
-                          messageText = value;
-                                              },
-                                              decoration: InputDecoration(
-                          filled: true,
-                          fillColor: const Color.fromARGB(255, 8, 61, 104),
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 20,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(80),
-                            borderSide: const BorderSide(
-                              color: Color.fromARGB(255, 8, 61, 104),
-                            ),
-                          ),
-                          hintText: 'Message ...',
-                          hintStyle: const TextStyle(color: Colors.white),
-                                              ),
-                                            ),
+                            
+                            child:  TextField(
+                              style: const TextStyle(color: Colors.white),
+                              controller: messageTextController,
+                              onChanged: (value) {
+                              messageText = value;
+                              },     
+                              decoration: InputDecoration(
+                              filled: true,
+                              fillColor: const Color.fromARGB(255, 8, 61, 104),
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 20,
+                              ),
+                              border: OutlineInputBorder(
+                            
+                                borderRadius: BorderRadius.circular(80),
+                                borderSide: const BorderSide(
+                                  color: Color.fromARGB(255, 8, 61, 104),
+                                ),
+                              ),
+                              hintText: 'Message ...',
+                              hintStyle: const TextStyle(color: Colors.white, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),
+                                                  ),
+                                                ),
                         )),
                         const SizedBox(width: 8,),
                     IconButton(
@@ -257,7 +265,9 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
                       },
                        icon: Icon(
                           recorder.isRecording? Icons.stop:
-                          Icons.mic, color: Color.fromARGB(255, 8, 61, 104),),
+                          Icons.mic, color: const Color.fromARGB(255, 8, 61, 104),
+                          size: 33,
+                          ),
                           
                      
                     ),
@@ -277,13 +287,20 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
                             'time': FieldValue.serverTimestamp(),
                             'receiver': frienduid,
                             'type': 'text',
+                            'isRead':'',
                           });
+                          firestore
+                              .collection('chatRoom')
+                              .doc(chatRoomId).update({
+                                'lastMessage': messageText
+                              });
                         },
                         child: const Text(
                           'send',
                           style: TextStyle(
                             color: Color.fromARGB(255, 8, 61, 104),
                             fontWeight: FontWeight.bold,
+                             fontFamily: 'HP Simplified Light',
                             fontSize: 18,
                           ),
                         ))
@@ -315,7 +332,7 @@ class messageStreamBuilder extends StatelessWidget {
           .collection('messages')
           .orderBy('time')
           .snapshots(),
-      //من وين حيجي الستريم
+      
       builder: (context, snapshot) {
         List<MessageLine> messageWidgets = [];
         if (!snapshot.hasData) {}
@@ -326,6 +343,7 @@ class messageStreamBuilder extends StatelessWidget {
           final messagesender = message.get('sender');
           final time = message.get('time');
           final type = message.get('type');
+          final isRead = message.get('isRead');
           final currentuser = currentUser;
 
 final DateTime convtime= DateTime.parse(time.toDate().toString());
@@ -336,6 +354,7 @@ String outputTime = DateFormat.jm().format(convtime);
             sender: messagesender,
             text: messageText,
             time: outputTime,
+            isRead : isRead,
             isMe: currentuser == messagesender,
             type: type,
           );
@@ -355,12 +374,13 @@ String outputTime = DateFormat.jm().format(convtime);
 }
 
 class MessageLine extends StatelessWidget {
-  const MessageLine({this.text, this.sender, required this.isMe, required this.time,required this.type, super.key});
+  const MessageLine({this.text, this.sender, required this.isMe, required this.time,required this.type, required this.isRead, super.key});
   final String? sender;
   final String? text;
   final String time;
   final bool isMe;
   final String type;
+  final String isRead;
 
   @override
   Widget build(BuildContext context) {
@@ -388,7 +408,8 @@ class MessageLine extends StatelessWidget {
                     '$text',
                     style: TextStyle(
                         fontSize: 15,
-                        color: isMe ?Colors.black: Colors.white),
+                        color: isMe ?Colors.black: Colors.white,
+                         fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 2,),
                   Text((time).toString(),
@@ -930,4 +951,10 @@ openFileFromNotification: true,
 }else{
   await Permission.storage.request();
 }
+}
+
+Future<void> updateMessageReadState(messageId, chatRoomId)async {
+  firestore.collection('chatRoom').doc(chatRoomId).update({
+    'isRead': true
+  });
 }

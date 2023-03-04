@@ -19,6 +19,7 @@ class Authintication {
 
     final Convert = EmailAuthProvider.credential(
         email: email.trim(), password: password.trim());
+    final List<Map> friendsId= [];
     final userConvert =
         await FirebaseAuth.instance.currentUser!.linkWithCredential(Convert);
     Map<String, dynamic> userInfoMap = {
@@ -30,8 +31,10 @@ class Authintication {
       "year": year,
       "imgUrl": imgUrl,
       "status": "",
+      "friendsId": friendsId,
       "position": position,
       "onlineStatus":""
+      
     };
     if (userCredential != null) {
       DatabaseMethods().addUserInfoToDB(auth.currentUser!.uid, userInfoMap);
@@ -80,7 +83,7 @@ class Authintication {
     User? usern = null;
     await auth.signOut();
     authNotifier.setUser(usern!);
-    Navigator.pushNamedAndRemoveUntil(context, "SignIn", (route) => false);
+    Navigator.pushNamedAndRemoveUntil(context, "signin_screan", (route) => false);
   }
 
   Future<void> getUserDetails(AuthNotifier authNotifier) async {
