@@ -1,11 +1,31 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../hiddenScreens/createClass.dart';
+String uid =FirebaseAuth.instance.currentUser!.uid;
 class ClassesScreen extends StatelessWidget {
   const ClassesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       floatingActionButton: Container(
+        width: 75,
+                  height: 50,
+         child: FloatingActionButton(
+          child: const Icon(Icons.add,  color: Color.fromARGB(255, 8, 61, 104)),
+             backgroundColor:  const Color(0xFFCCCED3),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+          onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (contex) => const CreatNewClassScreen()));
+          },
+         ),
+       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Container(
         decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -23,13 +43,82 @@ class ClassesScreen extends StatelessWidget {
               const EdgeInsets.only(left: 25, right: 15, bottom: 5, top: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+            children: const [
               SizedBox(
                 height: 65,
               ),
-              Material(
+            calssStreamBuilder(),
+             
+            ],
+          ),
+        )),
+      ),
+    );
+  }
+}
+
+
+class calssStreamBuilder extends StatelessWidget {
+  const calssStreamBuilder({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .doc(uid).collection('courses')
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<classLine> classWidgets = [];
+            final classes = snapshot.data!.docs;
+            for (var oneclass in classes) {
+              final className = oneclass.get('courseName');
+              final classId = oneclass.get('courseId');
+              final calssSubject = oneclass.get('courseSubject');
+              final teacherId = oneclass.get('teacherId');
+  
+              final classWidget = classLine(
+                  className: className,
+                  classId: classId,
+                  calssSubject: calssSubject,
+                  teacherId:teacherId,
+      );
+              classWidgets.add(classWidget);
+            }
+            return Expanded(
+              child: ListView(
+                children: classWidgets,
+              ),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
+  }
+}
+
+
+class classLine extends StatelessWidget {
+   classLine(
+      {  this.className,  this.classId, this.calssSubject, this.teacherId, super.key, });
+
+  final String? className;
+  final String? classId;
+  final String? calssSubject;
+  final String? teacherId;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 6, top: 6),
+      child: InkWell(
+        child:  Material(
                 elevation: 10,
-                borderRadius: BorderRadius.all(Radius.circular(35)),
+                borderRadius: const BorderRadius.all(Radius.circular(35)),
                 child: Container(
                   decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(35)),
@@ -52,7 +141,7 @@ class ClassesScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Internet Programming',
+                          Text(className!,
                               style: TextStyle(
                                 fontSize: 25,
                                  fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
@@ -62,7 +151,7 @@ class ClassesScreen extends StatelessWidget {
                             height: 10,
                           ),
                           Text(
-                            'HTML - JavaScript',
+                            calssSubject!,
                             style: TextStyle(
                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                               fontSize: 15,
@@ -72,36 +161,39 @@ class ClassesScreen extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          Row(
+                         StreamBuilder<DocumentSnapshot>(
+                          stream:firestore.collection("users").doc(teacherId).snapshots(),
+                           builder: (context, snapshot) {
+                            if (snapshot.data != null) {
+                            return  Row(
+                           mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Container(
-                                height: 35,
-                                width: 35,
-                                decoration: BoxDecoration(
-                                  color: (const Color.fromRGBO(17, 58, 99, 1)),
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
+                             CircleAvatar(
+                              radius: 15,
+                             backgroundImage: NetworkImage(snapshot.data?['imgUrl']),
                               ),
                               const SizedBox(
                                 width: 10,
                               ),
-                              Text('Wasseem Nahi',
-                                  style: TextStyle(
-                                     fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                    color: Colors.black45,
-                                  ))
+                            Text( snapshot.data?['Name'] ,
+                               style: const TextStyle(fontSize: 15, color: Colors.black45, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold))      
                             ],
-                          ),
+                            );
+                          } else{
+                           return  Container();
+                           }
+                        } 
+                        )
                         ],
                       ),
                     ),
                   ),
                 ),
-              )
-            ],
-          ),
-        )),
+              ),
+        onTap: () {
+      
+            
+                      },
       ),
     );
   }

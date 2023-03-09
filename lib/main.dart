@@ -12,12 +12,13 @@ import '../main.dart';
 import 'Others/auth_notifier.dart';
 import 'Screan/Classes.dart';
 
+import 'Screan/OpeningScreen1.dart';
 import 'Screan/Signin.dart';
 import 'Screan/menuScreen.dart';
 import 'Screan/newUserScreen.dart';
 
 import 'Screan/ChatList.dart';
-
+import 'Screan/OpeningScreen1.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'Widgets/MyIcons.dart';
@@ -62,13 +63,12 @@ class _MyState extends State<My> {
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
     
     return MaterialApp(
-      
       home: const ButtomNavigationBar(),
       initialRoute: FirebaseAuth.instance.currentUser == null 
-          ? SignIn.ScreanRoute
+          ? 'OpeningScreen'
           : ButtomNavigationBar.ScreanRoute,
       routes: {
-        SignIn.ScreanRoute: (context) => const SignIn(),
+        'OpeningScreen': (context) => const OpeningScreen1(),
         ButtomNavigationBar.ScreanRoute: (context) =>
             const ButtomNavigationBar()
       },
@@ -93,7 +93,7 @@ class _ButtomNavigationBarState extends State<ButtomNavigationBar> with WidgetsB
     NewUserScreen(),
     Allusers(),
     const ClassesScreen(),
-    groupList(),
+    const OpeningScreen1(),
     const MenuScreen(),
   
 

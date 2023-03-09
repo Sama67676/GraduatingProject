@@ -53,6 +53,9 @@ dependencies:
   permission_handler: ^10.2.0
   flutter_downloader: ^1.10.2
   flutter_sound: ^9.2.13
+  dio: ^5.0.1
+  gallery_saver: ^2.3.2
+  image_picker_saver: ^0.3.0
   
 
 dev_dependencies:
@@ -90,6 +93,9 @@ flutter:
     - images/personPic.jpg
     - images/students (2).png
     - images/teacher.png
+    - images/OpeningScreen1edited.png
+    - images/OpeningImage2.png
+    - images/OpeningImage3.png
 
  
   fonts:

@@ -1,3 +1,5 @@
+import 'package:graduating_project_transformed/Screan/OpeningScreen1.dart';
+
 import '../hiddenScreens/groupProfile.dart';
 import 'StudentsList.dart';
 import 'profile_screen.dart';
@@ -154,7 +156,11 @@ class MenuScreen extends StatelessWidget {
                                 child: creatMenu(
                                     'lessons', Image.asset('images/books.png')),
                                 onTap: () {
-                                  
+                                   Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (contex) =>
+                                            const OpeningScreen1()));
                                 },
                               ))),
                       Padding(

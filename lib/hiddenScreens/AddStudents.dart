@@ -1,29 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:graduating_project_transformed/Screan/CreatNewGroupScreen.dart';
+
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final TextEditingController _search=TextEditingController();
+   
+   
+List<Map<String, dynamic>> memberList =[];
 
-  Map<String, dynamic>? userMap;
-class AddMembers extends StatefulWidget {
-  const AddMembers({super.key, required this.groupId,  this. groupImage, required this.groupName, required this.memberList});
-    final String groupId;
-   final String? groupImage;
-  final String groupName;
-  final List memberList;
+class AddStudents extends StatefulWidget {
+  const AddStudents({super.key,});
+
 
   @override
-  State<AddMembers> createState() => _AddMembersState(groupId, groupImage, groupName, memberList);
+  State<AddStudents> createState() => _AddStudentssState();
 }
 
-class _AddMembersState extends State<AddMembers> {
-      final String groupId;
-   final String? groupImage;
-  final String groupName;
-  final List memberList;
+class _AddStudentssState extends State<AddStudents> {
 
-  _AddMembersState(this.groupId, this.groupImage, this.groupName, this.memberList);
 
   @override
    Widget build(BuildContext context) {
@@ -81,8 +75,7 @@ class _AddMembersState extends State<AddMembers> {
                                    padding: const EdgeInsets.symmetric(horizontal:10),
                                    child: GestureDetector(child: const Text('Done',style:TextStyle(fontSize: 20, color: Color.fromARGB(255, 8, 61, 104))),
                       onTap: (){
-                        onAddMembers(groupId, groupName, groupImage, memberList, context);
-
+                        Navigator.pop(context, memberList);
                       }
                       ),
                                  ),
@@ -252,14 +245,14 @@ class _StudentLineState extends State<StudentLine> {
                                       isChecked = value!;
 
                                   });
-                                  if(value==true){
-                                    userMap =({'name':userName,
+                                 if(value==true){
+                                    memberList.add({'name':userName,
                                    'uid':uid,});
                                   } else if(value==false){
-                                    userMap=({'name':userName,
+                                    memberList.remove({'name':userName,
                                     'uid':uid,});
                                   }
-                                },
+                                }
                               ),
                   ),
                 ),
@@ -288,30 +281,3 @@ class _StudentLineState extends State<StudentLine> {
     );
   }
 }
-
-  void onAddMembers(String groupId, String groupname, String? groupImage, List memberList, context) async {
-// for (int i=0; i<=memberList.length; i++){
-//   if (userMap ==memberList[i]){
-//     userMap = null;
-//     print('user is already here!');
-//   } 
-// }
-    memberList.add(userMap!);
-
-    await _firestore.collection('groups').doc(groupId).update({
-      "members": memberList,
-    });
-  for (int i=0; i<memberList.length; i++){
-    String uid= memberList[i]['uid'];
-   
-    await _firestore
-        .collection('users')
-        .doc(uid)
-        .collection('groups')
-        .doc(groupId)
-        .set({'groupName': groupname,
-      'groupId': groupId,
-      'groupImage':groupImage });
-  }
-  Navigator.pop(context);
-  }

@@ -1,24 +1,25 @@
-
 import 'dart:io';
-
-
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:graduating_project_transformed/others/managefiles/chatRoomPdf.dart';
 import 'package:intl/intl.dart';
-import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import '../Others/auth.dart';
 import '../Others/auth_notifier.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../others/managefiles/chatRoomAudio.dart';
+import '../others/managefiles/chatRoomRecord.dart';
+import '../others/managefiles/chooseAttachment.dart';
+import 'package:dio/dio.dart';
+import 'package:http/http.dart' show get;
+import 'package:image_picker_saver/image_picker_saver.dart';
 
+
+SendRecords sendRecords= SendRecords();
 final firestore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
 Authintication _authintication = Authintication();
@@ -89,7 +90,7 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
    Future stop()async{
 final path =await recorder.stopRecorder();
 RecordedAudio=File(path!);
-uploadRecord(chatRoomId,currentUser, frienduid);
+sendRecords.uploadRecord(chatRoomId,currentUser, frienduid);
   }
    Future record() async{
     if (! isRequrderReady) return;
@@ -181,6 +182,9 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
                     radius: 30.0,
                   ),
             ),
+            onTap: ()async{
+            await Permission.photos.request();
+            },
           ),
         ],
       ),
@@ -217,7 +221,8 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
                     Container(
                         child: IconButton(
                                 onPressed: () {
-                                  chooseAttachmentType(context,chatRoomId,currentUser, frienduid);
+                                  ChooseAttachement chooseAttachement = ChooseAttachement();
+                                  chooseAttachement.chooseAttachmentType(context,chatRoomId,currentUser, frienduid);
                                 },
                                 icon: const Icon(
                                   Icons.attachment,
@@ -426,7 +431,9 @@ class MessageLine extends StatelessWidget {
     ): type== 'image'? Padding(
       padding: isMe? const EdgeInsets.only(left: 75,bottom: 5,top: 5, right: 5) : const EdgeInsets.only(left: 5,bottom: 5,top: 5, right: 75),
       child: InkWell(
-        onTap: (){downloadFile(text!);},
+        onTap: ()async{
+          downloadFile(text!);
+         },
         child: Container(
               decoration: BoxDecoration(border: Border.all(width: 2, color: const Color.fromARGB(255, 8, 61, 104),),
           borderRadius: BorderRadius.circular(40),),
@@ -455,7 +462,7 @@ class MessageLine extends StatelessWidget {
       child:  InkWell(
         onTap: (){
 
-         downloadFile(text!);
+        //  downloadFile(text!);
         },
         child: Material(
           
@@ -506,7 +513,7 @@ class MessageLine extends StatelessWidget {
       padding: isMe? const EdgeInsets.only(left: 75,bottom: 5,top: 5, right: 5) : const EdgeInsets.only(left: 5,bottom: 5,top: 5, right: 75),
       child:  InkWell(
         onTap: (){
-          downloadFile(text!);
+          // downloadFile(text!);
         },
         child: Material(
           
@@ -562,7 +569,7 @@ class MessageLine extends StatelessWidget {
     : type== 'Video'?Padding(
       padding: isMe? const EdgeInsets.only(left: 75,bottom: 5,top: 5, right: 5) : const EdgeInsets.only(left: 5,bottom: 5,top: 5, right: 75),
       child: InkWell(
-        onTap: (){downloadFile(text!);},
+        // onTap: (){downloadFile(text!);},
         child: Container(
               decoration: BoxDecoration(border: Border.all(width: 5, color: const Color.fromARGB(255, 8, 61, 104),),
           borderRadius: BorderRadius.circular(40),),
@@ -653,305 +660,20 @@ bool setOnlineStatus(String frienduid){
           }});
  return false;
 }
-void chooseAttachmentType(context, chatRoomId,currentUser, frienduid){
-showModalBottomSheet(context: context, builder: (BuildContext bc){
-  return Container(
-    height: MediaQuery.of(context).size.height * .30,
-    child: Column(
-      children: [
-        Expanded(
-          child: Row(children: [
-            Padding(
-              padding: const EdgeInsets.only(left:35, right: 35, top: 35,bottom: 5),
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: (){
-                      pickImagefromGalery(context, chatRoomId, currentUser, frienduid);
-                    },
-                     style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                padding: const EdgeInsets.all(15),
-              ),child: const Icon(Icons.image, size: 30,),
-                  ),
-                  const SizedBox(height: 4,),
-                  const Text('Image', style: TextStyle(fontSize: 15),)
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left:35, right: 35, top: 35,bottom: 5),
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: (){
-                      pickpdfs(chatRoomId,currentUser, frienduid);
-                    },
-                     style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                padding: const EdgeInsets.all(15),
-              ),child: const Icon(Icons.file_copy, size: 30,),
-                  ),
-                  const SizedBox(height: 4,),
-                  const Text('file', style: TextStyle(fontSize: 15),)
-                ],
-              ),
-            ),
-            Padding(
-              padding:const EdgeInsets.only(left:35, right: 35, top: 35,bottom: 5),
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: (){
-                      pickImagefromcamera(context, chatRoomId, currentUser, frienduid);
-                    },
-                     style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                padding: const EdgeInsets.all(15),
-              ),child: const Icon(Icons.camera_alt, size: 30,),
-                  ),
-                  const SizedBox(height: 4,),
-                  const Text('Camera', style: TextStyle(fontSize: 15),)
-                ],
-              ),
-            )
-      ]), 
-        ),
-        Expanded(
-          child: Row(children: [
-            Padding(
-                padding: const EdgeInsets.only(left:35, right: 35, bottom: 35,top: 5),
-                child: Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: (){
-                        pickAudio(context, chatRoomId, currentUser, frienduid);
-                      },
-                       style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(15),
-                ),child: const Icon(Icons.headphones, size: 30,),
-                    ),
-                    const SizedBox(height: 4,),
-                    const Text('audio', style: TextStyle(fontSize: 15),)
-                  ],
-                ),
-              ),
-              Padding(
-              padding: const EdgeInsets.only(left:35, right: 35, bottom: 35,top: 5),
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: (){
-                      pickVideo(context, chatRoomId, currentUser, frienduid);
-                    },
-                     style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                padding: const EdgeInsets.all(15),
-              ),child: const Icon(Icons.video_call, size: 30,),
-                  ),
-                  const SizedBox(height: 4,),
-                  const Text('Video', style: TextStyle(fontSize: 15),)
-                ],
-              ),
-            )
-          ],),
-        )
-      ],
-    ),
-  );
-});
-}
-XFile? photo;
-PlatformFile? pickedpdf;
-PlatformFile? pickedAudio;
-File? imagefile;
-File? RecordedAudio;
-PlatformFile? PickedVideo;
-// final duration= snapshot.hasdata? snapshot.data!.duration: duration.zero;
 
 
- void pickImagefromGalery(context, chatRoomId,currentUser, frienduid) async {
-    photo = await ImagePicker()
-        .pickImage(source: ImageSource.gallery, imageQuality: 25,);
-        File? imagefile = File(photo!.path);
-        OpenFile.open(imagefile.path);
-    uploadpfp(chatRoomId,currentUser, frienduid);
-  }
-
-  void pickImagefromcamera(context, chatRoomId,currentUser, frienduid) async {
-    photo = await ImagePicker()
-        .pickImage(source: ImageSource.camera, imageQuality: 25);
-    uploadpfp(chatRoomId,currentUser, frienduid);
-  }
-
-  Future<void> uploadpfp(chatRoomId,currentUser, frienduid) async {
-    File? imagefile = File(photo!.path);
-    String? docid;
-    await firestore.collection('chatRoom').doc(chatRoomId).collection('messages').add({
-                            'text': "",
-                            'sender': currentUser,
-                            'time': FieldValue.serverTimestamp(),
-                            'receiver': frienduid,
-                            'type': 'image',
-                        }).then((value) {
-                          docid= value.id;
-                        });
-      
-      Reference ref = FirebaseStorage.instance.ref('files/${imagefile.path}');
-      var uploadTask = ref.putFile(imagefile).whenComplete(() async {
-      String imgUrl = await firebase_storage.FirebaseStorage.instance
-        .ref('files/${imagefile.path}')
-        .getDownloadURL();
-await firestore.collection('chatRoom').doc(chatRoomId).collection('messages').doc(docid).update({'text': imgUrl,});
-      }
-      );
-  }
-
-
-void pickpdfs(chatRoomId,currentUser, frienduid) async{
-  final result= await FilePicker.platform.pickFiles(
-  type: FileType.custom, allowedExtensions: ['pdf','docx'],
-  );
-  if (result != null){
-    pickedpdf =result.files.first;
-    // OpenFile.open(file.path!);
-    uploadpdfs(chatRoomId,currentUser, frienduid);
-  }
-}
-Future<void> uploadpdfs(chatRoomId,currentUser, frienduid) async {
-    File? pdfFile = File(pickedpdf!.path!);
-    String? docid;
-    await firestore.collection('chatRoom').doc(chatRoomId).collection('messages').add({
-                            'text': "",
-                            'sender': currentUser,
-                            'time': FieldValue.serverTimestamp(),
-                            'receiver': frienduid,
-                            'type': 'pdf',
-                        }).then((value) {
-                          docid= value.id;
-                        });
-      
-      Reference ref = FirebaseStorage.instance.ref('files/${pdfFile.path}');
-      var uploadTask = ref.putFile(pdfFile).whenComplete(() async {
-      String pdfUrl = await firebase_storage.FirebaseStorage.instance
-        .ref('files/${pdfFile.path}')
-        .getDownloadURL();
-await firestore.collection('chatRoom').doc(chatRoomId).collection('messages').doc(docid).update({'text': pdfUrl,});
-      }
-      );
-  }
-
-
-  void pickAudio(context, chatRoomId, currentUser, frienduid)async{
-    final result= await FilePicker.platform.pickFiles(
-  type: FileType.custom, allowedExtensions: ['mp3', 'm4a'],
-  );
-  if (result != null){
-    pickedAudio =result.files.first;
-    // OpenFile.open(file.path!);
-    uploadAudio(chatRoomId,currentUser, frienduid);
-  }
-}
-uploadAudio(chatRoomId,currentUser, frienduid)async {
-   File? AudioFile = File(pickedAudio!.path!);
-    String? docid;
-    await firestore.collection('chatRoom').doc(chatRoomId).collection('messages').add({
-                            'text': "",
-                            'sender': currentUser,
-                            'time': FieldValue.serverTimestamp(),
-                            'receiver': frienduid,
-                            'type': 'Audio',
-                        }).then((value) {
-                          docid= value.id;
-                        });
-      
-      Reference ref = FirebaseStorage.instance.ref('files/${AudioFile.path}');
-      var uploadTask = ref.putFile(AudioFile).whenComplete(() async {
-      String AudioUrl = await firebase_storage.FirebaseStorage.instance
-        .ref('files/${AudioFile.path}')
-        .getDownloadURL();
-await firestore.collection('chatRoom').doc(chatRoomId).collection('messages').doc(docid).update({'text': AudioUrl,});
-      }
-      );
-}
-
- void pickVideo(context, chatRoomId,currentUser, frienduid) async {
-   final result= await FilePicker.platform.pickFiles(
-  type: FileType.custom, allowedExtensions: ['mp4'],
-  );
-  if (result != null){
-    PickedVideo = result.files.first;
-        OpenFile.open(PickedVideo!.path);
-    uploadVideo(chatRoomId,currentUser, frienduid);
-  }
-  }
-  Future<void> uploadVideo(chatRoomId,currentUser, frienduid) async {
-    File? VideoFile = File(PickedVideo!.path!);
-    String? docid;
-    await firestore.collection('chatRoom').doc(chatRoomId).collection('messages').add({
-                            'text': "",
-                            'sender': currentUser,
-                            'time': FieldValue.serverTimestamp(),
-                            'receiver': frienduid,
-                            'type': 'video',
-                        }).then((value) {
-                          docid= value.id;
-                        });
-      
-      Reference ref = FirebaseStorage.instance.ref('files/${VideoFile.path}');
-      var uploadTask = ref.putFile(VideoFile).whenComplete(() async {
-      String VideoUrl = await firebase_storage.FirebaseStorage.instance
-        .ref('files/${VideoFile.path}')
-        .getDownloadURL();
-await firestore.collection('chatRoom').doc(chatRoomId).collection('messages').doc(docid).update({'text': VideoUrl,});
-      }
-      );
-  }
-
-  final recorder= FlutterSoundRecorder();
-  
- 
- uploadRecord(chatRoomId,currentUser, frienduid)async {
-  
-    String? docid;
-    await firestore.collection('chatRoom').doc(chatRoomId).collection('messages').add({
-                            'text': "",
-                            'sender': currentUser,
-                            'time': FieldValue.serverTimestamp(),
-                            'receiver': frienduid,
-                            'type': 'Recorde',
-                            
-                        }).then((value) {
-                          docid= value.id;
-                        });
-      
-      Reference ref = FirebaseStorage.instance.ref('files/${RecordedAudio!.path}');
-      var uploadTask = ref.putFile(RecordedAudio!).whenComplete(() async {
-      String AudioUrl = await firebase_storage.FirebaseStorage.instance
-        .ref('files/${RecordedAudio!.path}')
-        .getDownloadURL();
-        Reference ref=  await firebase_storage.FirebaseStorage.instance
-        .ref('files/${RecordedAudio!.path}');
-await firestore.collection('chatRoom').doc(chatRoomId).collection('messages').doc(docid).update({'text': AudioUrl,});
-      }
-      );
-}
 
 Future downloadFile(String url)async{
-  final status =await Permission.storage.status;
+//  var response = await get(Uri.parse(url)); 
+//    debugPrint(response.statusCode.toString());
   
-if (status.isGranted){
-  final  externaldir =await getApplicationDocumentsDirectory();
- FlutterDownloader.enqueue(url: url, savedDir: externaldir.path,
-showNotification: true,
-fileName: 'newpicidownloadedfromflutter',
-openFileFromNotification: true,
-);
-}else{
-  await Permission.storage.request();
+//       var filePath = await ImagePickerSaver.saveFile(
+//           fileData: response.bodyBytes);
+  
+//       var savedFile= File.fromUri(Uri.file(filePath));
+
 }
-}
+
 
 Future<void> updateMessageReadState(messageId, chatRoomId)async {
   firestore.collection('chatRoom').doc(chatRoomId).update({
