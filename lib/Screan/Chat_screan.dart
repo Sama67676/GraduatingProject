@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:graduating_project_transformed/others/managefiles/chatRoomPdf.dart';
 import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import '../Others/auth.dart';
 import '../Others/auth_notifier.dart';
@@ -16,7 +17,7 @@ import '../others/managefiles/chatRoomRecord.dart';
 import '../others/managefiles/chooseAttachment.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' show get;
-import 'package:image_picker_saver/image_picker_saver.dart';
+
 
 
 SendRecords sendRecords= SendRecords();
@@ -135,7 +136,7 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        toolbarHeight: 80, 
+    
         elevation: 0.6,
         backgroundColor:Color(0xFFCCCED3),
         title:  StreamBuilder<DocumentSnapshot>(
@@ -179,11 +180,11 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
               padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
                     backgroundImage: NetworkImage(profilePic),
-                    radius: 30.0,
+                    radius: 25.0,
                   ),
             ),
             onTap: ()async{
-            await Permission.photos.request();
+     
             },
           ),
         ],
@@ -432,7 +433,7 @@ class MessageLine extends StatelessWidget {
       padding: isMe? const EdgeInsets.only(left: 75,bottom: 5,top: 5, right: 5) : const EdgeInsets.only(left: 5,bottom: 5,top: 5, right: 75),
       child: InkWell(
         onTap: ()async{
-          downloadFile(text!);
+        
          },
         child: Container(
               decoration: BoxDecoration(border: Border.all(width: 2, color: const Color.fromARGB(255, 8, 61, 104),),
@@ -462,7 +463,7 @@ class MessageLine extends StatelessWidget {
       child:  InkWell(
         onTap: (){
 
-        //  downloadFile(text!);
+         
         },
         child: Material(
           
@@ -663,16 +664,16 @@ bool setOnlineStatus(String frienduid){
 
 
 
-Future downloadFile(String url)async{
-//  var response = await get(Uri.parse(url)); 
-//    debugPrint(response.statusCode.toString());
+// Future downloadFile(String url)async{
+// //  var response = await get(Uri.parse(url)); 
+// //    debugPrint(response.statusCode.toString());
   
-//       var filePath = await ImagePickerSaver.saveFile(
-//           fileData: response.bodyBytes);
+// //       var filePath = await ImagePickerSaver.saveFile(
+// //           fileData: response.bodyBytes);
   
-//       var savedFile= File.fromUri(Uri.file(filePath));
+// //       var savedFile= File.fromUri(Uri.file(filePath));
 
-}
+// }
 
 
 Future<void> updateMessageReadState(messageId, chatRoomId)async {

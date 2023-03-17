@@ -118,11 +118,11 @@ class _CreatNewClassScreenState extends State<CreatNewClassScreen> {
                               children: [
                                                    const SizedBox(height: 20,),
                                                    const Padding(
-                             padding:EdgeInsets.symmetric(horizontal:18.0, vertical: 5),
+                             padding:EdgeInsets.symmetric(horizontal:18.0, vertical: 0),
                              child: Text('Class Name:', style: TextStyle(fontSize: 20, color: Colors.white, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),),
                                                    ),
                                                   Padding(
-                            padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 18),
+                            padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 15),
                               child: Material(
                                 color: Colors.white,
                                 elevation: 4,
@@ -145,11 +145,11 @@ class _CreatNewClassScreenState extends State<CreatNewClassScreen> {
                                   ),
                                       ),
                                  const Padding(
-                             padding:EdgeInsets.symmetric(horizontal:18.0, vertical: 5),
+                             padding:EdgeInsets.symmetric(horizontal:18.0, vertical: 0),
                              child: Text('Subject Name:', style: TextStyle(fontSize: 20, color: Colors.white, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),),
                                                    ),
                                                   Padding(
-                            padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 18),
+                            padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 15),
                               child: Material(
                                 color: Colors.white,
                                 elevation: 4,
@@ -172,11 +172,11 @@ class _CreatNewClassScreenState extends State<CreatNewClassScreen> {
                                   ),
                                       ),
                                              const Padding(
-                             padding:EdgeInsets.symmetric(horizontal:18.0, vertical: 5),
+                             padding:EdgeInsets.symmetric(horizontal:18.0, vertical: 0),
                              child: Text('choose the department : ', style: TextStyle(fontSize: 20, color: Colors.white, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),),
                                                    ),
                                                   Padding(
-                            padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 18),
+                            padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 15),
                               child: Material(
                                 color: Colors.white,
                                 elevation: 4,
@@ -224,15 +224,15 @@ class _CreatNewClassScreenState extends State<CreatNewClassScreen> {
                                               activeColor: Colors.white,
                                       value:isSelectChecked,
                                       shape: const CircleBorder(),
-                                      onChanged: (value) {
+                                      onChanged: (value) async{
                                         setState(() {
                                             isSelectChecked = value!;
-                          
+                                            isAllChecked = false;
                                         });
                                         if(value==true){
-                                        
+                                        await getAllStudents();
                                         } else if(value==false){
-                                        
+                                        memberList.clear();
                                         }
                                       },
                                       
@@ -259,7 +259,7 @@ class _CreatNewClassScreenState extends State<CreatNewClassScreen> {
                                       onChanged: (value) async{
                                         setState(() {
                                             isAllChecked = value!;
-                          
+                                            isSelectChecked= false;
                                         });
                                         if(value==true) {
                                           Navigator.push(
@@ -271,7 +271,7 @@ class _CreatNewClassScreenState extends State<CreatNewClassScreen> {
                                             },);
                                            
                                         } else if(value==false){
-                                        
+                                        memberList.clear();
                                         }
                                      
                                       },
@@ -331,9 +331,19 @@ void creatClass(context)async{
   _SubjectName.clear();
   isSelectChecked = false;
   isAllChecked =false;
+  memberList.clear();
   Navigator.pop(context);
 
 }
 
 
- 
+  Future getAllStudents() async {
+    await FirebaseFirestore.instance
+        .collection('users').where('position', isEqualTo: 'Student')
+         .get().then((QuerySnapshot querySnapshot){
+            for (var element in querySnapshot.docs) {
+         memberList.add({'name':element['Name'], 'uid': element['uid']});
+            }
+         });
+         print(memberList);
+  }

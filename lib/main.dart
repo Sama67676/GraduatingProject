@@ -23,6 +23,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'Widgets/MyIcons.dart';
 import 'others/groupList.dart';
+import 'others/underInstruction.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -90,10 +91,10 @@ class _ButtomNavigationBarState extends State<ButtomNavigationBar> with WidgetsB
   int _currentIndex = 0;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final List<Widget> children = [
-    NewUserScreen(),
+    UnderInstructions(),
     Allusers(),
     const ClassesScreen(),
-    const OpeningScreen1(),
+    const UnderInstructions(),
     const MenuScreen(),
   
 

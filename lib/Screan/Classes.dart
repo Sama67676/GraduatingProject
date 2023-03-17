@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:graduating_project_transformed/Screan/SingleClass.dart';
 
 import '../hiddenScreens/createClass.dart';
 String uid =FirebaseAuth.instance.currentUser!.uid;
@@ -169,7 +170,7 @@ class classLine extends StatelessWidget {
                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                              CircleAvatar(
-                              radius: 15,
+                              radius: 20,
                              backgroundImage: NetworkImage(snapshot.data?['imgUrl']),
                               ),
                               const SizedBox(
@@ -191,8 +192,7 @@ class classLine extends StatelessWidget {
                 ),
               ),
         onTap: () {
-      
-            
+          Navigator.push(context, MaterialPageRoute(builder:  (contex) => SingleClassScreen(classId : classId, className: className, teacherId: teacherId, classSubject:calssSubject ) ));
                       },
       ),
     );

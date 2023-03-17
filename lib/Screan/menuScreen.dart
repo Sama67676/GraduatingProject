@@ -1,4 +1,5 @@
 import 'package:graduating_project_transformed/Screan/OpeningScreen1.dart';
+import 'package:graduating_project_transformed/Screan/newUserScreen.dart';
 
 import '../hiddenScreens/groupProfile.dart';
 import 'StudentsList.dart';
@@ -112,7 +113,7 @@ class MenuScreen extends StatelessWidget {
                     children: [
                       Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 15),
+                              horizontal: 5, vertical: 8),
                           child: Expanded(
                               flex: 1,
                               child: InkWell(
@@ -128,7 +129,7 @@ class MenuScreen extends StatelessWidget {
                               ))),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 15),
+                            horizontal: 5, vertical: 8),
                         child: Expanded(
                             flex: 1,
                             child: InkWell(
@@ -149,7 +150,7 @@ class MenuScreen extends StatelessWidget {
                     children: [
                       Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 15),
+                              horizontal: 5, vertical: 8),
                           child: Expanded(
                               flex: 1,
                               child: InkWell(
@@ -165,7 +166,7 @@ class MenuScreen extends StatelessWidget {
                               ))),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 15),
+                            horizontal: 5, vertical: 8),
                         child: Expanded(
                             flex: 1,
                             child: InkWell(
@@ -177,14 +178,14 @@ class MenuScreen extends StatelessWidget {
                     ],
                   ),
                   Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: Column(
                       children: [
                         Row(
                           children: [
                             Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 15),
+                                    horizontal: 5, vertical:8),
                                 child: Expanded(
                                     flex: 1,
                                     child: FittedBox(
@@ -198,7 +199,7 @@ class MenuScreen extends StatelessWidget {
                                         )))),
                             Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 15),
+                                  horizontal: 5, vertical: 8),
                               child: Expanded(
                                   flex: 1,
                                   child: FittedBox(
@@ -209,6 +210,49 @@ class MenuScreen extends StatelessWidget {
                                             Image.asset(
                                                 'images/online-library.png')),
                                         onTap: () {},
+                                      ))),
+                            ),
+                          ],
+                        ),
+                       Row(
+                          children: [
+                            Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 8),
+                                child: Expanded(
+                                    flex: 1,
+                                    child: FittedBox(
+                                        fit: BoxFit.contain,
+                                        child: InkWell(
+                                          child: creatMenu(
+                                              'Add teacher',
+                                              Image.asset(
+                                                  'images/addTeacher.png')),
+                                          onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                 MaterialPageRoute(
+                                                 builder: (contex) => NewUserScreen()));
+                                          },
+                                        )))),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 8),
+                              child: Expanded(
+                                  flex: 1,
+                                  child: FittedBox(
+                                      fit: BoxFit.contain,
+                                      child: InkWell(
+                                        child: creatMenu(
+                                            'Add student',
+                                            Image.asset(
+                                                'images/addStudent.png')),
+                                        onTap: () {
+                                             Navigator.push(
+                                                context,
+                                                 MaterialPageRoute(
+                                                 builder: (contex) => NewUserScreen()));
+                                        },
                                       ))),
                             ),
                           ],
@@ -310,7 +354,7 @@ class MenuScreen extends StatelessWidget {
 
 Container creatMenu(String MenuName, Image image) {
   return Container(
-    width: 170,
+    width: 180,
     child: Material(
       color: Colors.white,
       elevation: 4,
@@ -334,8 +378,11 @@ Container creatMenu(String MenuName, Image image) {
               padding: const EdgeInsets.all(8),
               child: Text(
                 '$MenuName',
-                style: const TextStyle(fontSize: 20, color: Colors.black,
-                 fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),
+                maxLines: 2,
+                overflow: TextOverflow.clip,
+                style: const TextStyle(fontSize: 18, color: Colors.black,
+                 fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                 ),
               ),
             ),
           ],

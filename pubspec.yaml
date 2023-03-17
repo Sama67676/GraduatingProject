@@ -54,8 +54,6 @@ dependencies:
   flutter_downloader: ^1.10.2
   flutter_sound: ^9.2.13
   dio: ^5.0.1
-  gallery_saver: ^2.3.2
-  image_picker_saver: ^0.3.0
   
 
 dev_dependencies:
@@ -96,7 +94,11 @@ flutter:
     - images/OpeningScreen1edited.png
     - images/OpeningImage2.png
     - images/OpeningImage3.png
-
+    - images/addStudent.png
+    - images/addTeacher.png
+    - images/Lecture.png
+    - images/Quiz.png
+    - images/Assignment.png
  
   fonts:
     - family: MyFlutterApp
