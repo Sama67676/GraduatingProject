@@ -10,10 +10,12 @@ import 'package:graduating_project_transformed/others/auth_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
   List<Map<String, dynamic>> memberList =[];
-   
+   bool isLoading= false;
+bool isDone= false;
+bool isFailed = false;
   final TextEditingController _search=TextEditingController();
   final TextEditingController _groupname=TextEditingController();
-    bool isloading = false;
+
     List groupList=[];
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -27,6 +29,37 @@ class CreatNewGroupScreen extends StatefulWidget {
 class _CreatNewGroupScreenState extends State<CreatNewGroupScreen> {
 
    XFile? photo;
+
+   void createGroup(context, groupImage)async{
+  setState(() {
+    isLoading = true;
+  });
+  var uuid = Uuid();
+
+   
+  
+  String groupId= uuid.v1();
+  await firestore.collection('groups').doc(groupId).set({
+  'members':memberList,
+  'groupsId':groupId,
+   'groupName': _groupname.text,
+   'groupImage':groupImage 
+  });
+  for (int i=0; i<memberList.length; i++){
+    String uid= memberList[i]['uid'];
+    await firestore.collection('users').doc(uid).collection('groups').doc(groupId).set({
+      'groupName': _groupname.text,
+      'groupId': groupId,
+      'groupImage':groupImage 
+    });
+  }
+  setState(() {
+    isLoading = false;
+    isDone = true;
+  });
+ 
+
+}
 
  void pickImage() async {
     photo = await ImagePicker()
@@ -55,7 +88,7 @@ class _CreatNewGroupScreenState extends State<CreatNewGroupScreen> {
 
 void initializeApp(){
   super.initState();
-  getAvailableGroups(context);
+
   }
   List <Map<String, dynamic>>? userMap=[];
   @override
@@ -75,158 +108,189 @@ void initializeApp(){
               Color.fromRGBO(255, 255, 255, 1)
             ],
           )),
-          child: Column(
+          child: Stack(
+            children: [
+              Column(
 
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children:  [
-                
-                  Expanded(
-                    flex: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal:10),
-                      child: GestureDetector(child: const Text('Cancel',style:TextStyle(fontSize: 20, color: Color.fromARGB(255, 8, 61, 104))),
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children:  [
+                    
+                      Expanded(
+                        flex: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal:10),
+                          child: GestureDetector(child: const Text('Cancel',style:TextStyle(fontSize: 20, color: Color.fromARGB(255, 8, 61, 104))),
+                          onTap: (){
+                            Navigator.pop(context);
+                          },
+                          ),
+                        ),
+                      ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal:20),
+                                child: Expanded(flex:2, child: Text('Create Group',style:TextStyle(fontSize: 25, color: Color.fromARGB(255, 8, 61, 104)))),
+                              ),
+                               Expanded(
+                                flex: 0,
+                                 child: Padding(
+                                   padding: const EdgeInsets.symmetric(horizontal:10),
+                                   child: GestureDetector(child: const Text('Done',style:TextStyle(fontSize: 20, color: Color.fromARGB(255, 8, 61, 104))),
+                          onTap: ()async{
+                               await uploadpfp().then((value) => {});
+                                                String value = await getDowmload();
+                            createGroup(context,   value != null ? value : "",);},
+                          ),
+                                 ),
+                               ),
+                      ],),
+                    ),
+                   
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Expanded(
+                      flex: 12,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            elevation: 0,
+                            color: const Color.fromARGB(255, 8, 61, 104),
+                            child:Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                  
+                                children: [
+                             const SizedBox(height: 20,),
+                             Padding(
+                               padding: const EdgeInsets.all(8.0),
+                               child: Material(
+                                    color: Colors.white,
+                                    elevation: 4,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(30),
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                        vertical: 15,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children:  [
+                                         InkWell(
+                                           child: CircleAvatar(
+                                                backgroundColor: Color.fromARGB(255, 205, 206, 212),
+                                                // ignore: sort_child_properties_last
+                                                
+                                              
+                                              backgroundImage: photo != null 
+                                              ? FileImage(File(photo!.path))
+                                  : null,
+                              child: photo == null
+                                  ? const Icon(
+                                      Icons.camera_alt,
+                                      size: 35,
+                                      color: Colors.white,
+                                    )
+                                  : null),
+                                              onTap: () {
+                                                pickImage();
+                                              
+                                            
+                                              },
+                                         ),
+                                             Padding(
+                                              padding:const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                width: 120,
+                                                height: 60,
+                                                child: TextField(
+                                                  controller: _groupname,
+                                                  decoration: InputDecoration(hintText: 'Group name'),
+                                                ),
+                                              )
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                             ),
+                            
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 18),
+                                child: Material(
+                                  color: Colors.white,
+                                  elevation: 4,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(30),
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 12,
+                                    ),
+                                    child: TextField(controller: _search,
+                                    decoration: const InputDecoration(hintText: 'Who would you like to add',
+                                    suffixIcon:  Icon(
+                                      Icons.search,
+                                      color:  Color.fromARGB(255, 8, 61, 104),
+                                      size: 40,
+                                    ),
+                                      ),
+                                      )
+                                      ),
+                                    ),
+                                        ),
+                                  const StudentStreamBuilder()
+                                  ],
+                              ),
+                            )),
                       ),
                     ),
-                  ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal:20),
-                            child: Expanded(flex:2, child: Text('Create Group',style:TextStyle(fontSize: 25, color: Color.fromARGB(255, 8, 61, 104)))),
+                  ],
+                ),
+                 isLoading ? Center(
+             child: SizedBox(
+                  height: 60,
+                  width: 60,
+                          child:  CircularProgressIndicator(
+                          color: Colors.black38,
+                           strokeWidth: 4,
                           ),
-                           Expanded(
-                            flex: 0,
-                             child: Padding(
-                               padding: const EdgeInsets.symmetric(horizontal:10),
-                               child: GestureDetector(child: const Text('Done',style:TextStyle(fontSize: 20, color: Color.fromARGB(255, 8, 61, 104))),
-                      onTap: ()async{
-                           await uploadpfp().then((value) => {});
-                                            String value = await getDowmload();
-                        createGroup(context,   value != null ? value : "",);},
-                      ),
-                             ),
-                           ),
-                  ],),
-                ),
-               
-                const SizedBox(
-                  height: 20,
-                ),
-                Expanded(
-                  flex: 12,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
                         ),
-                        elevation: 0,
-                        color: const Color.fromARGB(255, 8, 61, 104),
-                        child:Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-              
-                            children: [
-                         const SizedBox(height: 20,),
-                         Padding(
-                           padding: const EdgeInsets.all(8.0),
-                           child: Material(
-                                color: Colors.white,
-                                elevation: 4,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(30),
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 15,
-                                    vertical: 15,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children:  [
-                                     InkWell(
-                                       child: CircleAvatar(
-                                            backgroundColor: Color.fromARGB(255, 205, 206, 212),
-                                            // ignore: sort_child_properties_last
-                                            
-                                          
-                                          backgroundImage: photo != null 
-                                          ? FileImage(File(photo!.path))
-                              : null,
-                          child: photo == null
-                              ? const Icon(
-                                  Icons.camera_alt,
-                                  size: 35,
-                                  color: Colors.white,
-                                )
-                              : null),
-                                          onTap: () {
-                                            pickImage();
-                                          
-                                        
-                                          },
-                                     ),
-                                         Padding(
-                                          padding:const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            width: 120,
-                                            height: 60,
-                                            child: TextField(
-                                              controller: _groupname,
-                                              decoration: InputDecoration(hintText: 'Group name'),
-                                            ),
-                                          )
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                         ),
-                        
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 18),
-                            child: Material(
-                              color: Colors.white,
-                              elevation: 4,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(30),
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 12,
-                                ),
-                                child: TextField(controller: _search,
-                                decoration: const InputDecoration(hintText: 'Who would you like to add',
-                                suffixIcon:  Icon(
-                                  Icons.search,
-                                  color:  Color.fromARGB(255, 8, 61, 104),
-                                  size: 40,
-                                ),
-                                  ),
-                                  )
-                                  ),
-                                ),
-                                    ),
-                              const StudentStreamBuilder()
-                              ],
-                          ),
-                        )),
-                  ),
-                ),
-              ],
-            ),
+         
+             
+           ) : isDone? 
+           Center(
+             child: Container(
+              height: 80,
+              width: 80,
+                      child:  showDone()
+                    ),
+           ) : isFailed?
+           Center(
+           child: Container(
+              height: 80,
+              width: 80,
+                      child:  showError()
+                    ),
+           ):
+            Container()
+            ],
+          ),
           
         ),
       ),
@@ -365,38 +429,20 @@ class _StudentLineState extends State<StudentLine> {
     );
   }
 }
-void createGroup(context, groupImage)async{
-  var uuid = Uuid();
-  isloading =true;
-   
-  
-  String groupId= uuid.v1();
-  await firestore.collection('groups').doc(groupId).set({
-  'members':memberList,
-  'groupsId':groupId,
-   'groupName': _groupname.text,
-   'groupImage':groupImage 
-  });
-  for (int i=0; i<memberList.length; i++){
-    String uid= memberList[i]['uid'];
-    await firestore.collection('users').doc(uid).collection('groups').doc(groupId).set({
-      'groupName': _groupname.text,
-      'groupId': groupId,
-      'groupImage':groupImage 
-    });
-  }
-  Navigator.pop(context);
 
+
+
+ Widget showDone(){
+return Container(
+  decoration: BoxDecoration(shape: BoxShape.circle,
+  color: Colors.green),
+child: Icon(Icons.done, size: 60 , color: Colors.white,)
+);
 }
-void getAvailableGroups(context)async{
-  AuthNotifier _authNotifer =
-              Provider.of<AuthNotifier>(context, listen: false);
- String uid = _authNotifer.userDetails!.uid!;
- await firestore.collection('users').doc(uid).collection('groups').get().then((value) {
-  groupList= value.docs;
- });
-
+Widget showError(){
+return Container(
+  decoration: BoxDecoration(shape: BoxShape.circle,
+  color: Colors.red),
+child: Icon(Icons.close, size: 60 , color: Colors.white,)
+);
 }
-
-
- 

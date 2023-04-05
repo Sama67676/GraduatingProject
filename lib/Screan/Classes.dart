@@ -11,22 +11,7 @@ class ClassesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       floatingActionButton: Container(
-        width: 75,
-                  height: 50,
-         child: FloatingActionButton(
-          child: const Icon(Icons.add,  color: Color.fromARGB(255, 8, 61, 104)),
-             backgroundColor:  const Color(0xFFCCCED3),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (contex) => const CreatNewClassScreen()));
-          },
-         ),
-       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+       
       body: Container(
         decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -42,14 +27,45 @@ class ClassesScreen extends StatelessWidget {
             child: Padding(
           padding:
               const EdgeInsets.only(left: 25, right: 15, bottom: 5, top: 5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: const [
-              SizedBox(
-                height: 65,
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: const [
+                  SizedBox(
+                    height: 25,
+                  ),
+                calssStreamBuilder(),
+                 
+                ],
               ),
-            calssStreamBuilder(),
-             
+                Positioned(
+                left: 270,
+                           
+                 bottom: 40,
+                 child: InkWell(
+                   child: Container(
+                       width: 75,
+                        height: 50,
+                       child: Material(
+                        elevation: 4,
+                        
+                        borderRadius: const BorderRadius.all(
+                         Radius.circular(35),
+                         ),
+                        color:  const Color(0xFFCCCED3),
+                        child: const Icon(Icons.add,  color: Color.fromARGB(255, 8, 61, 104)),
+                       ),
+                      ),
+                      onTap: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (contex) => const CreatNewClassScreen()));
+
+                      },
+                 ),
+               ),
             ],
           ),
         )),

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import 'AddStudents.dart';
@@ -15,7 +15,7 @@ String month= '0';
     'Assignment',
     'Quiz',
     'Lecture',
-  
+    'midTerm'
   ];
   late List<Map<String, dynamic>> memberList =[];
 
@@ -37,9 +37,19 @@ class NewPostScreen extends StatefulWidget {
 }
 
 class _NewPostScreenState extends State<NewPostScreen> {
+  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
   String? classId;
   List <Map<String, dynamic>>? userMap=[];
   _NewPostScreenState(this.classId);
+
+  @override
+  void initState() {
+   
+    super.initState();
+    _fcm.getToken().then((token){
+      print('token is: $token');
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -533,6 +543,7 @@ void post(context, classId)async{
   'attachment': '',
   'attachmentType': '',
   'points': points,
+  'StudentId':'',
   'toStudents': memberList,
    }).then((value) async {
     postId = value.id;

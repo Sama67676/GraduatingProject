@@ -3,6 +3,9 @@ import 'package:graduating_project_transformed/Screan/newUserScreen.dart';
 
 import '../hiddenScreens/groupProfile.dart';
 import 'StudentsList.dart';
+
+import 'addNewStudent2.dart';
+import 'addNewTeacher.dart';
 import 'profile_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -153,27 +156,19 @@ class MenuScreen extends StatelessWidget {
                               horizontal: 5, vertical: 8),
                           child: Expanded(
                               flex: 1,
-                              child: InkWell(
-                                child: creatMenu(
+                              child:  creatMenu(
                                     'lessons', Image.asset('images/books.png')),
-                                onTap: () {
-                                   Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (contex) =>
-                                            const OpeningScreen1()));
-                                },
-                              ))),
+                               
+                              )),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 5, vertical: 8),
                         child: Expanded(
                             flex: 1,
-                            child: InkWell(
-                              child: creatMenu('Notes',
+                            child: creatMenu('Notes',
                                   Image.asset('images/note-taking.png')),
-                              onTap: () {},
-                            )),
+                   
+                            ),
                       ),
                     ],
                   ),
@@ -190,13 +185,12 @@ class MenuScreen extends StatelessWidget {
                                     flex: 1,
                                     child: FittedBox(
                                         fit: BoxFit.contain,
-                                        child: InkWell(
-                                          child: creatMenu(
+                                        child:  creatMenu(
                                               'Saved',
                                               Image.asset(
                                                   'images/bookmark.png')),
-                                          onTap: () {},
-                                        )))),
+                                         
+                                        ))),
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 5, vertical: 8),
@@ -204,13 +198,11 @@ class MenuScreen extends StatelessWidget {
                                   flex: 1,
                                   child: FittedBox(
                                       fit: BoxFit.contain,
-                                      child: InkWell(
-                                        child: creatMenu(
+                                      child: creatMenu(
                                             'Library',
                                             Image.asset(
                                                 'images/online-library.png')),
-                                        onTap: () {},
-                                      ))),
+                                       )),
                             ),
                           ],
                         ),
@@ -232,7 +224,7 @@ class MenuScreen extends StatelessWidget {
                                               Navigator.push(
                                                 context,
                                                  MaterialPageRoute(
-                                                 builder: (contex) => NewUserScreen()));
+                                                 builder: (contex) => AddNewTeacher()));
                                           },
                                         )))),
                             Padding(
@@ -251,7 +243,7 @@ class MenuScreen extends StatelessWidget {
                                              Navigator.push(
                                                 context,
                                                  MaterialPageRoute(
-                                                 builder: (contex) => NewUserScreen()));
+                                                 builder: (contex) => AddNewStudent2()));
                                         },
                                       ))),
                             ),

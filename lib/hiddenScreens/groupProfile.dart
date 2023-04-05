@@ -88,77 +88,210 @@ final String? groupImage;
                   children: [
                     
                   Expanded(
-                    flex: 1,
-                    child: IconButton(
-                            icon: const Icon(Icons.arrow_back_ios,
-                                color: Color.fromARGB(255, 8, 61, 104)),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
+                    flex: 2,
+                    child:
+                        MaterialButton(
+                          child: Row(children: const [
+                            Icon( Icons.arrow_back_ios,
+                                    color: Color.fromARGB(255, 8, 61, 104)),
+                            Text('Back', style: TextStyle(fontSize: 20, color:Color.fromARGB(255, 8, 61, 104), fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),)
+                          ],),
+                          onPressed: (){
+                               Navigator.pop(context);
+                          })
+                       
+                            
+                      
                   ),
-                      const Expanded(
-                        flex: 4,
-                        child: SizedBox(width: 30,)),
-                    Expanded(
-                      flex: 1,
-                      child: PopupMenuButton(
-                        icon: const Icon(Icons.edit,
-                            color: Color.fromARGB(255, 8, 61, 104)),
-                             itemBuilder: (context) => [ const PopupMenuItem(
-           child: Text('Edit group Details', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104), fontSize: 20),), value: '1'),
-        const PopupMenuItem<String>(
-            child: Text('Leave Group', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104), fontSize: 20),), value: '2'),
-        const PopupMenuItem<String>(
-            child: Text('Delete group', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104), fontSize: 20),), value: '3'),
-      ],
-                         elevation: 4,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-               Radius.circular(35),
-          ),
-),
-onSelected: (result) {
-  if (result == '1'){
-    changeGroupDetails(context, groupId);
-  }
-    if (result == '2') {
-      AlertLeavingGroup( context, groupId,);
+//THIS IS IMPORTANT DONT DELETE WAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRNNNNNNNNNNNNNNNNNNNNNNNNNINNNNNNNNNNNNNNNNNNNNNGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+//                       const Expanded(
+//                         flex: 4,
+//                         child: SizedBox(width: 30,)),
+//                     Expanded(
+//                       flex: 1,
+//                       child: PopupMenuButton(
+//                         icon: const Icon(Icons.edit,
+//                             color: Color.fromARGB(255, 8, 61, 104)),
+//                              itemBuilder: (context) => [ const PopupMenuItem(
+//            child: Text('Edit group Details', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104), fontSize: 20),), value: '1'),
+//         const PopupMenuItem<String>(
+//             child: Text('Leave Group', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104), fontSize: 20),), value: '2'),
+//         const PopupMenuItem<String>(
+//             child: Text('Delete group', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104), fontSize: 20),), value: '3'),
+//       ],
+//                          elevation: 4,
+//         shape: const RoundedRectangleBorder(
+//           borderRadius: BorderRadius.all(
+//                Radius.circular(35),
+//           ),
+// ),
+// onSelected: (result) {
+//   if (result == '1'){
+//     changeGroupDetails(context, groupId);
+//   }
+//     if (result == '2') {
+//       AlertLeavingGroup( context, groupId,);
      
-    } else if(result == '3'){
-      AlertDeletingGroup(context, groupId);
-    }
-},
-                      ),
-                    ),
+//     } else if(result == '3'){
+//       AlertDeletingGroup(context, groupId);
+//     }
+// },
+//                       ),
+//                     ),
                   ],
                 ),
        
              Padding(
-               padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20, top: 5),
-               child: Row(
+               padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20, top: 5),
+               child: Column(
                 children: [
                   CircleAvatar(
-                      radius: 40,
+                      radius: 60,
                       backgroundImage: widget.groupImage != null?
                       NetworkImage(widget.groupImage!): null),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(widget.groupName, style: const TextStyle(fontSize: 30, color: Color.fromARGB(255, 8, 61, 104)),),
                       ),
-              
-                ],
-               ),
-             ),
-             Padding(
+               Padding(
                padding: const EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 20),
                child: Text(
                 '$numberOfMembers Members',
                 style:  const TextStyle(fontSize: 22, color: Color.fromARGB(255, 8, 61, 104))),
              ),
+                ],
+               ),
+             ),
+            Expanded(
+              child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          elevation: 0,
+                          color: const Color.fromARGB(255, 8, 61, 104),
+                          child:Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 3),
+                                child:Material(
+                                    color:Colors.white,
+                                      
+                                      shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                    Radius.circular(30),
+                                    ),),
+                                    child: MaterialButton(
+                                      minWidth: 30,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 2),
+                                        child: Column(children: const [
+                                          Icon(Icons.notifications_outlined,
+                                              color: Color.fromARGB(255, 8, 61, 104),
+                                              size: 40,),
+                                              Text('Mute', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
+                                              fontSize: 16,),)
+                                        ],),
+                                      ),
+                                      onPressed: (){
+                                  
+                                    }
+                                    ),
+                                  ),
+                                
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 3),
+                                child: Material(
+                                    color:Colors.white,
+                                      
+                                    shape: const RoundedRectangleBorder(
+                                   borderRadius: BorderRadius.all(
+                                    Radius.circular(30),
+                                    ),),
+                                    child: MaterialButton(
+                                       minWidth: 30,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 2),
+                                        child: Column(children: const [
+                                          Icon(Icons.search,
+                                              color: Color.fromARGB(255, 8, 61, 104),
+                                              size: 40,),
+                                              Text('Search', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
+                                              fontSize: 16,),)
+                                        ],),
+                                      ),
+                                      onPressed: (){
+                                  
+                                    }
+                                    ),
+                                  ),
+                                
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 3),
+                                child: Material(
+                                    color:Colors.white,
+                                      
+                                  shape: const RoundedRectangleBorder(
+                                 borderRadius: BorderRadius.all(
+                                    Radius.circular(30),
+                                    ),),
+                                    child: MaterialButton(
+                                       minWidth: 30,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 2),
+                                        child: Column(children: const [
+                                          Icon(Icons.logout,
+                                              color: Color.fromARGB(255, 8, 61, 104),
+                                              size: 40,),
+                                              Text('Leave', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
+                                              fontSize: 16,),)
+                                        ],),
+                                      ),
+                                      onPressed: (){
+                                   AlertLeavingGroup( context, groupId,);
+                                    }
+                                    ),
+                                  ),
+                                
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 3),
+                                child:  Material(
+                                    color:Colors.white,
+                                      
+                                   shape: const RoundedRectangleBorder(
+                                   borderRadius: BorderRadius.all(
+                                    Radius.circular(30),
+                                    ),),
+                                    child: MaterialButton(
+                                       minWidth: 35,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 2),
+                                        child: Column(children: const [
+                                          Icon(Icons.more_vert,
+                                              color: Color.fromARGB(255, 8, 61, 104),
+                                              size: 40,),
+                                              Text('More', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
+                                              fontSize: 16,),)
+                                        ],),
+                                      ),
+                                      onPressed: (){
+                                  
+                                    }
+                                    ),
+                                  ),
+                                
+                              )
+                            ],),
+                         )),
+            ),
               
               Expanded(
-                  flex: 6,
+                  flex: 4,
                   child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25),
@@ -169,55 +302,106 @@ onSelected: (result) {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
+                           
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: ListTile(
-                              onTap: () {
-                                 Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (contex) => AddMembers(groupId: groupId, groupImage: groupImage, groupName: groupName, memberList: membersList,)));
-            setState(() {
-              
-            });
-            },
-
-                              leading: const Icon(
-                                Icons.add,
-                                color: Colors.white,
-                                size: 30,
+                              child: InkWell(
+                                child: Material(
+                                    color: Colors.white,
+                                    elevation: 4,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(35),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: const [
+                                        Padding(
+                                          padding:  EdgeInsets.only(left:18,top: 10, bottom: 10),
+                                          child: Icon(Icons.person_add_alt_1_outlined,
+                                                  color: Color.fromARGB(255, 8, 61, 104),
+                                                  size: 40,),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 16,
+                                          ),
+                                          child:  Text('Add members', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
+                                                  fontSize: 20,),)
+                                            ),
+                                           
+                                      ],
+                                    ),
+                                      ),
+                                      onTap: () {
+                                         Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (contex) => AddMembers(groupId: groupId, groupImage: groupImage, groupName: groupName, memberList: membersList,)));
+                                  setState(() {});
+                                      },
                               ),
-                              title: const Text(
-                                "Add Members",
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                               ),
-                            ),
+                            ), 
                            Flexible(
-                      child: ListView.builder(
+                      child: ListView.separated(
+                        padding: EdgeInsets.symmetric(vertical:5),
+                          separatorBuilder: (BuildContext context, int index) {
+                           return SizedBox(height: 12);
+                            },
+                      
                         itemCount: membersList.length,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
+                     shrinkWrap: true,
+                        physics:BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
-                          return ListTile(
-                            onTap: () =>showRemoveMemberDialog(index,context, groupId),
-                            
-                            leading: const Icon(Icons.account_circle, color: Colors.white60,),
-                            title: Text(
-                              membersList[index]['name'],
-                              style: const TextStyle(
-                                fontSize:  22,
-                                color: Colors.white60,
+                          return Container(
+                            height: 70,
+                            child: ListTile(
+                              
+                              onTap: () =>showRemoveMemberDialog(index,context, groupId),
+                            tileColor: Colors.white,
+                             dense: true,
+                              visualDensity: VisualDensity(vertical: 4), 
+                               shape: RoundedRectangleBorder( //<-- SEE HERE
+                              
+                                 borderRadius: BorderRadius.circular(35),
+                               ),
+                              leading: Padding(
+                                padding: const EdgeInsets.only(top:8.0, bottom: 1),
+                                child: StreamBuilder<DocumentSnapshot>(
+                                 stream:firestore.collection("users").doc(membersList[index]['uid']).snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.data != null) {
+                                 return CircleAvatar(
+                                 backgroundColor:const Color.fromARGB(255, 8, 61, 104),
+                                radius: 30,
+                                
+                                 backgroundImage:
+                                  NetworkImage(snapshot.data?['imgUrl']) 
+                                );
+                                    }else{
+                                      return  Container(
+                                        height: 1,
+                                        width: 1,
+                                      );
+                                     }
+                                   }
+                                ),
                                
                               ),
+                          
+                              title: Text(
+                                membersList[index]['name'],
+                                style: const TextStyle(
+                                  fontSize:  22,
+                                  color: Colors.black,
+                                 
+                                ),
+                              ),
+                             
+                              // trailing: Text(
+                              //     membersList[index]['isAdmin'] ? "Admin" : ""),
                             ),
-                           
-                            // trailing: Text(
-                            //     membersList[index]['isAdmin'] ? "Admin" : ""),
                           );
                           
                         },
@@ -323,7 +507,7 @@ Future<void> AlertLeavingGroup(context,groupId) async{
        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(35))),
        
-        content:Text('Are you sure you want to leave this group?'),
+        content:const Text('Are you sure you want to leave this group?'),
         actions: <Widget>[
           TextButton(
             child: const Text('Cancel'),
@@ -357,7 +541,7 @@ Future<void> AlertDeletingGroup(context,groupId) async{
        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(35))),
        
-        content:Text('Are you sure you want to delete this group?'),
+        content:const Text('Are you sure you want to delete this group?'),
         actions: <Widget>[
           TextButton(
             child: const Text('Cancel'),
@@ -409,12 +593,12 @@ Future<void> changeGroupDetails(context,groupId) async{
                     pickImage();
                     },
             ),
-            SizedBox(width: 10,),
+            const SizedBox(width: 10,),
             Container(
               width: 120,
               height: 60,
               child: TextField(controller: NewName,
-               decoration: InputDecoration(hintText: 'New name'),
+               decoration: const InputDecoration(hintText: 'New name'),
               ),
             ),
           ],

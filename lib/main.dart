@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -13,7 +14,9 @@ import 'Others/auth_notifier.dart';
 import 'Screan/Classes.dart';
 
 import 'Screan/OpeningScreen1.dart';
-import 'Screan/Signin.dart';
+import 'Screan/ScheduleScreen.dart';
+
+import 'Screan/SwaipableChats.dart';
 import 'Screan/menuScreen.dart';
 import 'Screan/newUserScreen.dart';
 
@@ -92,14 +95,38 @@ class _ButtomNavigationBarState extends State<ButtomNavigationBar> with WidgetsB
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final List<Widget> children = [
     UnderInstructions(),
-    Allusers(),
+    const SwipableChats(),
     const ClassesScreen(),
-    const UnderInstructions(),
+    const calender(),
     const MenuScreen(),
   
 
     
   ];
+  
+void notificationsPermission()async{
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+NotificationSettings settings = await messaging.requestPermission(
+  alert: true,
+  announcement: false,
+  badge: true,
+  carPlay: false,
+  criticalAlert: false,
+  provisional: false,
+  sound: true,
+);
+print('User granted permission: ${settings.authorizationStatus}');
+
+FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  print('Got a message whilst in the foreground!');
+  print('Message data: ${message.data}');
+
+  if (message.notification != null) {
+    print('Message also contained a notification: ${message.notification}');
+  }
+});
+}
 
 void setStatus(String status)async{
   AuthNotifier authNotifier =
@@ -110,7 +137,7 @@ void setStatus(String status)async{
 @override
   void initState() {
     super.initState();
-    
+    notificationsPermission();
     WidgetsBinding.instance.addObserver(this);
     setStatus('online');
   }
@@ -145,8 +172,7 @@ void setStatus(String status)async{
           items: [
             /// Home
             SalomonBottomBarItem(
-              icon: const Icon(MyFlutterApp.home_circled,),
-              activeIcon: const Icon(MyFlutterApp.home_circled,color: Color.fromARGB(255, 8, 61, 104)),
+             icon: const Icon(Icons.home),
               title: const Text("Home", style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),  fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),),
               unselectedColor: Color.fromARGB(255, 8, 61, 104),
               selectedColor: Color.fromARGB(255, 8, 61, 104),

@@ -238,7 +238,7 @@ class _CreatNewClassScreenState extends State<CreatNewClassScreen> {
                                       
                                     ),
                                             ),
-                                            const Text('Add all  students', style: TextStyle(fontSize: 20, color: Colors.white, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),)
+                                            const Text('Add all students', style: TextStyle(fontSize: 20, color: Colors.white, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),)
                                                  ],
                                                ),
                                                  Row(

@@ -40,20 +40,34 @@ dependencies:
   firebase_auth: ^4.2.6
   cloud_firestore: ^4.3.2
   modal_progress_hud_nsn: ^0.3.0
+  #i dont remember
   flutter_svg: ^1.1.6
   firebase_storage: ^11.0.11
   file_picker: ^5.2.5
   image_picker: ^0.8.6+1
   path_provider: ^2.0.12
   provider: ^6.0.5
+  #do math.. change the form of the timestamp of firebase
   intl: ^0.17.0
+  #to show images inside container
   cached_network_image: ^3.2.3
+  #to generate random ids
   uuid: ^3.0.7
+  #open files from phone using phone apps
   open_file: ^2.1.1
+  #to request permissions
   permission_handler: ^10.2.0
+  #to download images and files/ not working for now
   flutter_downloader: ^1.10.2
+  #to record audio
   flutter_sound: ^9.2.13
+  #to download images and files / not working for now
   dio: ^5.0.1
+  #for notifications
+  firebase_messaging: ^14.3.0
+  #to call api/ notificatios
+  http: ^0.13.5
+  table_calendar: ^3.0.8
   
 
 dev_dependencies:
@@ -99,6 +113,7 @@ flutter:
     - images/Lecture.png
     - images/Quiz.png
     - images/Assignment.png
+    - images/midTerm.png
  
   fonts:
     - family: MyFlutterApp

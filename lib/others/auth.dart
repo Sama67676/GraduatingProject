@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 
@@ -13,7 +14,7 @@ class Authintication {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   Future<void> createUserAnonymous(String email, String password, String Name,
-      String department, String year, String imgUrl, String position) async {
+      String department, String year,  String position) async {
     UserCredential userCredential =
         await FirebaseAuth.instance.signInAnonymously();
 
@@ -27,13 +28,15 @@ class Authintication {
       "email": email,
       "password": password,
       "Name": Name,
+      "lowercaseName": Name.toLowerCase(),
       "department": department,
       "year": year,
-      "imgUrl": imgUrl,
+      "imgUrl": '',
       "status": "",
       "friendsId": friendsId,
       "position": position,
       "onlineStatus":"",
+      "deviceToken":"",
       "typingTo":""
       
     };
@@ -78,6 +81,13 @@ class Authintication {
       authNotifier.setUser(user);
       await getUserDetails(authNotifier);
     }
+      final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+      _fcm.getToken().then((token)async{
+      print('token is: $token');
+      await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update({
+        "deviceToken":token,
+      });
+    });
   }
 
   Future<void> signout(AuthNotifier authNotifier, BuildContext context) async {

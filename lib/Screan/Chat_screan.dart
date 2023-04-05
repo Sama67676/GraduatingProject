@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:graduating_project_transformed/hiddenScreens/FriendProfile.dart';
 import 'package:graduating_project_transformed/others/managefiles/chatRoomPdf.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
@@ -17,9 +20,10 @@ import '../others/managefiles/chatRoomRecord.dart';
 import '../others/managefiles/chooseAttachment.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' show get;
+import 'package:http/http.dart' as http;
 
 
-
+late String friendToken;
 SendRecords sendRecords= SendRecords();
 final firestore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
@@ -71,6 +75,7 @@ bool isRequrderReady= false;
   void initState() {
     super.initState();
     initRecorder();
+    getFriendDeviceToken(frienduid);
  messageTextController.addListener(_printLatestValue);
     _authintication.initializeCurrentUser(authNotifier);
    FlutterDownloader.initialize(
@@ -135,6 +140,7 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
+      
       appBar: AppBar(
     
         elevation: 0.6,
@@ -184,7 +190,10 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
                   ),
             ),
             onTap: ()async{
-     
+              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (contex) => FriendProfile(friendId: frienduid,)));
             },
           ),
         ],
@@ -255,6 +264,7 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
                                   color: Color.fromARGB(255, 8, 61, 104),
                                 ),
                               ),
+                              
                               hintText: 'Message ...',
                               hintStyle: const TextStyle(color: Colors.white, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),
                                                   ),
@@ -294,7 +304,8 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
                             'receiver': frienduid,
                             'type': 'text',
                             'isRead':'',
-                          });
+                          }).then((value) => sendPushNotification(friendToken, currentUser, messageText));
+                          
                           firestore
                               .collection('chatRoom')
                               .doc(chatRoomId).update({
@@ -679,5 +690,37 @@ bool setOnlineStatus(String frienduid){
 Future<void> updateMessageReadState(messageId, chatRoomId)async {
   firestore.collection('chatRoom').doc(chatRoomId).update({
     'isRead': true
+  });
+}
+
+void sendPushNotification(token,msgSender, msg)async{
+try {
+  final body={
+    "to":token,
+    "notification": {
+        "title": msgSender,
+        "body": msg
+    }
+};
+var url = Uri.https('example.com', 'whatsit/create');
+
+var response = await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+headers: {HttpHeaders.contentTypeHeader: 'application/json',
+HttpHeaders.authorizationHeader: 'key=AAAA9EJgwkc:APA91bE-6mR8NRuNmQe0nXJehRO4uXhqQPz-LaaWbSpuCwhWn7nS3YuRhGDxemhW7tseo9pWD-Lse6Bi3s8MngGIf3EU0_dwkajRvJSfJaNFMy6nUFjLxdTZNlG5cSZgUacppLylCF7W'
+} ,
+body: jsonEncode(body));
+
+print('Response status: ${response.statusCode}');
+print('Response body: ${response.body}');
+} catch (e) {
+  print('ERROR NOTIFICATIONS: $e');
+}
+}
+
+void getFriendDeviceToken(frienduid)async{
+  await firestore.collection('users').doc('frienduid').get().then((snapshot) {
+    if (snapshot.exists) {
+       friendToken = snapshot.data()!['deviceToken'];
+    }
   });
 }

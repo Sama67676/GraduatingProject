@@ -9,18 +9,26 @@ import 'package:provider/provider.dart';
 
 
 import '../Screan/groupChatRoom.dart';
+import '../hiddenScreens/SearchChat.dart';
 
 
+String department = 'Computer dep' ;
+var items = [
+    'Computer dep',
+    'Network dep',
+    'Civil??? dep',
+    '?????? dep'
+  ];
 String uid =FirebaseAuth.instance.currentUser!.uid;
-class groupList extends StatefulWidget {
+class groupsList extends StatefulWidget {
   static const String ScreanRoute = 'groupList_Screen';
-  groupList({super.key});
+  groupsList({super.key});
 
   @override
-  State<groupList> createState() => _groupListState();
+  State<groupsList> createState() => _groupsListState();
 }
 
-class _groupListState extends State<groupList> {
+class _groupsListState extends State<groupsList> {
   UserModel _userModel = UserModel();
 
   @override
@@ -38,40 +46,93 @@ class _groupListState extends State<groupList> {
           ],
         )),
         child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children:  [
-              Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 8, left: 10, right: 10),
-                child: Row(
-                    children: [
-                     Expanded(
-                      flex: 1,
-                       child: IconButton(
-                              icon: const Icon(Icons.add_circle_outline,
-                              size: 40,
-                                  color: Color.fromARGB(255, 8, 61, 104)),
-                              onPressed: () {
-                                Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (contex) => const CreatNewGroupScreen()));
-                              },
-                            ),
-                     ),
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children:  [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 8, left: 10, right: 10),
+                    child: Row(
+                        children: [
                         
-                      Expanded(
-                        flex: 1,
-                        child: IconButton(onPressed: (){},
-                         icon: const Icon(Icons.search,
-                              size: 40,
-                                  color: Color.fromARGB(255, 8, 61, 104)),),
-                      )
-                    ],
+                             Expanded(
+                              flex: 4,
+                               child: Padding(
+                                 padding: const EdgeInsets.symmetric(horizontal:18.0),
+                                 child: DropdownButton(
+                                  borderRadius: BorderRadius.circular(35),
+                                      value: department,
+                                      icon: const Icon(Icons.keyboard_arrow_down,size: 30, color: Color.fromARGB(255, 8, 61, 104),),
+                                      items: items.map((String items) {
+                                        return DropdownMenuItem(
+                                          value: items,
+                                          child: Text(items, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, fontFamily: 'HP Simplified Light', color: Color.fromARGB(255, 8, 61, 104)),),
+                                        );
+                                      }).toList(),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          department = newValue!;
+                                        });              
+                                      }),
+                               ), 
+                             ),
+                          Expanded(
+                            flex: 1,
+                            child: IconButton(onPressed: (){
+                               Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (contex) =>  const SearchChats(title: 'Search through chats',)));
+                            },
+                             icon: const Icon(Icons.search,
+                                  size: 40,
+                                      color: Color.fromARGB(255, 8, 61, 104)),),
+                          )
+                        ],
+                      ),
                   ),
+                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                     Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+                    child: Text('Groups', style:  TextStyle(
+                       fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                  fontSize:25, color: Color.fromARGB(255, 8, 61, 104))),
+                  ),
+                  ],),
+                 const SizedBox(height: 10,),
+                  const groupStreamBuilder()
+                ],
               ),
-              
-              const groupStreamBuilder()
+               Positioned(
+                left: 295,
+                           
+                 bottom:45,
+                 child: InkWell(
+                   child: Container(
+                       width: 75,
+                        height: 50,
+                       child: Material(
+                        elevation: 4,
+                        
+                        borderRadius: const BorderRadius.all(
+                         Radius.circular(35),
+                         ),
+                        color:  const Color(0xFFCCCED3),
+                        child: const Icon(Icons.add,  color: Color.fromARGB(255, 8, 61, 104)),
+                       ),
+                      ),
+                      onTap: (){
+                       Navigator.push(
+                         context,
+                         MaterialPageRoute(
+                             builder: (contex) => const CreatNewGroupScreen()));
+
+                      },
+                 ),
+               ),
             ],
           ),
         ),

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../Screan/Chat_screan.dart';
 import '../Screan/groupChatRoom.dart';
+import '../hiddenScreens/SearchChat.dart';
 
 
 String department = 'Computer dep' ;
@@ -52,41 +53,36 @@ class _AllusersState extends State<Allusers> {
                 padding: const EdgeInsets.only(top: 20, bottom: 8, left: 10, right: 10),
                 child: Row(
                     children: [
-                     Expanded(
-                      flex: 1,
-                       child: IconButton(
-                              icon: const Icon(Icons.add_circle_outline,
-                              size: 40,
-                                  color: Color.fromARGB(255, 8, 61, 104)),
-                              onPressed: () {
-                                Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (contex) => const CreatNewGroupScreen()));
-                              },
-                            ),
-                     ),
+                    
                          Expanded(
                           flex: 4,
-                           child: DropdownButton(
-                            borderRadius: BorderRadius.circular(35),
-                                value: department,
-                                icon: const Icon(Icons.keyboard_arrow_down,size: 30, color: Color.fromARGB(255, 8, 61, 104),),
-                                items: items.map((String items) {
-                                  return DropdownMenuItem(
-                                    value: items,
-                                    child: Text(items, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'HP Simplified Light', color: Color.fromARGB(255, 8, 61, 104)),),
-                                  );
-                                }).toList(),
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    department = newValue!;
-                                  });              
-                                }), 
+                           child: Padding(
+                             padding:const EdgeInsets.symmetric(horizontal:18.0),
+                             child: DropdownButton(
+                              borderRadius: BorderRadius.circular(35),
+                                  value: department,
+                                  icon: const Icon(Icons.keyboard_arrow_down,size: 30, color: Color.fromARGB(255, 8, 61, 104),),
+                                  items: items.map((String items) {
+                                    return DropdownMenuItem(
+                                      value: items,
+                                      child: Text(items, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, fontFamily: 'HP Simplified Light', color: Color.fromARGB(255, 8, 61, 104)),),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      department = newValue!;
+                                    });              
+                                  }),
+                           ), 
                          ),
                       Expanded(
                         flex: 1,
-                        child: IconButton(onPressed: (){},
+                        child: IconButton(onPressed: (){
+                           Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (contex) =>  SearchChats(title: 'Search through chats',)));
+                        },
                          icon: const Icon(Icons.search,
                               size: 40,
                                   color: Color.fromARGB(255, 8, 61, 104)),),
@@ -94,19 +90,17 @@ class _AllusersState extends State<Allusers> {
                     ],
                   ),
               ),
-              const Padding(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-                child: Text('Groups', style:  TextStyle(
+                child: Text('Chats', style:  TextStyle(
                    fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                               fontSize:25, color: Color.fromARGB(255, 8, 61, 104))),
               ),
-           const groupStreamBuilder(),
-           const Padding(
-             padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-             child: Text('Chats', style:  TextStyle(
-               fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                fontSize:25, color: Color.fromARGB(255, 8, 61, 104))),
-           ),
+              ],),
+             SizedBox(height: 10,),
               usersStreamBuilder()
             ],
           ),
@@ -287,136 +281,6 @@ void callChatScreen(BuildContext context, Name, frienduid, _authNotifer, profile
               )));
 }
 
-
-
-class groupStreamBuilder extends StatelessWidget {
-  const groupStreamBuilder({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('users')
-            .doc(FirebaseAuth.instance.currentUser!.uid).collection('groups')
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            List<groupLine> userWidgets = [];
-            final groups = snapshot.data!.docs;
-            for (var group in groups) {
-              final groupName = group.get('groupName');
-              final groupId = group.get('groupId');
-              final groupPic = group.get('groupImage');
-    
-
-              final userWidget = groupLine(
-                  groupName: groupName,
-                  groupId: groupId,
-                  groupPic: groupPic,
-      );
-              userWidgets.add(userWidget);
-            }
-            return Expanded(
-              flex: 1,
-              child: ListView(
-                shrinkWrap: true,
-                children: userWidgets,
-              ),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        });
-  }
-}
-
-class groupLine extends StatelessWidget {
-   groupLine(
-      {  this.groupName,  this.groupId,  this.groupPic, super.key, });
-
-  final String? groupName;
-  final String? groupId;
-  final String? groupPic;
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 3, top: 3),
-      child: InkWell(
-        child: Material(
-          color: Colors.white,
-
-          elevation: 1, //shadows
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(35),
-            ),
-            side: BorderSide(color: Color.fromRGBO(17, 58, 99, 1), width: 1.5),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 10,
-            ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage(groupPic!),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          groupName!,
-                          style: const TextStyle(
-                             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                              fontSize: 20, color: Colors.black),
-                        ),
-                      
-                       
-                      ],
-                    ),
-                  
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-        onTap: () {
-       AuthNotifier _authNotifer =
-              Provider.of<AuthNotifier>(context, listen: false);
-              callGroupChatScreen(context, _authNotifer, groupName!, groupPic!, groupId!, FirebaseAuth.instance.currentUser!.uid);
-            
-                      },
-      ),
-    );
-  }
-}
-
-
-void callGroupChatScreen(BuildContext context, authNotifer, groupName, groupPic,
-    groupId, currentUser) {
-  Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (contex) => GroupChatscrean(
-                groupName: groupName,
-                authNotifier: authNotifer,
-                groupPic: groupPic,
-                groupId: groupId,
-                currentUser: currentUser,
-           
-              )));
-}
 
 
 

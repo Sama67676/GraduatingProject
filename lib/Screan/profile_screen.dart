@@ -1,5 +1,8 @@
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:image_picker/image_picker.dart';
 import '../Others/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -69,6 +72,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final FireBaseStorage storage = FireBaseStorage();
     return SafeArea(
       child: Scaffold(
+         resizeToAvoidBottomInset: true,
         body: Container(
           decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -83,6 +87,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
+
+
               children: [
                 Row(
                   children: [
@@ -108,162 +114,143 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // ),
                   ],
                 ),
-                Column(
-                  children: [
-                    Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        InkWell(
-                          onTap: () {},
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: const Image(
-                              image: AssetImage('images/galaxy.jpg'),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 190,
-                          left: 30,
-                          child: InkWell(
-                              child: CircleAvatar(
-                                radius: 50,
-                                backgroundImage: imageUrl != null
-                                    ? NetworkImage(imageUrl!)
-                                    : null,
-                                child: imageUrl == null
-                                    ? Icon(
-                                        Icons.person,
-                                        size: 60,
-                                        color: Colors.white,
-                                      )
-                                    : null,
-                              ),
-                              onTap: () {
-                                () async {
-                                  final results =
-                                      await FilePicker.platform.pickFiles(
-                                    allowMultiple: false,
-                                    type: FileType.custom,
-                                    allowedExtensions: [
-                                      'png',
-                                      'jpg',
-                                    ],
-                                  );
-                                  if (results == null) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('no file selected.'),
-                                      ),
-                                    );
-                                    return null;
-                                  }
-                                  final path = results.files.single.path!;
-                                  final fileName =
-                                      results.files.single.name; //profile/$uid
-
-                                  storage.uploadFile(
-                                      path,
-                                      fileName
-                                          as File); //we may have to add then and print some message or something
-                                };
-                              }),
-                        ),
-                      ],
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 140),
-                        child: Text(
-                          '$Name',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                              fontSize: 20, color: Colors.indigo[900]),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 140),
-                        child: Text(
-                          '$department' + ' ' + '$year' + ' ' + 'year',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                              fontSize: 20, color: Colors.indigo[900]),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Text(
-                          'bio',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                              fontSize: 20, color: Colors.indigo[900]),
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      child: Container(
-                        width: 370,
-                        height: 80,
-                        child: Material(
-                          color: Colors.white,
-                          elevation: 1, //shadows
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(35),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Text('$status',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                   fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                    fontSize: 20, color: Colors.indigo[900])),
-                          ),
-                        ),
-                      ),
-                      onTap: () {
-                        // openDialog();
-                      },
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Material(
-                      color: Colors.indigo[800],
-                      borderRadius: BorderRadius.circular(45),
-                      child: MaterialButton(
-                        onPressed: () {
-                          AuthNotifier authNotifier =
-                              Provider.of<AuthNotifier>(context, listen: false);
-                          
-                            _authintication.signout(authNotifier, context);
-                          
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: const Text(
-                            'Log out',
+                        
+                            InkWell(
+                                    child: CircleAvatar(
+                                      radius: 60,
+                                      backgroundImage: imageUrl != null
+                                          ? NetworkImage(imageUrl!)
+                                          : null,
+                                      child: imageUrl == null
+                                          ? Icon(
+                                              Icons.person,
+                                              size: 60,
+                                              color: Colors.white,
+                                            )
+                                          : null,
+                                    ),
+                                    onTap: () {
+                                      changeProfile(context, imageUrl);
+                                      setState(() { });
+                                    }
+                                    ),
+                       
+                   Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Text(
+                            '$Name',
+                            textAlign: TextAlign.start,
                             style: TextStyle(
                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 15),
+                                fontSize: 30, color: Colors.indigo[900]),
+                          ),
+                        ),
+                   Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Text(
+                            '$department' + ' ' + '$year' + ' ' + 'year',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                               fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                fontSize: 30, color: Colors.indigo[900]),
+                          ),
+                        ),
+                         Expanded(
+                           child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(35),),
+                            elevation: 0,
+                            color: const Color.fromARGB(255, 8, 61, 104),
+                            child:Padding(
+                            padding: const EdgeInsets.all(18),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                             InkWell(
+                                child:  Material(
+                              color: Colors.white,
+                              elevation: 1, //shadows
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(35),
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                     Padding(
+                                padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 2),
+                                child: Text(
+                                  'bio',
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                     fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                      fontSize: 20, color: Colors.indigo[900]),
+                                ),
+                              ),
+                                    Padding(
+                                     padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                                      child: Text('$status',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                              fontSize: 20, color: Colors.indigo[900])),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                                                 
+                                                 onTap: () {
+                            ChangeBio(context);
+                            setState(() {});
+                                                 },
+                                               ),
+                                                ],
+                                               ),
+                                                )),
+                         ),
+                      
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        width: 120,
+                        child: Material(
+                          color: Colors.indigo[800],
+                          borderRadius: BorderRadius.circular(45),
+                          child: MaterialButton(
+                            onPressed: () {
+                              AuthNotifier authNotifier =
+                                  Provider.of<AuthNotifier>(context, listen: false);
+                              
+                                _authintication.signout(authNotifier, context);
+                              
+                            },
+                            child: Row(
+                              children: const [
+                                 Padding(
+                                  padding:  EdgeInsets.all(10),
+                                  child:  Text(
+                                    'Log out',
+                                    style: TextStyle(
+                                       fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: 15),
+                                  ),
+                                ),
+                               Icon(Icons.logout,
+                                                  color: Colors.white,
+                                                  size: 20,),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                  
               ],
             ),
           ),
@@ -272,3 +259,148 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+
+   XFile? photo;
+
+ void pickImage() async {
+    photo = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 25);
+    uploadpfp();
+  }
+
+  Future<void> uploadpfp() async {
+    File? imagefile = File(photo!.path);
+    try {
+      Reference ref = FirebaseStorage.instance.ref('files/${imagefile.path}');
+      UploadTask uploadTask = ref.putFile(imagefile);
+      final snapshot = await uploadTask.whenComplete(() => null);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<String> getDowmload() async {
+    File? imagefile = File(photo!.path);
+    return firebase_storage.FirebaseStorage.instance
+        .ref('files/${imagefile.path}')
+        .getDownloadURL();
+  }
+
+
+Future<void> changeProfile(context, imageUrl) async{
+
+       return showDialog<void>(
+    context: context,
+    barrierDismissible: false, 
+    builder: (BuildContext context) {
+      return AlertDialog(
+        contentPadding: const EdgeInsets.all(20),
+        actionsPadding: const EdgeInsets.only(left:20, right: 20, bottom: 20),
+       shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(35))),
+       title: const Text('Change your profile picture', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
+                                                 fontSize: 20,),),
+        content:
+            InkWell(child: CircleAvatar(radius: 40,
+             backgroundImage: photo != null 
+              ? FileImage(File(photo!.path))
+              : null,
+              child: photo == null
+              ? const Icon(
+                Icons.camera_alt,
+                 size: 35,
+                 color: Colors.white,
+                  )
+                  : null),
+                  onTap: () {
+                    pickImage();
+                    },
+            ),
+            
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
+                                                 fontSize: 18),),
+            onPressed: () {
+             
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Approve', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
+                                                fontSize: 18),),
+            onPressed: () async {
+              if( imageUrl== null){
+             
+               await uploadpfp().then((value) => {});
+              String? value = await getDowmload();
+              await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update({
+              
+                'imgUrl': value,
+              });
+              }else{
+                
+
+                await uploadpfp().then((value) => {});
+              String? value = await getDowmload();
+              await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update({
+              
+                'imgUrl': value,
+              });
+              }
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+  }
+  Future<void> ChangeBio(context) async{
+  final TextEditingController NewName = TextEditingController();
+       return showDialog<void>(
+    context: context,
+    barrierDismissible: false, 
+    builder: (BuildContext context) {
+      return AlertDialog(
+        contentPadding: const EdgeInsets.all(20),
+        actionsPadding: const EdgeInsets.only(left:20, right: 20, bottom: 20),
+       shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(35))),
+       title: const Text('Change your Bio', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
+                                                 fontSize: 20,),),
+        content:  Container(
+              width: 80,
+              height: 40,
+              child: TextField(controller: NewName,
+               decoration: const InputDecoration(hintText: 'New name'),
+              ),
+            ),
+            
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
+                                                 fontSize: 18),),
+            onPressed: () {
+             
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Approve', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
+                                                fontSize: 18),),
+            onPressed: () async {
+              
+              await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update({
+              
+                'status': NewName.text,
+              });
+              
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+  }

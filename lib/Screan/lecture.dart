@@ -7,8 +7,8 @@ import 'package:intl/intl.dart';
 
 
 final CommentsController = TextEditingController();
-class PostScreen extends StatefulWidget {
-  PostScreen({this.postId,this.title, this.type, this.classId,this.teacherId, this.description,this.attachment, this.points,this.DateFromFirebase});
+class LectureScreen extends StatefulWidget {
+  LectureScreen({this.postId,this.title, this.type, this.classId,this.teacherId, this.description,this.attachment, this.DateFromFirebase});
   String? postId;
   String? classId;
   String? teacherId;
@@ -16,13 +16,12 @@ class PostScreen extends StatefulWidget {
  String? title;
  String? description;
  String? attachment;
- String? points;
  Map<String, dynamic>? DateFromFirebase;
   @override
-  State<PostScreen> createState() => _PostScreenState(this.postId,this.title, this.type, this.teacherId, this.classId, this.description,this.attachment, this.points, this.DateFromFirebase);
+  State<LectureScreen> createState() => _LectureScreenState(this.postId,this.title, this.type, this.teacherId, this.classId, this.description,this.attachment,this.DateFromFirebase);
 }
 
-class _PostScreenState extends State<PostScreen> {
+class _LectureScreenState extends State<LectureScreen> {
     String? postId;
   String? classId;
   String? teacherId;
@@ -30,9 +29,9 @@ class _PostScreenState extends State<PostScreen> {
  String? title;
   String? description;
   String? attachment;
-  String? points;
+
 Map<String, dynamic>? DateFromFirebase;
-    _PostScreenState(this.postId,this.title,this.type, this.teacherId, this.classId,  this.description,this.attachment, this.points,this.DateFromFirebase);
+    _LectureScreenState(this.postId,this.title,this.type, this.teacherId, this.classId,  this.description,this.attachment,this.DateFromFirebase);
 
 
   
@@ -90,14 +89,7 @@ void initState(){
                           flex: 2,
                           child: SizedBox(width: 4,)),
                            Expanded(
-                             child: Text(
-                             '-/10',
-                             style: TextStyle(
-                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                               color: Color.fromARGB(255, 8, 61, 104),
-                               fontSize:22,
-                             ),
-                              ), 
+                             child: SizedBox(width: 2,)
                            ),
                         ],
                       ),
@@ -118,8 +110,7 @@ void initState(){
                             color: const Color.fromARGB(255, 8, 61, 104),
                             child: Padding(
                               padding: const EdgeInsets.all(24),
-                              child: Stack(
-                                children: [
+                              child: 
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
@@ -161,80 +152,40 @@ void initState(){
                                          ],
                                        ),
                                      
-                                     Padding(
-                                     padding: const EdgeInsets.symmetric(vertical:8.0),
-                                       child: Text(title!,
-                                            style: TextStyle(
-                                              fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                             color: Colors.white,
-                                              fontSize:30,
-                                            ),
-                                           ),
-                                     ),
-                                     Padding(
-                                    padding: const EdgeInsets.symmetric(vertical:8.0),
-                                       child: description !=''? 
-                                       Text('Description :',
-                                        style: TextStyle(color: Colors.white,
-                                              fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                             ),):
-                                                SizedBox(width: 0, height: 0,)
-                                          
-                                     ),
-                                      Text(description ?? '',
-                                        style: TextStyle(color: Colors.white70,
+                                  Padding(
+                                      padding: const EdgeInsets.symmetric(vertical:8.0),
+                                    child: Text(title!,
+                                              style: TextStyle(
+                                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                               color: Colors.white,
+                                                fontSize:30,
+                                              ),
+                                             ),
+                                  ),
+                          
+                                  Padding(
+                                   padding: EdgeInsets.symmetric(vertical:8.0),
+                                   child:description !=''? 
+                                   Text(
+                                    'Description :',
+                                          style: TextStyle(color: Colors.white,
+                                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                               ),):
+                                              SizedBox(width: 0, height: 0,)
+                                 ),
+                                 Text(description ?? '',
+                                        style: const TextStyle(color: Colors.white70,
                                               fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                               fontSize: 20,
                                              ),),
-                                     
-                                   
-                                      Text('$points points',
-                                         style: TextStyle(color: Colors.white,
-                                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                               ),
-                                       ),
-                                     
-                                 
-                                    Text('due ${DateFromFirebase!['month']}/${DateFromFirebase!['day']} ${DateFromFirebase!['hour']}:${DateFromFirebase!['minute']} ${DateFromFirebase!['moreve']}',
-                                       style: TextStyle(color: Colors.white,
-                                                  fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                 ),
-                                                 ),
-                                     
-                                   
+                                  
                                     ],
                                   ),
-                                  Positioned(
                              
-                                right: 20,
-                                bottom: 30,
-                                child: Container(
-                                    width: 125,
-                                    height: 60,
-                                     child: Material(
-                                      elevation: 4,
-                                      
-                                      borderRadius: const BorderRadius.all(
-                                       Radius.circular(35),
-                                       ),
-                                      color:  const Color(0xFFCCCED3),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-                                        child: Text('Submit',
-                                        style: TextStyle(
-                                          fontSize: 28,
-                                          color: const Color.fromARGB(255, 8, 61, 104), fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),
-                                        ),
-                                      ),
-                                     ),
-                                   ),
-                              ),
-                                ],
-                              ),
                             )),
+                              
+                      
                   ),
                 ),
                
