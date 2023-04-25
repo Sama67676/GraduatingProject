@@ -3,13 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:graduating_project_transformed/hiddenScreens/StudentsWork.dart';
 import 'package:intl/intl.dart';
 
 
 final CommentsController = TextEditingController();
-class PostScreen extends StatefulWidget {
-  PostScreen({this.postId,this.title, this.type, this.classId,this.teacherId, this.description,this.attachment, this.points,this.DateFromFirebase, this.time});
+class S_PostScreen extends StatefulWidget {
+  S_PostScreen({this.postId,this.title, this.type, this.classId,this.teacherId, this.description,this.attachment, this.points,this.DateFromFirebase, this.time});
   String? postId;
   String? classId;
   String? teacherId;
@@ -21,10 +20,10 @@ class PostScreen extends StatefulWidget {
 Map<String, dynamic>? DateFromFirebase;
 String? time;
   @override
-  State<PostScreen> createState() => _PostScreenState(this.postId,this.title, this.type, this.teacherId, this.classId, this.description,this.attachment, this.points, this.DateFromFirebase, this.time);
+  State<S_PostScreen> createState() => _S_PostScreenState(this.postId,this.title, this.type, this.teacherId, this.classId, this.description,this.attachment, this.points, this.DateFromFirebase, this.time);
 }
 
-class _PostScreenState extends State<PostScreen> {
+class _S_PostScreenState extends State<S_PostScreen> {
     String? postId;
   String? classId;
   String? teacherId;
@@ -35,7 +34,7 @@ class _PostScreenState extends State<PostScreen> {
   String? points;
 Map<String, dynamic>? DateFromFirebase;
 String? time;
-    _PostScreenState(this.postId,this.title,this.type, this.teacherId, this.classId,  this.description,this.attachment, this.points,this.DateFromFirebase, this.time);
+    _S_PostScreenState(this.postId,this.title,this.type, this.teacherId, this.classId,  this.description,this.attachment, this.points,this.DateFromFirebase, this.time);
 
 
   
@@ -222,32 +221,26 @@ void initState(){
                              
                                 right: 20,
                                 bottom: 30,
-                                child: InkWell(
-                                  child: Container(
-                                      width: 125,
-                                      height: 65,
-                                       child: Material(
-                                        elevation: 4,
-                                        
-                                        borderRadius: const BorderRadius.all(
-                                         Radius.circular(35),
-                                         ),
-                                        color:  const Color(0xFFCCCED3),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-                                          child: Text('students work',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: const Color.fromARGB(255, 8, 61, 104), fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),
-                                          ),
-                                        ),
+                                child: Container(
+                                    width: 125,
+                                    height: 60,
+                                     child: Material(
+                                      elevation: 4,
+                                      
+                                      borderRadius: const BorderRadius.all(
+                                       Radius.circular(35),
                                        ),
+                                      color:  const Color(0xFFCCCED3),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                                        child: Text('Submit',
+                                        style: TextStyle(
+                                          fontSize: 28,
+                                          color: const Color.fromARGB(255, 8, 61, 104), fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),
+                                        ),
+                                      ),
                                      ),
-                                     onTap: ()
-                                     {
-                                            Navigator.push(context, MaterialPageRoute(builder:  (contex) => StudentsWork(postId: postId, courseId: classId, ) ));
-                                     },
-                                ),
+                                   ),
                               ),
                                 ],
                               ),

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:graduating_project_transformed/others/auth_notifier.dart';
 import 'package:provider/provider.dart';
 
-import 'AddStudents.dart';
+
  bool isloading = false;
  bool isDone= false;
 String NoteType = 'Assignment' ;
@@ -29,21 +29,21 @@ String? noteId;
 TextEditingController _title = TextEditingController();
 TextEditingController _note = TextEditingController();
 // ignore: camel_case_types
-class Addevent extends StatefulWidget {
-  const Addevent({super.key});
+class S_Addevent extends StatefulWidget {
+  const S_Addevent({super.key});
 
   @override
-  State<Addevent> createState() => _AddeventState();
+  State<S_Addevent> createState() => _S_AddeventState();
 }
 
-class _AddeventState extends State<Addevent> {
+class _S_AddeventState extends State<S_Addevent> {
     void createNote(context)async{
       setState(() {
         isloading= true;
       });
      final dataBaseMoreEve= MorEve == '0'? 'A.M.': 'P.M.';
   Map time ={'month': month, 'day': day, 'hour': hour, 'minute': minut, 'moreve': dataBaseMoreEve};
-
+  getOnlyMe();
   await FirebaseFirestore.instance
         .collection('Notes').add({
           'creator': FirebaseAuth.instance.currentUser!.uid,
@@ -464,112 +464,6 @@ class _AddeventState extends State<Addevent> {
                                                       ),
                                                 ),
                                               ),
-                                            Row(
-                                                     children: [
-                                                       Transform.scale(
-                                                       scale: 1.3,
-                                                  child: Checkbox(
-                                                  checkColor: const Color.fromARGB(255, 8, 61, 104) ,
-                                                  fillColor:  MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-                                                       if (states.contains(MaterialState.disabled)) {
-                                return Colors.white;
-                                 }
-                                 return Colors.white;
-                                                       }),
-                                                  activeColor: Colors.white,
-                                          value:isSelectChecked,
-                                          shape: const CircleBorder(),
-                                          onChanged: (value) async{
-                                            setState(() {
-                                                isSelectChecked = value!;
-                                                isAllChecked = false;
-                                                isMeChecked= false;
-                                            });
-                                            if(value==true){
-                                            await getAllStudents();
-                                            } else if(value==false){
-                                            memberList.clear();
-                                            }
-                                          },
-                                          
-                                        ),
-                                                ),
-                                                const Text('Add all students', style: TextStyle(fontSize: 20, color: Colors.white, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),)
-                                                     ],
-                                                   ),
-                                                     Row(
-                                                     children: [
-                                                       Transform.scale(
-                                                       scale: 1.3,
-                                                  child: Checkbox(
-                                                  checkColor: const Color.fromARGB(255, 8, 61, 104) ,
-                                                  fillColor:  MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-                                                       if (states.contains(MaterialState.disabled)) {
-                                return Colors.white;
-                                 }
-                                 return Colors.white;
-                                                       }),
-                                                  activeColor: Colors.white,
-                                          value:isAllChecked,
-                                          shape: const CircleBorder(),
-                                          onChanged: (value) async{
-                                            setState(() {
-                                                isAllChecked = value!;
-                                                isSelectChecked= false;
-                                                 isMeChecked= false;
-                                            });
-                                            if(value==true) {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                builder: (contex) => const AddStudents())).then((value2) {
-                                                   print(value2);
-                                                   memberList= value2;
-                                                },);
-                                               
-                                            } else if(value==false){
-                                            memberList.clear();
-                                            }
-                                         
-                                          },
-                                          
-                                        ),
-                                                ),
-                                                const Text('Select students ', style: TextStyle(fontSize: 20, color: Colors.white, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),)
-                                                     ],
-                                                   ),
-                                                      Row(
-                                                     children: [
-                                                       Transform.scale(
-                                                       scale: 1.3,
-                                                  child: Checkbox(
-                                                  checkColor: const Color.fromARGB(255, 8, 61, 104) ,
-                                                  fillColor:  MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-                                                       if (states.contains(MaterialState.disabled)) {
-                                return Colors.white;
-                                 }
-                                 return Colors.white;
-                                                       }),
-                                                  activeColor: Colors.white,
-                                          value:isMeChecked,
-                                          shape: const CircleBorder(),
-                                          onChanged: (value) async{
-                                            setState(() {
-                                                isSelectChecked = false;
-                                                isAllChecked = false;
-                                                isMeChecked= value!;
-                                            });
-                                            if(value==true){
-                                              memberList.clear();
-                                              getOnlyMe();
-                                            } 
-                                          },
-                                          
-                                        ),
-                                                ),
-                                                const Text('Me only', style: TextStyle(fontSize: 20, color: Colors.white, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),)
-                                                     ],
-                                                   ),
                                             ]
                                             ),
                                           )
@@ -609,16 +503,7 @@ class _AddeventState extends State<Addevent> {
             );
   }
 }
-  Future getAllStudents() async {
-    await FirebaseFirestore.instance
-        .collection('users').where('position', isEqualTo: 'Student')
-         .get().then((QuerySnapshot querySnapshot){
-            for (var element in querySnapshot.docs) {
-         memberList.add({'name':element['Name'], 'uid': element['uid']});
-            }
-         });
-         print(memberList);
-  }
+  
   
   Future getOnlyMe() async {
     await FirebaseFirestore.instance

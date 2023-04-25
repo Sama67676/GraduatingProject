@@ -2,39 +2,16 @@ import 'package:graduating_project_transformed/Screan/OpeningScreen1.dart';
 import 'package:graduating_project_transformed/Screan/newUserScreen.dart';
 
 import '../hiddenScreens/groupProfile.dart';
-import '../others/Prefrences.dart';
-import 'StudentsList.dart';
+import '../Screan/StudentsList.dart';
 
-import 'addNewStudent2.dart';
-import 'addNewTeacher.dart';
-import 'profile_screen.dart';
+import '../Screan/profile_screen.dart';
 import 'package:flutter/material.dart';
+import '../Screan/TeachersList.dart';
 
-import 'TeachersList.dart';
-String name ='';
-class MenuScreen extends StatefulWidget {
+
+class S_MenuScreen extends StatelessWidget {
   static const String ScreanRoute = 'menu_Screen';
-   MenuScreen({super.key});
-
-  @override
-  State<MenuScreen> createState() => _MenuScreenState();
-}
-
-class _MenuScreenState extends State<MenuScreen> {
-
-@override
-  void initState() {
-    // TODO: implement initState
-    getprefrences();
-    super.initState();
-  }
-  void getprefrences()async{
-          name =await UserPrefrences.getUserPosition().toString();
-          setState(() {
-            
-          });
-
-}
+  const S_MenuScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -92,10 +69,10 @@ class _MenuScreenState extends State<MenuScreen> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children:  [
+                                  children: const [
                                     Text(
-                                      name?? 'wait',
-                                      style: const TextStyle(
+                                      'Name',
+                                      style: TextStyle(
                                          fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                           fontSize: 20, color: Colors.black),
                                     ),
@@ -224,49 +201,6 @@ class _MenuScreenState extends State<MenuScreen> {
                                             Image.asset(
                                                 'images/online-library.png')),
                                        )),
-                            ),
-                          ],
-                        ),
-                       Row(
-                          children: [
-                            Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 8),
-                                child: Expanded(
-                                    flex: 1,
-                                    child: FittedBox(
-                                        fit: BoxFit.contain,
-                                        child: InkWell(
-                                          child: creatMenu(
-                                              'Add teacher',
-                                              Image.asset(
-                                                  'images/addTeacher.png')),
-                                          onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                 MaterialPageRoute(
-                                                 builder: (contex) => AddNewTeacher()));
-                                          },
-                                        )))),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 8),
-                              child: Expanded(
-                                  flex: 1,
-                                  child: FittedBox(
-                                      fit: BoxFit.contain,
-                                      child: InkWell(
-                                        child: creatMenu(
-                                            'Add student',
-                                            Image.asset(
-                                                'images/addStudent.png')),
-                                        onTap: () {
-                                             Navigator.push(
-                                                context,
-                                                 MaterialPageRoute(
-                                                 builder: (contex) => AddNewStudent2()));
-                                        },
-                                      ))),
                             ),
                           ],
                         ),

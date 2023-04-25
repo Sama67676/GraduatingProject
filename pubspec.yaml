@@ -68,6 +68,9 @@ dependencies:
   #to call api/ notificatios
   http: ^0.13.5
   table_calendar: ^3.0.8
+  #associated with flutter downloader to download files from temp to permit
+  flutter_file_dialog: ^3.0.0
+  shared_preferences: ^2.1.0
   
 
 dev_dependencies:

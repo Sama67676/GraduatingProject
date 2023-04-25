@@ -17,7 +17,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../hiddenScreens/groupProfile.dart';
+import 'S_GroupProfile.dart';
 
 final firestore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
@@ -25,14 +25,14 @@ late String currentUserName;
 late String? curentUserImage;
  int? numberOfMembers;
 Authintication _authintication = Authintication();
-bool recordingIcon= false;
 
 
 
 
-class GroupChatscrean extends StatefulWidget {
+
+class S_GroupChatscrean extends StatefulWidget {
   static const String ScreanRoute = 'GroupChatscrean';
-  const GroupChatscrean({
+  const S_GroupChatscrean({
     super.key,
     required this.groupName,
     required this.groupPic,
@@ -49,11 +49,11 @@ class GroupChatscrean extends StatefulWidget {
 
   @override
   // ignore: no_logic_in_create_state
-  State<GroupChatscrean> createState() => _GroupChatscreanState(
+  State<S_GroupChatscrean> createState() => _S_GroupChatscreanState(
       groupName, groupPic, authNotifier, currentUser, groupId, );
 }
 
-class _GroupChatscreanState extends State<GroupChatscrean> {
+class _S_GroupChatscreanState extends State<S_GroupChatscrean> {
   final messageTextController = TextEditingController();
   String? messageText;
   bool isRecording = false;
@@ -67,7 +67,7 @@ class _GroupChatscreanState extends State<GroupChatscrean> {
 
 
 
-  _GroupChatscreanState(this.groupName, this.groupPic,
+  _S_GroupChatscreanState(this.groupName, this.groupPic,
       this.authNotifier, this.currentUser, this.groupId,);
 
 
@@ -183,7 +183,7 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
                Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (contex) => GroupProfile(groupImage: groupPic, groupName: groupName, groupId: groupId)));
+                              builder: (contex) => S_GroupProfile(groupImage: groupPic, groupName: groupName, groupId: groupId)));
             },
           )
         ],
@@ -260,14 +260,8 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
                     IconButton(
                       onPressed: ()async {
                         if(recorder.isRecording){
-                          setState(() {
-                            recordingIcon= false;
-                          });
                           await stop();
                         } else{
-                          setState(() {
-                            recordingIcon= true;
-                          });
                           await record();
                         }
                       },
@@ -395,9 +389,8 @@ class MessageLine extends StatelessWidget {
         children: [
           
           Padding(
-            padding: isMe? const EdgeInsets.only(left:55, top: 2, bottom: 2, right: 5): const EdgeInsets.only(left:55, top: 2, bottom: 2, right: 2),
-            child:!isMe? Text(messageSenderName!, style: TextStyle(color: Colors.black))
-            :Container(height: 1, width: 1,),
+            padding: isMe? const EdgeInsets.all(2): const EdgeInsets.only(left:55, top: 2, bottom: 2, right: 2),
+            child: Text(messageSenderName!, style: TextStyle(color: Colors.black),),
           ),
            Row(
           mainAxisAlignment: isMe? MainAxisAlignment.end: MainAxisAlignment.start ,
@@ -407,9 +400,9 @@ class MessageLine extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 20,
                       
-                  // ignore: sort_child_properties_last
-                   backgroundImage: memberImage != null 
-                  ? NetworkImage(memberImage!)
+                                            // ignore: sort_child_properties_last
+                                          backgroundImage: memberImage != null 
+                                          ? NetworkImage(memberImage!)
                               : null,
                           child: memberImage == null
                               ? const Icon(
@@ -418,40 +411,34 @@ class MessageLine extends StatelessWidget {
                                   color: Colors.white,
                                 )
                               : null),
-              ):Container(width: 1, height: 1,),
-              Container(
-                 constraints: const BoxConstraints(
-                  maxWidth: 290,
+              ):SizedBox(width: 1,),
+              Material(
+                color: isMe ? Colors.white : const Color.fromARGB(255, 8, 61, 104),
+                elevation: 5, //shadow
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(25),
                 ),
-                child: Material(
-                  color: isMe ? Colors.white : const Color.fromARGB(255, 8, 61, 104),
-                  elevation: 5, //shadow
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(25),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 15,
+                    vertical: 5,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                      vertical: 5,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: isMe ?CrossAxisAlignment.end: CrossAxisAlignment.start,
-                      children: [
-                         Text(
-                              '$text',
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: isMe ?Colors.black: Colors.white),
-                                  maxLines: 10,
-                            ),
-                        const SizedBox(height: 2,),
-                        Text((time).toString(),
-                      maxLines: 10,
-                         style: TextStyle(
-                              fontSize: 10,
-                              color: isMe ?Colors.black45: Colors.white54),)
-                      ],
-                    ),
+                  child: Column(
+                    crossAxisAlignment: isMe ?CrossAxisAlignment.end: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '$text',
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: isMe ?Colors.black: Colors.white),
+                      ),
+                      const SizedBox(height: 2,),
+                      Text((time).toString(),
+                    maxLines: 10,
+                       style: TextStyle(
+                            fontSize: 10,
+                            color: isMe ?Colors.black45: Colors.white54),)
+                    ],
                   ),
                 ),
               ),
@@ -811,8 +798,7 @@ PlatformFile? PickedVideo;
                             'text': "",
                             'sender': currentUser,
                             'time': FieldValue.serverTimestamp(),
-                            'imgUrl': curentUserImage,
-                            'senderName': currentUserName,
+                           
                             'type': 'image',
                         }).then((value) {
                           docid= value.id;
@@ -846,8 +832,7 @@ Future<void> uploadpdfs(groupId,currentUser) async {
                             'text': "",
                             'sender': currentUser,
                             'time': FieldValue.serverTimestamp(),
-                            'imgUrl': curentUserImage,
-                            'senderName': currentUserName,
+                  
                             'type': 'pdf',
                         }).then((value) {
                           docid= value.id;
@@ -881,8 +866,7 @@ uploadAudio(grooupId,currentUser, )async {
                             'text': "",
                             'sender': currentUser,
                             'time': FieldValue.serverTimestamp(),
-                            'imgUrl': curentUserImage,
-                            'senderName': currentUserName,
+                           
                             'type': 'Audio',
                         }).then((value) {
                           docid= value.id;
@@ -915,8 +899,7 @@ await firestore.collection('groups').doc(grooupId).collection('messages').doc(do
                             'text': "",
                             'sender': currentUser,
                             'time': FieldValue.serverTimestamp(),
-                            'imgUrl': curentUserImage,
-                            'senderName': currentUserName,
+                          
                             'type': 'video',
                         }).then((value) {
                           docid= value.id;
@@ -942,8 +925,7 @@ await firestore.collection('groups').doc(groupId).collection('messages').doc(doc
                             'text': "",
                             'sender': currentUser,
                             'time': FieldValue.serverTimestamp(),
-                            'imgUrl': curentUserImage,
-                            'senderName': currentUserName,
+                  
                             'type': 'Recorde',
                             
                         }).then((value) {

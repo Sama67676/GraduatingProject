@@ -3,13 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:graduating_project_transformed/hiddenScreens/StudentsWork.dart';
 import 'package:intl/intl.dart';
 
 
+
 final CommentsController = TextEditingController();
-class PostScreen extends StatefulWidget {
-  PostScreen({this.postId,this.title, this.type, this.classId,this.teacherId, this.description,this.attachment, this.points,this.DateFromFirebase, this.time});
+class S_LectureScreen extends StatefulWidget {
+  S_LectureScreen({this.postId,this.title, this.type, this.classId,this.teacherId, this.description,this.attachment, this.time});
   String? postId;
   String? classId;
   String? teacherId;
@@ -17,14 +17,12 @@ class PostScreen extends StatefulWidget {
  String? title;
  String? description;
  String? attachment;
- String? points;
-Map<String, dynamic>? DateFromFirebase;
-String? time;
+ String? time;
   @override
-  State<PostScreen> createState() => _PostScreenState(this.postId,this.title, this.type, this.teacherId, this.classId, this.description,this.attachment, this.points, this.DateFromFirebase, this.time);
+  State<S_LectureScreen> createState() => _S_LectureScreenState(this.postId,this.title, this.type, this.teacherId, this.classId, this.description,this.attachment,this.time);
 }
 
-class _PostScreenState extends State<PostScreen> {
+class _S_LectureScreenState extends State<S_LectureScreen> {
     String? postId;
   String? classId;
   String? teacherId;
@@ -32,10 +30,9 @@ class _PostScreenState extends State<PostScreen> {
  String? title;
   String? description;
   String? attachment;
-  String? points;
-Map<String, dynamic>? DateFromFirebase;
+
 String? time;
-    _PostScreenState(this.postId,this.title,this.type, this.teacherId, this.classId,  this.description,this.attachment, this.points,this.DateFromFirebase, this.time);
+    _S_LectureScreenState(this.postId,this.title,this.type, this.teacherId, this.classId,  this.description,this.attachment,this.time);
 
 
   
@@ -43,6 +40,7 @@ String? time;
 void initState(){
 
 }
+
 
   @override
   Widget build(BuildContext context) {
@@ -93,14 +91,7 @@ void initState(){
                           flex: 2,
                           child: SizedBox(width: 4,)),
                            Expanded(
-                             child: Text(
-                             '-/10',
-                             style: TextStyle(
-                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                               color: Color.fromARGB(255, 8, 61, 104),
-                               fontSize:22,
-                             ),
-                              ), 
+                             child: SizedBox(width: 2,)
                            ),
                         ],
                       ),
@@ -121,8 +112,7 @@ void initState(){
                             color: const Color.fromARGB(255, 8, 61, 104),
                             child: Padding(
                               padding: const EdgeInsets.all(24),
-                              child: Stack(
-                                children: [
+                              child: 
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
@@ -135,25 +125,27 @@ void initState(){
                              builder: (context, snapshot) {
                                   if (snapshot.data != null) {
                                   return  Row(
-                             mainAxisAlignment: MainAxisAlignment.start,
+                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
-                                   Padding(
-                                     padding: const EdgeInsets.only(top:8.0, bottom: 8, right: 8, left: 3),
-                                     child: CircleAvatar(
-                                      radius: 24,
-                                      backgroundColor: Colors.white,
-                                     backgroundImage: NetworkImage(snapshot.data?['imgUrl']),
-                                      ),
-                                   ),
+                           Padding(
+                                       padding: const EdgeInsets.only(top:8.0, bottom: 8, right: 8, left: 3),
+                                       child: CircleAvatar(
+                                        radius: 24,
+                                        backgroundColor: Colors.white,
+                                       backgroundImage: NetworkImage(snapshot.data?['imgUrl']),
+                                        ),
+                                     ),
+                                   
+                           Padding(
+                                      padding: const EdgeInsets.only(top:8.0, right: 8, bottom: 8),
+                                      child: Text( '${snapshot.data?['Name']} :' ,
+                                         style: const TextStyle(color: Colors.white,
+                                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                                fontSize: 22,)),
+                                    ),
                                   
-                                  Padding(
-                                    padding: const EdgeInsets.only(top:8.0, right: 8, bottom: 8),
-                                    child: Text( '${snapshot.data?['Name']} :' ,
-                                       style: const TextStyle(color: Colors.white,
-                                              fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                              fontSize: 22,)),
-                                  ),
-                                      Padding(
+                        
+                              Padding(
                                                                  padding:const EdgeInsets.symmetric( horizontal: 14),
                                                                  child:
                                                                     
@@ -162,6 +154,7 @@ void initState(){
                                             fontSize: 14, color: Colors.white54),),
                                                                   
                                                                ),
+                                   
                                   ],
                                   );
                             } else{
@@ -172,86 +165,41 @@ void initState(){
                                          
                                          ],
                                        ),
-                                     Padding(
-                                     padding: const EdgeInsets.symmetric(vertical:8.0),
-                                       child: Text(title!,
-                                            style: const TextStyle(
-                                              fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                             color: Colors.white,
-                                              fontSize:30,
-                                            ),
-                                           ),
-                                     ),
-                                     Padding(
-                                    padding: const EdgeInsets.symmetric(vertical:8.0),
-                                       child: description !=''? 
-                                       Text('Description :',
-                                        style: TextStyle(color: Colors.white,
-                                              fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                             ),):
-                                                SizedBox(width: 0, height: 0,)
-                                          
-                                     ),
-                                      Text(description ?? '',
-                                        style: TextStyle(color: Colors.white70,
+                                     
+                                  Padding(
+                                      padding: const EdgeInsets.symmetric(vertical:8.0),
+                                    child: Text(title!,
+                                              style: TextStyle(
+                                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                               color: Colors.white,
+                                                fontSize:30,
+                                              ),
+                                             ),
+                                  ),
+                          
+                                  Padding(
+                                   padding: EdgeInsets.symmetric(vertical:8.0),
+                                   child:description !=''? 
+                                   Text(
+                                    'Description :',
+                                          style: TextStyle(color: Colors.white,
+                                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                               ),):
+                                              SizedBox(width: 0, height: 0,)
+                                 ),
+                                 Text(description ?? '',
+                                        style: const TextStyle(color: Colors.white70,
                                               fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                               fontSize: 20,
                                              ),),
-                                     
-                                   
-                                      Text('$points points',
-                                         style: TextStyle(color: Colors.white,
-                                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                               ),
-                                       ),
-                                     
-                                 
-                                    Text('due ${DateFromFirebase!['month']}/${DateFromFirebase!['day']} ${DateFromFirebase!['hour']}:${DateFromFirebase!['minute']} ${DateFromFirebase!['moreve']}',
-                                       style: TextStyle(color: Colors.white,
-                                                  fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                 ),
-                                                 ),
-                                     
-                                   
+                                  
                                     ],
                                   ),
-                                  Positioned(
                              
-                                right: 20,
-                                bottom: 30,
-                                child: InkWell(
-                                  child: Container(
-                                      width: 125,
-                                      height: 65,
-                                       child: Material(
-                                        elevation: 4,
-                                        
-                                        borderRadius: const BorderRadius.all(
-                                         Radius.circular(35),
-                                         ),
-                                        color:  const Color(0xFFCCCED3),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-                                          child: Text('students work',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: const Color.fromARGB(255, 8, 61, 104), fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),
-                                          ),
-                                        ),
-                                       ),
-                                     ),
-                                     onTap: ()
-                                     {
-                                            Navigator.push(context, MaterialPageRoute(builder:  (contex) => StudentsWork(postId: postId, courseId: classId, ) ));
-                                     },
-                                ),
-                              ),
-                                ],
-                              ),
                             )),
+                              
+                      
                   ),
                 ),
                
@@ -506,7 +454,7 @@ class CommentsLine extends StatelessWidget {
                                 topLeft:  Radius.circular(30),
                                      ),) ,
                                      child: Padding(
-                                       padding: const EdgeInsets.symmetric(horizontal:16, vertical:6),
+                                       padding: const EdgeInsets.symmetric(horizontal:16, vertical: 6),
                                        child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                          children: [
@@ -538,7 +486,8 @@ class CommentsLine extends StatelessWidget {
                            return  Container();
                            }
                         } 
-                        )
+                        ),
+                        
             ]),
           ),
         

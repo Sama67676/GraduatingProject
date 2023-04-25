@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'dart:math';
+import 'dart:isolate'; //مال فلتر دونلودر حتى ليخرب التطبيق بين ما ينزل ملف
+import 'dart:ui'; //مال فلتر دونلودر حتى ليخرب التطبيق بين ما ينزل ملف
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,14 +24,15 @@ import '../others/managefiles/chooseAttachment.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' show get;
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart'; //to copy paste
 
 
 late String friendToken;
-SendRecords sendRecords= SendRecords();
+SendRecords sendRecords= SendRecords(); 
 final firestore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
 Authintication _authintication = Authintication();
-
+final ReceivePort _port = ReceivePort();  //مال فلتر دونلودر حتى ليخرب التطبيق بين ما ينزل ملف
 class Cahtscrean extends StatefulWidget {
   static const String ScreanRoute = 'Chat_Screan';
   const Cahtscrean({
@@ -56,7 +60,6 @@ class Cahtscrean extends StatefulWidget {
 class _CahtscreanState extends State<Cahtscrean> {
   final messageTextController = TextEditingController();
   String? messageText;
-
   final String frienduid;
   final String friendName;
   final String profilePic;
@@ -66,10 +69,10 @@ class _CahtscreanState extends State<Cahtscrean> {
 
   _CahtscreanState(this.frienduid, this.friendName, this.profilePic,
       this.authNotifier, this.chatRoomId, this.currentUser);
-
+bool recordingIcon= false;
 bool isRecording = false;
 bool isRequrderReady= false;
- FocusNode _focus = FocusNode();
+//  FocusNode _focus = FocusNode();   يمكن ما احتاجة
   @override
   
   void initState() {
@@ -82,8 +85,21 @@ bool isRequrderReady= false;
     debug: true, // optional: set to false to disable printing logs to console (default: true)
     ignoreSsl: true // option: set to false to disable working with http links (default: false)
   );
-
+IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port'); //مال فلتر دونلودر حتى ليخرب التطبيق بين ما ينزل ملف
+    _port.listen((dynamic data) {  //مال فلتر دونلودر حتى ليخرب التطبيق بين ما ينزل ملف
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
+      int progress = data[2];
+      setState((){ });
+    });
+    FlutterDownloader.registerCallback(downloadCallback); //مال فلتر دونلودر حتى ليخرب التطبيق بين ما ينزل ملف
   }
+//مال فلتر دونلودر حتى ليخرب التطبيق بين ما ينزل ملف
+   static void downloadCallback(String id, DownloadTaskStatus status, int progress) { 
+    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port')!;
+    send.send([id, status, progress]);
+  }
+
 Future downloaderinit()async{
 final status = await Permission.storage.request();
 if(status != PermissionStatus.granted){
@@ -108,7 +124,9 @@ sendRecords.uploadRecord(chatRoomId,currentUser, frienduid);
     recorder.stopRecorder();
     super.dispose();
    messageTextController.dispose();
+   
   }
+  
    void _printLatestValue() {
         print('Second text field: ${messageTextController.text}');
         if(messageTextController.text.isNotEmpty){
@@ -135,6 +153,7 @@ await recorder.openRecorder();
 isRequrderReady= true;
 recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
 }
+
 
   @override
   Widget build(BuildContext context) {
@@ -274,13 +293,19 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
                     IconButton(
                       onPressed: ()async {
                         if(recorder.isRecording){
+                          setState(() {
+                            recordingIcon= false;
+                          });
                           await stop();
                         } else{
+                          setState(() {
+                            recordingIcon= true;
+                          });
                           await record();
                         }
                       },
                        icon: Icon(
-                          recorder.isRecording? Icons.stop:
+                          recordingIcon? Icons.stop:
                           Icons.mic, color: const Color.fromARGB(255, 8, 61, 104),
                           size: 33,
                           ),
@@ -375,7 +400,6 @@ String outputTime = DateFormat.jm().format(convtime);
             isMe: currentuser == messagesender,
             type: type,
           );
-
           messageWidgets.add(messageWidget);
         }
         return Expanded(
@@ -407,45 +431,52 @@ class MessageLine extends StatelessWidget {
         crossAxisAlignment:
             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Material(
-            color: isMe ? Colors.white : const Color.fromARGB(255, 8, 61, 104),
-            elevation: 5, //shadow
-            borderRadius: const BorderRadius.all(
-              Radius.circular(25),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15,
-                vertical: 5,
+          InkWell(
+            child: Material(
+              color: isMe ? Colors.white : const Color.fromARGB(255, 8, 61, 104),
+              elevation: 5, //shadow
+              borderRadius: const BorderRadius.all(
+                Radius.circular(25),
               ),
-              child: Column(
-                crossAxisAlignment: isMe ?CrossAxisAlignment.end: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '$text',
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: isMe ?Colors.black: Colors.white,
-                         fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 2,),
-                  Text((time).toString(),
-                maxLines: 10,
-                   style: TextStyle(
-                        fontSize: 10,
-                        color: isMe ?Colors.black45: Colors.white54),)
-                ],
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 5,
+                ),
+                child: Column(
+                  crossAxisAlignment: isMe ?CrossAxisAlignment.end: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '$text',
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: isMe ?Colors.black: Colors.white,
+                           fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 2,),
+                    Text((time).toString(),
+                  maxLines: 10,
+                     style: TextStyle(
+                          fontSize: 10,
+                          color: isMe ?Colors.black45: Colors.white54),)
+                  ],
+                ),
               ),
             ),
+            
+            onTap: ()async {await Clipboard.setData(ClipboardData(text: text));},
           ),
         ],
       ),
     ): type== 'image'? Padding(
       padding: isMe? const EdgeInsets.only(left: 75,bottom: 5,top: 5, right: 5) : const EdgeInsets.only(left: 5,bottom: 5,top: 5, right: 75),
       child: InkWell(
-        onTap: ()async{
-        
+        onTap: (){
+        // downloadFiles(text!);
          },
+         onLongPress: () {
+          downloadFileDialog(context, text!);
+        },
         child: Container(
               decoration: BoxDecoration(border: Border.all(width: 2, color: const Color.fromARGB(255, 8, 61, 104),),
           borderRadius: BorderRadius.circular(40),),
@@ -474,7 +505,10 @@ class MessageLine extends StatelessWidget {
       child:  InkWell(
         onTap: (){
 
-         
+        //  downloadFiles(text!);
+        },
+        onLongPress: () {
+          downloadFileDialog(context, text!);
         },
         child: Material(
           
@@ -525,7 +559,10 @@ class MessageLine extends StatelessWidget {
       padding: isMe? const EdgeInsets.only(left: 75,bottom: 5,top: 5, right: 5) : const EdgeInsets.only(left: 5,bottom: 5,top: 5, right: 75),
       child:  InkWell(
         onTap: (){
-          // downloadFile(text!);
+          // downloadFiles(text!);
+        },
+        onLongPress: () {
+          downloadFileDialog(context, text!);
         },
         child: Material(
           
@@ -581,7 +618,10 @@ class MessageLine extends StatelessWidget {
     : type== 'Video'?Padding(
       padding: isMe? const EdgeInsets.only(left: 75,bottom: 5,top: 5, right: 5) : const EdgeInsets.only(left: 5,bottom: 5,top: 5, right: 75),
       child: InkWell(
-        // onTap: (){downloadFile(text!);},
+        // onTap: (){downloadFiles(text!);},
+        onLongPress: () {
+          downloadFileDialog(context, text!);
+        },
         child: Container(
               decoration: BoxDecoration(border: Border.all(width: 5, color: const Color.fromARGB(255, 8, 61, 104),),
           borderRadius: BorderRadius.circular(40),),
@@ -608,9 +648,8 @@ class MessageLine extends StatelessWidget {
     ):type== 'Recorde'?Padding(
       padding: isMe? const EdgeInsets.only(left: 75,bottom: 5,top: 5, right: 5) : const EdgeInsets.only(left: 5,bottom: 5,top: 5, right: 75),
       child:  InkWell(
-        onTap: (){
-       
-        },
+      //  onTap: (){downloadFiles(text!);},
+      onLongPress: () {downloadFileDialog(context, text!);},
         child: Material(
           color:Colors.white,
           shape: const RoundedRectangleBorder(
@@ -675,17 +714,6 @@ bool setOnlineStatus(String frienduid){
 
 
 
-// Future downloadFile(String url)async{
-// //  var response = await get(Uri.parse(url)); 
-// //    debugPrint(response.statusCode.toString());
-  
-// //       var filePath = await ImagePickerSaver.saveFile(
-// //           fileData: response.bodyBytes);
-  
-// //       var savedFile= File.fromUri(Uri.file(filePath));
-
-// }
-
 
 Future<void> updateMessageReadState(messageId, chatRoomId)async {
   firestore.collection('chatRoom').doc(chatRoomId).update({
@@ -724,3 +752,152 @@ void getFriendDeviceToken(frienduid)async{
     }
   });
 }
+
+// void downloadImage(String url)async{
+//   final httpsReference = FirebaseStorage.instance.refFromURL(url);
+//   final appDocDir = await getApplicationDocumentsDirectory();
+//   final filePath = appDocDir.absolute.path +'/' + httpsReference.name;
+//   final file = File(filePath);
+//   new File('$filePath').create(recursive: true); 
+
+//   final downloadTask = httpsReference.writeToFile(file);
+// downloadTask.snapshotEvents.listen((downloadTask) {
+//   switch (downloadTask.state) {
+//     case TaskState.running:
+//     print("running");
+//       break;
+//     case TaskState.paused:
+//     print("paused");
+//       break;
+//     case TaskState.success:
+//     print("success");
+//       break;
+//     case TaskState.canceled:
+//     print("canceled");
+//       break;
+//     case TaskState.error:
+//     print("error");
+//       break;
+//   }
+// });
+// }
+
+// void downloadImage2( url)async{
+//   final uri = Uri.parse(url);
+//   var response= await http.get(uri);
+//   Directory documentDirectory = await getApplicationDocumentsDirectory();
+//   final httpsReference = FirebaseStorage.instance.refFromURL(url);
+//   final filePath = "${documentDirectory.absolute.path}/${httpsReference.name}";
+//   final file = File(filePath);
+//   await file.writeAsBytes(response.bodyBytes);
+
+//   // new File('$filePath').create(recursive: true); 
+
+  
+// }
+
+// void downloadFileWithDownloader(String text)async{
+//   //  final uri = Uri.parse(text);
+//   final httpsReference = FirebaseStorage.instance.refFromURL(text);
+//   final appDocDir = await getApplicationDocumentsDirectory();
+//   final filePath = appDocDir.absolute.path  ;
+//    final savedDir = Directory(filePath);
+//           bool hasExisted = await savedDir.exists();
+//           if (!hasExisted) {
+//             savedDir.create().then((value) async{
+//               final taskId = await FlutterDownloader.enqueue(
+//   url: text,
+//   savedDir: filePath,
+//   saveInPublicStorage: true,
+
+// showNotification: true,
+//       openFileFromNotification: true,
+// );
+
+//             }
+//             );
+       
+ 
+//           } else
+//           {
+//             final taskId = await FlutterDownloader.enqueue(
+//   url: text,
+//   savedDir: filePath,
+
+// );
+ 
+ 
+//           }
+
+  //   final file = File(filePath);
+  //  File('$filePath').create(recursive: true); 
+
+  
+// }
+void downloadFiles(String url)async{
+ try {
+   final httpsReference = FirebaseStorage.instance.refFromURL(url);
+  final appDocDir = await getApplicationDocumentsDirectory();
+  final filePath = appDocDir.absolute.path +'/' + httpsReference.name;
+  Directory? directory;
+    if (Platform.isIOS) {
+      directory = await getDownloadsDirectory();
+      print(directory?.path);
+    } else if (Platform.isAndroid) {
+      // For Android get the application's scoped cache directory
+      directory = await getTemporaryDirectory();
+    }
+      if (directory == null) {
+      throw Exception('Could not access local storage for '
+          'download. Please try again.');
+    }
+    print('Temp cache save path: ${directory.path}/${httpsReference.name}');
+      // Use Dio package to download the short lived url to application cache
+      final dio = Dio();
+    await dio.download(
+      url,
+      '${directory.path}/${httpsReference.name}',
+    );
+     /// For Android call the flutter_file_dialog package, which will give the option to save the now downloaded file by Dio (to temp application cache) to wherever the user wants including Downloads!
+      if (Platform.isAndroid) {
+      final params = SaveFileDialogParams(
+          sourceFilePath: '${directory.path}/${httpsReference.name}');
+      final filePath =
+          await FlutterFileDialog.saveFile(params: params);
+
+      print('Download path: $filePath');
+    }
+     OpenFile.open(directory.path);
+ } catch (e) {
+   
+ }
+  
+}
+// Future downloadFile(String url)async{
+// //  var response = await get(Uri.parse(url)); 
+// //    debugPrint(response.statusCode.toString());
+  
+// //       var filePath = await ImagePickerSaver.saveFile(
+// //           fileData: response.bodyBytes);
+  
+// //       var savedFile= File.fromUri(Uri.file(filePath));
+
+// }
+ void downloadFileDialog(context, String text) {
+  
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: ListTile(
+                  onTap: () { 
+                    downloadFiles(text);
+                    Navigator.pop(context);
+                  },
+                  title: const Text("Download file"),
+                ),
+              );
+            });
+      
+    
+  }

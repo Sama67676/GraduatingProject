@@ -11,31 +11,33 @@ import 'package:graduating_project_transformed/others/SingleClassFiles.dart/Send
 import 'package:intl/intl.dart';
 
 
+import '../hiddenScreens/createClass.dart';
 
-import 'Post.dart';
-import 'lecture.dart';
+import 'S_Lecture.dart';
+import 'S_Post.dart';
+
 String uid =FirebaseAuth.instance.currentUser!.uid;
 
 String? imageUrl;
   final TextEditingController _shareWithClass=TextEditingController();
-class SingleClassScreen extends StatefulWidget {
-   SingleClassScreen({ this.classId, this.className,  this.teacherId, this.classSubject, super.key});
+class S_SingleClassScreen extends StatefulWidget {
+   S_SingleClassScreen({ this.classId, this.className,  this.teacherId, this.classSubject, super.key});
   String? classId;
   String? className;
   String? teacherId;
   String? classSubject;
 
   @override
-  State<SingleClassScreen> createState() => _SingleClassScreenState(classId, className, teacherId, classSubject);
+  State<S_SingleClassScreen> createState() => _S_SingleClassScreenState(classId, className, teacherId, classSubject);
 }
 
-class _SingleClassScreenState extends State<SingleClassScreen> {
+class _S_SingleClassScreenState extends State<S_SingleClassScreen> {
   String? classId;
   String? className;
   String? teacherId;
   String? classSubject;
 
-  _SingleClassScreenState(this.classId, this.className, this.teacherId, this.classSubject);
+  _S_SingleClassScreenState(this.classId, this.className, this.teacherId, this.classSubject);
 
   Future<void> fetchData() async {
     await FirebaseFirestore.instance
@@ -292,32 +294,6 @@ class _SingleClassScreenState extends State<SingleClassScreen> {
                   ),
                 ],
               ),
-              Positioned(
-                right: 30,    
-                 bottom: 70,
-                 child: InkWell(
-                   child: Container(
-                       width: 75,
-                        height: 50,
-                       child: Material(
-                        elevation: 4,
-                        
-                        borderRadius: const BorderRadius.all(
-                         Radius.circular(35),
-                         ),
-                        color:  const Color(0xFFCCCED3),
-                        child: const Icon(Icons.add,  color: Color.fromARGB(255, 8, 61, 104)),
-                       ),
-                      ),
-                      onTap: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (contex) =>  NewPostScreen(classId: classId,)));
-
-                      },
-                 ),
-               ),
             ],
           ),
         )),
@@ -647,11 +623,11 @@ int comentsNumber=0;
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (contex) =>  LectureScreen(postId: widget.postId, classId: widget.classId, teacherId:widget.teacherId, type:widget.type, title: widget.title, description:widget.description, attachment:widget.attachment , time:time))):
+                builder: (contex) =>  S_LectureScreen(postId: widget.postId, classId: widget.classId, teacherId:widget.teacherId, type:widget.type, title: widget.title, description:widget.description, attachment:widget.attachment , time:time))):
                   Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (contex) =>  PostScreen(postId: widget.postId, classId: widget.classId, teacherId:widget.teacherId, type:widget.type, title: widget.title, description:widget.description, attachment:widget.attachment ,points: widget.points, DateFromFirebase: DateFromFirebase, time:time,)));
+                builder: (contex) =>  S_PostScreen(postId: widget.postId, classId: widget.classId, teacherId:widget.teacherId, type:widget.type, title: widget.title, description:widget.description, attachment:widget.attachment ,points: widget.points, DateFromFirebase: DateFromFirebase, time:time)));
         },
       ),
     );

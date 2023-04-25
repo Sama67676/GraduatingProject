@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../Others/auth_notifier.dart';
 import '../others/groupList.dart';
 import 'ChatList.dart';
 
@@ -13,6 +14,11 @@ class SwipableChats extends StatefulWidget {
 }
 
 class _SwipableChatsState extends State<SwipableChats> {
+  @override
+  void initState() {
+    // print(AuthNotifier().user!.email);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

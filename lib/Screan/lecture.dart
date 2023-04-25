@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 
+
 final CommentsController = TextEditingController();
 class LectureScreen extends StatefulWidget {
-  LectureScreen({this.postId,this.title, this.type, this.classId,this.teacherId, this.description,this.attachment, this.DateFromFirebase});
+  LectureScreen({this.postId,this.title, this.type, this.classId,this.teacherId, this.description,this.attachment, this.time});
   String? postId;
   String? classId;
   String? teacherId;
@@ -16,9 +17,9 @@ class LectureScreen extends StatefulWidget {
  String? title;
  String? description;
  String? attachment;
- Map<String, dynamic>? DateFromFirebase;
+ String? time;
   @override
-  State<LectureScreen> createState() => _LectureScreenState(this.postId,this.title, this.type, this.teacherId, this.classId, this.description,this.attachment,this.DateFromFirebase);
+  State<LectureScreen> createState() => _LectureScreenState(this.postId,this.title, this.type, this.teacherId, this.classId, this.description,this.attachment,this.time);
 }
 
 class _LectureScreenState extends State<LectureScreen> {
@@ -30,8 +31,8 @@ class _LectureScreenState extends State<LectureScreen> {
   String? description;
   String? attachment;
 
-Map<String, dynamic>? DateFromFirebase;
-    _LectureScreenState(this.postId,this.title,this.type, this.teacherId, this.classId,  this.description,this.attachment,this.DateFromFirebase);
+String? time;
+    _LectureScreenState(this.postId,this.title,this.type, this.teacherId, this.classId,  this.description,this.attachment,this.time);
 
 
   
@@ -39,6 +40,7 @@ Map<String, dynamic>? DateFromFirebase;
 void initState(){
 
 }
+
 
   @override
   Widget build(BuildContext context) {
@@ -123,24 +125,36 @@ void initState(){
                              builder: (context, snapshot) {
                                   if (snapshot.data != null) {
                                   return  Row(
-                             mainAxisAlignment: MainAxisAlignment.start,
+                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
-                                   Padding(
-                                     padding: const EdgeInsets.only(top:8.0, bottom: 8, right: 8, left: 3),
-                                     child: CircleAvatar(
-                                      radius: 24,
-                                      backgroundColor: Colors.white,
-                                     backgroundImage: NetworkImage(snapshot.data?['imgUrl']),
-                                      ),
-                                   ),
+                           Padding(
+                                       padding: const EdgeInsets.only(top:8.0, bottom: 8, right: 8, left: 3),
+                                       child: CircleAvatar(
+                                        radius: 24,
+                                        backgroundColor: Colors.white,
+                                       backgroundImage: NetworkImage(snapshot.data?['imgUrl']),
+                                        ),
+                                     ),
+                                   
+                           Padding(
+                                      padding: const EdgeInsets.only(top:8.0, right: 8, bottom: 8),
+                                      child: Text( '${snapshot.data?['Name']} :' ,
+                                         style: const TextStyle(color: Colors.white,
+                                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                                fontSize: 22,)),
+                                    ),
                                   
-                                  Padding(
-                                    padding: const EdgeInsets.only(top:8.0, right: 8, bottom: 8),
-                                    child: Text( '${snapshot.data?['Name']} :' ,
-                                       style: const TextStyle(color: Colors.white,
-                                              fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                              fontSize: 22,)),
-                                  )      
+                        
+                              Padding(
+                                                                 padding:const EdgeInsets.symmetric( horizontal: 14),
+                                                                 child:
+                                                                    
+                                                                     Text(time!, style: const TextStyle(
+                                             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                            fontSize: 14, color: Colors.white54),),
+                                                                  
+                                                               ),
+                                   
                                   ],
                                   );
                             } else{
@@ -434,13 +448,13 @@ class CommentsLine extends StatelessWidget {
                                    Material(
                                     color: Colors.white,
                               shape:const RoundedRectangleBorder( borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(35),
-                                bottomLeft:  Radius.circular(35),
-                                bottomRight:  Radius.circular(35),
-                                topLeft:  Radius.circular(35),
+                                topRight: Radius.circular(30),
+                                bottomLeft:  Radius.circular(30),
+                                bottomRight:  Radius.circular(30),
+                                topLeft:  Radius.circular(30),
                                      ),) ,
                                      child: Padding(
-                                       padding: const EdgeInsets.symmetric(horizontal:16, vertical: 10),
+                                       padding: const EdgeInsets.symmetric(horizontal:16, vertical: 6),
                                        child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                          children: [
@@ -472,7 +486,8 @@ class CommentsLine extends StatelessWidget {
                            return  Container();
                            }
                         } 
-                        )
+                        ),
+                        
             ]),
           ),
         

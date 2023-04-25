@@ -3,22 +3,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-
-import '../hiddenScreens/AddNewNote.dart';
+import 'S_hiddenScreens/S_AddNewNote.dart';
 final uid = FirebaseAuth.instance.currentUser!.uid;
   DateTime today = DateTime.now();
   String? databaseDay;
     String? databaseMonth;
-class calender extends StatefulWidget {
-  const calender({ super.key});
+class S_calender extends StatefulWidget {
+  const S_calender({ super.key});
 
   @override
-  State<calender> createState() => _calenderState();
+  State<S_calender> createState() => _S_calenderState();
 }
 
 // ignore: camel_case_types
-class _calenderState extends State<calender> {
+class _S_calenderState extends State<S_calender> {
 
   void _ondayselected(DateTime day, DateTime focused) {
     final DateTime convtime= DateTime.parse(day.toString());
@@ -191,7 +189,7 @@ String outputTimeMonth = DateFormat.M().format(convtime);
                                          Navigator.push(
                                                 context,
                                                  MaterialPageRoute(
-                                                 builder: (contex) => Addevent()));
+                                                 builder: (contex) => S_Addevent()));
                                         }),
                                   
                                 ),

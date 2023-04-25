@@ -4,12 +4,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:graduating_project_transformed/others/GlobalVariables.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 import '../main.dart';
+import 'Prefrences.dart';
 import 'auth_notifier.dart';
 import 'user_Entity.dart';
-
+String? position;
+String? name;
 class Authintication {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -63,11 +67,18 @@ class Authintication {
           authNotifier.setUser(user);
           await getUserDetails(authNotifier);
           print('done');
-          if (authNotifier.userDetails?.position == 'Student') {
+          await fetchData(FirebaseAuth.instance.currentUser!.uid).then((value) {
+            if (position == 'Teacher') {
             Navigator.push(context,
                 MaterialPageRoute(builder: (contex) => ButtomNavigationBar()));
             initializeCurrentUser(authNotifier);
+          } else if (position == 'Student') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (contex) => ButtomNavigationBarStudents()));
+            initializeCurrentUser(authNotifier);
           }
+          });
+          
         }
       }
     } catch (e) {
@@ -102,11 +113,20 @@ class Authintication {
         .collection('users')
         .doc(authNotifier.user?.uid)
         .get()
-        .catchError((e) => print(e))
-        .then((value) => (value != null)
-            ? authNotifier.setUserDetails(
-                UserModel.fromMap(value.data() as Map<String, dynamic>))
-            : print(value));
+        .catchError((e) => print(e));
+        // .then((userMap) => (userMap != null)
+            // ? {authNotifier.userDetails!.displayName=userMap['Name'],
+            //   authNotifier.userDetails!.uid=userMap['uid'],
+            //   authNotifier.userDetails!.department=userMap['department'],
+            //   authNotifier.userDetails!.status=userMap['status'],
+            //   authNotifier.userDetails!.year=userMap['year'],
+            //   authNotifier.userDetails!.email=userMap['email'],
+            //   authNotifier.userDetails!.position=userMap['position'],
+            //   authNotifier.userDetails!.password=userMap['password'],
+            //   authNotifier.userDetails!.imgUrl=userMap['imgUrl'],
+            //   }
+            // : print('user details did not intialize!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'));
+            // print(authNotifier.userDetails!.position)
   }
 }
 
@@ -123,3 +143,18 @@ class DatabaseMethods {
     return FirebaseFirestore.instance.collection("users").doc("uid").get();
   }
 }
+
+  Future<void> fetchData(String uid) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then((snapshot) async {
+      if (snapshot.exists) {
+          position = snapshot.data()!['position']; 
+          name=  snapshot.data()!['Name']; 
+          await UserPrefrences.setUserName(name!);
+          // Variables().changePosition(snapshot.data()!['position']);
+      }
+    });
+  }

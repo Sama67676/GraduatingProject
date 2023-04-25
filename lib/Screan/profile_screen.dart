@@ -54,6 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         });
       }
     });
+    
   }
 
   Future getCurrentUserId() async {
@@ -86,10 +87,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           )),
           child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Column(
-
+            child: 
+            Column(
+              
 
               children: [
+                
                 Row(
                   children: [
                     Positioned.fill(
@@ -137,23 +140,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                        
                    Padding(
                           padding: const EdgeInsets.only(top: 10),
-                          child: Text(
+                          child: Name != null?
+                          Text(
                             '$Name',
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                 fontSize: 30, color: Colors.indigo[900]),
-                          ),
+                          ):
+                          Container(height: 1, width: 1,)
                         ),
                    Padding(
                           padding: const EdgeInsets.only(bottom: 20),
-                          child: Text(
+                          child:department != null? 
+                          Text(
                             '$department' + ' ' + '$year' + ' ' + 'year',
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                 fontSize: 30, color: Colors.indigo[900]),
-                          ),
+                          ):
+                                Container(height: 1, width: 1,)
                         ),
                          Expanded(
                            child: Card(
@@ -163,7 +170,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             color: const Color.fromARGB(255, 8, 61, 104),
                             child:Padding(
                             padding: const EdgeInsets.all(18),
-                            child: Column(
+                            child: status != null?
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -193,7 +201,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                                     Padding(
                                      padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
-                                      child: Text('$status',
+                                      child: 
+                                      Text('$status',
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                              fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
@@ -210,7 +219,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                  },
                                                ),
                                                 ],
-                                               ),
+                                               ):
+                                              Center(
+             child: SizedBox(
+                  height: 60,
+                  width: 60,
+                          child:  CircularProgressIndicator(
+                          color: Colors.black38,
+                           strokeWidth: 4,
+                          ),
+                        ),
+         
+             
+           ) 
                                                 )),
                          ),
                       
@@ -404,3 +425,4 @@ Future<void> changeProfile(context, imageUrl) async{
     },
   );
   }
+  
