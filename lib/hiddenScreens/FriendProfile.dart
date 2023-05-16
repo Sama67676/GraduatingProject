@@ -148,132 +148,142 @@ class _FriendProfileState extends State<FriendProfile> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                              Material(
-                                    color:Colors.white,
-                                      
-                                      shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                    Radius.circular(30),
-                                    ),),
-                                    child: MaterialButton(
-                                      minWidth: 30,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 0),
-                                        child: Column(children: const [
-                                          Icon(Icons.message_outlined,
-                                              color: Color.fromARGB(255, 8, 61, 104),
-                                              size: 40,),
-                                              Text('Message', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
-                                              fontSize: 16,),)
-                                        ],),
-                                      ),
-                                      onPressed: (){
-                                        AuthNotifier _authNotifer =
-                                              Provider.of<AuthNotifier>(context, listen: false);
-                                         if (_authNotifer.user != null) {
-                                            final String? currentUserName =
-                                                _authNotifer.userDetails!.displayName;
-                                           generateChatRoomId(
-                                                context,
-                                                currentUserName!,
-                                                friendName!,
-                                                friendId,
-                                                _authNotifer,
-                                                friendImage,
-                                                FirebaseAuth.instance.currentUser!.uid);
-                                         }
-                                    }
-                                    ),
-                                  ),
-                                
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal:8.0),
-                                child: Material(
-                                      color:Colors.white,
-                                        
-                                      shape: const RoundedRectangleBorder(
-                                     borderRadius: BorderRadius.all(
-                                      Radius.circular(30),
-                                      ),),
-                                      child: MaterialButton(
-                                         minWidth: 20,
-                                         
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 2),
-                                          child: Column(children: const [
-                                            Icon(Icons.call,
-                                                color: Color.fromARGB(255, 8, 61, 104),
-                                                size: 40,),
-                                                Text('Call', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
-                                                fontSize: 16,),)
-                                          ],),
+                                child: Expanded(
+                                  child: Material(
+                                        color:Colors.white,
+                                          
+                                          shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                        Radius.circular(30),
+                                        ),),
+                                        child: MaterialButton(
+                                          minWidth: 30,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 0),
+                                            child: Column(children: const [
+                                              Icon(Icons.message_outlined,
+                                                  color: Color.fromARGB(255, 8, 61, 104),
+                                                  size: 40,),
+                                                  Text('Message', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
+                                                  fontSize: 16,),)
+                                            ],),
+                                          ),
+                                          onPressed: (){
+                                            AuthNotifier _authNotifer =
+                                                  Provider.of<AuthNotifier>(context, listen: false);
+                                             if (_authNotifer.user != null) {
+                                                final String? currentUserName =
+                                                    _authNotifer.userDetails!.displayName;
+                                               generateChatRoomId(
+                                                    context,
+                                                    currentUserName!,
+                                                    friendName!,
+                                                    friendId,
+                                                    _authNotifer,
+                                                    friendImage,
+                                                    FirebaseAuth.instance.currentUser!.uid);
+                                             }
+                                        }
                                         ),
-                                        onPressed: (){
-                                    
-                                      }
                                       ),
-                                    ),
+                                ),
                               ),
                                 
-                              
-                               
-                                
-                              
-                               Material(
-                                    color:Colors.white,
-                                      
-                                   shape: const RoundedRectangleBorder(
-                                   borderRadius: BorderRadius.all(
-                                    Radius.circular(30),
-                                    ),),
-                                    child: MaterialButton(
-                                       minWidth: 35,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 2),
-                                        child: Column(children: const [
-                                          Icon(Icons.notifications_outlined,
-                                              color: Color.fromARGB(255, 8, 61, 104),
-                                              size: 40,),
-                                              Text('Mute', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
-                                              fontSize: 16,),)
-                                        ],),
-                                      ),
-                                      onPressed: (){
-                                  
-                                    }
-                                    ),
-                                  ),
-                                Padding(
-                                 padding:  const EdgeInsets.only(right:8),
-                                 child: Material(
-                                  color:Colors.white,
-                                  shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(30),
-                                      ),),
-                                      child: PopupMenuButton(
-                                       itemBuilder: (context) => [ const PopupMenuItem(
-                                           child: Text('Delete Chatroom', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104), fontSize: 20),), value: '1'),
+                              Padding(
+                                padding: const EdgeInsets.only(right:8.0),
+                                child: Expanded(
+                                  child: Material(
+                                          color:Colors.white,
                                             
-                                         ],
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 2),
-                                          child: Column(children: const [
-                                            Icon(Icons.more_vert,
-                                                color: Color.fromARGB(255, 8, 61, 104),
-                                                size: 40,),
-                                                Text('More', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
-                                                fontSize: 16,),)
-                                          ],),
+                                          shape: const RoundedRectangleBorder(
+                                         borderRadius: BorderRadius.all(
+                                          Radius.circular(30),
+                                          ),), 
+                                          child: MaterialButton(
+                                             minWidth: 20,
+                                             
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 2),
+                                              child: Column(children: const [
+                                                Icon(Icons.call,
+                                                    color: Color.fromARGB(255, 8, 61, 104),
+                                                    size: 40,),
+                                                    Text('Call', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
+                                                    fontSize: 16,),)
+                                              ],),
+                                            ),
+                                            onPressed: (){
+                                        
+                                          }
+                                          ),
                                         ),
-                                       onSelected: (result) {
-                                           if (result == '1'){
-                                   AlertDeletingChatRoom(context, chatRoomId, friendId, FirebaseAuth.instance.currentUser!.uid);
-                                               }
-                                          },
+                                  
+                                ),
+                              ),
+                               Padding(
+                                 padding: const EdgeInsets.only(right:8.0),
+                                 child: Expanded(
+                                   child: Material(
+                                        color:Colors.white,
+                                          
+                                       shape: const RoundedRectangleBorder(
+                                       borderRadius: BorderRadius.all(
+                                        Radius.circular(30),
+                                        ),),
+                                        child: MaterialButton(
+                                           minWidth: 35,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 2),
+                                            child: Column(children: const [
+                                              Icon(Icons.notifications_outlined,
+                                                  color: Color.fromARGB(255, 8, 61, 104),
+                                                  size: 40,),
+                                                  Text('Mute', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
+                                                  fontSize: 16,),)
+                                            ],),
+                                          ),
+                                          onPressed: (){
+                                      
+                                        }
+                                        ),
                                       ),
-                                    ),
+                                 ),
                                ),
+                                Expanded(
+                                  child: Padding(
+                                   padding:  const EdgeInsets.only(right:8),
+                                   child: Material(
+                                    color:Colors.white,
+                                    shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(30),
+                                        ),),
+                                        child: PopupMenuButton(
+                                         itemBuilder: (context) => [ const PopupMenuItem(
+                                             child: Text('Delete Chatroom', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104), fontSize: 20),), value: '1'),
+                                              
+                                           ],
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 2),
+                                            child: Column(children: const [
+                                              Icon(Icons.more_vert,
+                                                  color: Color.fromARGB(255, 8, 61, 104),
+                                                  size: 40,),
+                                                  Text('More', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
+                                                  fontSize: 16,),)
+                                            ],),
+                                          ),
+                                         onSelected: (result) {
+                                             if (result == '1'){
+                                     AlertDeletingChatRoom(context, chatRoomId, friendId, FirebaseAuth.instance.currentUser!.uid);
+                                                 }
+                                            },
+                                        ),
+                                      ),
+                                                               ),
+                                ),
                               
                             ],),
                          )),
@@ -388,7 +398,7 @@ void callChatScreen(BuildContext context, Name, frienduid, _authNotifer, profile
           builder: (contex) => Cahtscrean(
                 friendName: Name,
                 frienduid: frienduid,
-                authNotifier: _authNotifer,
+      
                 profilePic: profilePic,
                 chatRoomId: chatRoomId,
                 currentUser: currentUser,
@@ -435,9 +445,5 @@ Future<void> AlertDeletingChatRoom(context,chatRoomId, friendId, currentUser) as
     print('ChatRoom deleted');
   
     await FirebaseFirestore.instance.collection('users').doc(friendId);
-    
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const ButtomNavigationBar()),
-        (route) => false,
-      );
+    Navigator.pop(context);
   }

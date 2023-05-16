@@ -17,8 +17,8 @@ String department = 'Computer dep' ;
 var items = [
     'Computer dep',
     'Network dep',
-    'Civil??? dep',
-    '?????? dep'
+    'Civil dep',
+    'electrical  dep'
   ];
 class Allusers extends StatefulWidget {
   static const String ScreanRoute = 'allUsers_Screen';
@@ -81,7 +81,7 @@ class _AllusersState extends State<Allusers> {
                            Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (contex) =>  SearchChats(title: 'Search through chats',)));
+                                builder: (contex) =>  SearchChats(title: 'Search through chats',  topic: 'Student')));
                         },
                          icon: const Icon(Icons.search,
                               size: 40,
@@ -140,7 +140,6 @@ class usersStreamBuilder extends StatelessWidget {
                  chatRoomId: chatRoomId,
                   frienduid: uid,
                   profilePic: profilePic,
-         
                   onlineStatus: onlineStatus);
               userWidgets.add(userWidget);
                 }
@@ -273,7 +272,6 @@ void callChatScreen(BuildContext context, Name, frienduid, _authNotifer, profile
           builder: (contex) => Cahtscrean(
                 friendName: Name,
                 frienduid: frienduid,
-                authNotifier: _authNotifer,
                 profilePic: profilePic,
                 chatRoomId: chatRoomId,
                 currentUser: currentUser,

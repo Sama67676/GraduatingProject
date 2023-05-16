@@ -57,8 +57,6 @@ dependencies:
   open_file: ^2.1.1
   #to request permissions
   permission_handler: ^10.2.0
-  #to download images and files/ not working for now
-  flutter_downloader: ^1.10.2
   #to record audio
   flutter_sound: ^9.2.13
   #to download images and files / not working for now
@@ -70,7 +68,10 @@ dependencies:
   table_calendar: ^3.0.8
   #associated with flutter downloader to download files from temp to permit
   flutter_file_dialog: ^3.0.0
-  shared_preferences: ^2.1.0
+  shared_preferences: ^2.1.1
+  get_it: ^7.3.0
+  universal_platform: ^1.0.0+1
+  webview_flutter: ^3.0.4
   
 
 dev_dependencies:

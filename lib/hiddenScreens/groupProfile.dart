@@ -476,10 +476,7 @@ Future onLeaveGroup(groupId, context) async {
           .doc(groupId)
           .delete();
 
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const ButtomNavigationBar()),
-        (route) => false,
-      );
+      Navigator.pop(context);
     
   }
   
@@ -490,10 +487,7 @@ Future onLeaveGroup(groupId, context) async {
     String memberId = membersList[i]['uid'];
       await firestore.collection('users').doc(memberId).collection('groups').doc(groupId).delete();
     }
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const ButtomNavigationBar()),
-        (route) => false,
-      );
+     Navigator.pop(context);
   }
 
 Future<void> AlertLeavingGroup(context,groupId) async{

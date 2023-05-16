@@ -1,8 +1,11 @@
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
+import 'package:image_picker/image_picker.dart';
 import 'AddStudents.dart';
 String attachmentType = 'Assignment' ;
 String points = '100';
@@ -18,7 +21,7 @@ String month= '0';
     'midTerm'
   ];
   late List<Map<String, dynamic>> memberList =[];
-
+  String sideAttachementType='';
   bool isSelectChecked = false;
   bool isAllChecked = false;
   final TextEditingController _title=TextEditingController();
@@ -51,17 +54,24 @@ void post(context, classId)async{
   late String postId;
   final dataBaseMoreEve= MorEve == '0'? 'A.M.': 'P.M.';
   Map time ={'month': month, 'day': day, 'hour': hour, 'minute': minut, 'moreve': dataBaseMoreEve};
+   Reference ref = FirebaseStorage.instance.ref('files/${pickedFile!.path}');
+    var uploadTask = ref.putFile(pickedFile!).whenComplete(() async {
+       fileUrl = await firebase_storage.FirebaseStorage.instance
+        .ref('files/${pickedFile!.path}')
+        .getDownloadURL();
+        print(fileUrl);
  await FirebaseFirestore.instance.collection('courses').doc(classId).collection('posts').add({
   'postDate' :FieldValue.serverTimestamp(),
   'type': attachmentType,
   'title': _title.text,
   'description': _description.text,
   'dueDate': time,
-  'attachment': '',
-  'attachmentType': '',
+  'attachment': fileUrl,
+  'attachmentType': sideAttachementType,
   'points': points,
   'StudentId':'',
   'toStudents': memberList,
+   
    }).then((value) async {
     postId = value.id;
      await FirebaseFirestore.instance.collection('courses').doc(classId).collection('posts').doc(value.id).update(
@@ -70,6 +80,8 @@ void post(context, classId)async{
       }
      );
    });
+    }
+    );
    for (int i=0; i<memberList.length; i++) {
      String uid= memberList[i]['uid'];
      await FirebaseFirestore.instance.collection('users').doc(uid).collection('courses').doc(classId).collection('posts').doc(postId).set(
@@ -100,9 +112,7 @@ void post(context, classId)async{
   void initState() {
    
     super.initState();
-    _fcm.getToken().then((token){
-      print('token is: $token');
-    });
+   
   }
   @override
   Widget build(BuildContext context) {
@@ -145,8 +155,6 @@ void post(context, classId)async{
                               },
                               ),
                             ),
-                          
-                        
                       ),
                               const Padding(
                                 padding: EdgeInsets.symmetric(horizontal:20),
@@ -245,6 +253,7 @@ void post(context, classId)async{
                                       child: Container(
                                         child: TextField(controller: _title,
                                         decoration: const InputDecoration(hintText: 'Add Title' ,
+                                          border: InputBorder.none,
                                          hintStyle: TextStyle(color: Colors.black38)
                                           ),
                                           ),
@@ -267,7 +276,9 @@ void post(context, classId)async{
                                         horizontal: 12,
                                         vertical: 16,
                                       ),
-                                      child: MaterialButton(onPressed: (){},
+                                      child: MaterialButton(onPressed: (){
+                                         setAttachment(context);
+                                      },
                                       child: Row(
                                         children: const [
                                           Expanded(child: Text('Add Attachement', style: TextStyle(color: Colors.black26),)),
@@ -301,6 +312,7 @@ void post(context, classId)async{
                                       ),
                                       child: TextField(controller: _description,
                                       decoration: const InputDecoration(hintText: 'Add description' ,
+                                        border: InputBorder.none,
                                       hintStyle: TextStyle(color: Colors.black38)
                                         ),
                                         )
@@ -478,7 +490,6 @@ void post(context, classId)async{
                                                 height: 50,
                                                 width: 50,
                                                 child: ListWheelScrollView.useDelegate(
-                                                
                                                   perspective: 0.005,
                                                   onSelectedItemChanged: (value) {
 
@@ -628,3 +639,201 @@ return Container(
 child: Icon(Icons.done, size: 60 , color: Colors.white,)
 );
 }
+
+
+Future<void> setAttachment(context,) async{
+
+       return showDialog<void>(
+    context: context,
+    barrierDismissible: false, 
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('choose Attachement', 
+        style: TextStyle(color: const Color.fromARGB(255, 8, 61, 104),
+        fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+        ),),
+        contentPadding: const EdgeInsets.all(30),
+        actionsPadding: const EdgeInsets.only(left:20, right: 20, bottom: 20),
+       shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(35))),
+        content:  Column(
+          mainAxisSize: MainAxisSize.min,
+      children: [
+       Row(children: [
+            Padding(
+              padding: const EdgeInsets.only(left:5, right: 5, top: 5,bottom: 5),
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: (){
+                       Navigator.of(context).pop();
+                 sideAttachementType= 'image';
+                 pickImagefromGalery();
+                    },
+                     style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(15),
+              ),child: const Icon(Icons.image, size: 30,),
+                  ),
+                  const SizedBox(height: 4,),
+                  const Text('Image', style: TextStyle(fontSize: 15, color: const Color.fromARGB(255, 8, 61, 104),
+        fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),)
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left:5, right: 5, top: 5,bottom: 5),
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: (){
+                    sideAttachementType='pdf';
+                    pickpdfs();
+                    },
+                     style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(15),
+              ),child: const Icon(Icons.file_copy, size: 30,),
+                  ),
+                  const SizedBox(height: 4,),
+                  const Text('file', style: TextStyle(fontSize: 15, color: const Color.fromARGB(255, 8, 61, 104),
+        fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),)
+                ],
+              ),
+            ),
+            Padding(
+              padding:const EdgeInsets.only(left:5, right: 5, top: 5,bottom: 5),
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: (){
+                      sideAttachementType= 'image';
+                 pickImagefromCamera();
+                    },
+                     style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(15),
+              ),child: const Icon(Icons.camera_alt, size: 30,),
+                  ),
+                  const SizedBox(height: 4,),
+                  const Text('Camera', style: TextStyle(fontSize: 15, color: const Color.fromARGB(255, 8, 61, 104),
+        fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),)
+                ],
+              ),
+            )
+      ]), 
+        
+        Row(children: [
+            Padding(
+                padding: const EdgeInsets.only(left:5, right: 5, bottom: 5,top: 5),
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: (){
+                        sideAttachementType= 'Audio';
+                        pickAudio();
+                      },
+                       style: ElevatedButton.styleFrom(
+                  shape: const CircleBorder(),
+                  padding: const EdgeInsets.all(15),
+                ),child: const Icon(Icons.headphones, size: 30,),
+                    ),
+                    const SizedBox(height: 4,),
+                    const Text('audio', style: TextStyle(fontSize: 15, color: const Color.fromARGB(255, 8, 61, 104),
+        fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),)
+                  ],
+                ),
+              ),
+              Padding(
+              padding: const EdgeInsets.only(left:5, right: 5, bottom: 5,top: 5),
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: (){
+                      sideAttachementType='Video';
+                      pickVideo();
+                    },
+                     style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(15),
+              ),child: const Icon(Icons.video_call, size: 30,),
+                  ),
+                  const SizedBox(height: 4,),
+                  const Text('Video', style: TextStyle(fontSize: 15, color: const Color.fromARGB(255, 8, 61, 104),
+        fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),)
+                ],
+              ),
+            )
+          ],),
+        
+      ],
+    ),
+        
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel',   style: TextStyle(color: const Color.fromARGB(255, 8, 61, 104),
+        fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,)),
+            onPressed: () {
+             
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Approve',   style: TextStyle(color: const Color.fromARGB(255, 8, 61, 104),
+        fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,)),
+            onPressed: () async {
+
+             
+            },
+          ),
+        ],
+      );
+    },
+  );
+  }
+  
+String? fileUrl= '';
+XFile? photo;
+File? pickedFile; 
+
+void pickImagefromGalery() async {
+    photo = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 25,);
+        pickedFile = File(photo!.path);
+  }
+
+void pickImagefromCamera() async {
+    photo = await ImagePicker()
+        .pickImage(source: ImageSource.camera, imageQuality: 25,);
+        pickedFile = File(photo!.path);
+  }
+
+void pickpdfs() async{
+  final result= await FilePicker.platform.pickFiles(
+  type: FileType.custom, allowedExtensions: ['pdf','docx'],
+  );
+  if (result != null){
+    PlatformFile pickedfile =result.files.first;
+    pickedFile= File(pickedfile.path!);
+  }
+}
+
+void pickAudio()async{
+    final result= await FilePicker.platform.pickFiles(
+  type: FileType.custom, allowedExtensions: ['mp3', 'm4a'],
+  );
+  if (result != null){
+    PlatformFile pickedAudio =result.files.first;
+     pickedFile= File(pickedAudio.path!);
+
+  }
+}
+void pickVideo() async {
+   final result= await FilePicker.platform.pickFiles(
+  type: FileType.custom, allowedExtensions: ['mp4'],
+  );
+  if (result != null){
+  PlatformFile PickedVideo = result.files.first;
+   pickedFile= File(PickedVideo.path!);
+  }
+  }

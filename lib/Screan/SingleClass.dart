@@ -470,9 +470,10 @@ int comentsNumber=0;
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
+                  
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal:5, vertical: 20),
-                    child: CircleAvatar(radius: 40,
+                    child: CircleAvatar(radius: 30,
                     backgroundColor: Color.fromRGBO(255, 255, 255, 1),
                     child:  Image.asset('images/${widget.type}.png'),),
                   ),
@@ -647,11 +648,11 @@ int comentsNumber=0;
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (contex) =>  LectureScreen(postId: widget.postId, classId: widget.classId, teacherId:widget.teacherId, type:widget.type, title: widget.title, description:widget.description, attachment:widget.attachment , time:time))):
+                builder: (contex) =>  LectureScreen(postId: widget.postId, classId: widget.classId, teacherId:widget.teacherId, type:widget.type, title: widget.title, description:widget.description, attachment:widget.attachment , attachmentType: widget.attachmentType, time:time))):
                   Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (contex) =>  PostScreen(postId: widget.postId, classId: widget.classId, teacherId:widget.teacherId, type:widget.type, title: widget.title, description:widget.description, attachment:widget.attachment ,points: widget.points, DateFromFirebase: DateFromFirebase, time:time,)));
+                builder: (contex) =>  PostScreen(postId: widget.postId, classId: widget.classId, teacherId:widget.teacherId, type:widget.type, title: widget.title, description:widget.description, attachment:widget.attachment , attachmentType: widget.attachmentType, points: widget.points, DateFromFirebase: DateFromFirebase, time:time,)));
         },
       ),
     );

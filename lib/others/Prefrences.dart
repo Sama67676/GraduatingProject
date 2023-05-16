@@ -1,33 +1,38 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async' show Future;
 class UserPrefrences {
-  static const _keyUserName ='userName';
+static SharedPreferences? _sharedPrefs;
+  factory UserPrefrences() => UserPrefrences._internal();
+  UserPrefrences._internal();
+
+    static const _keyUserName ='userName';
     static const _keyUserPosition ='userPosition';
 
-
-  static Future setUserName(String userName)async{
-    await  SharedPreferences.getInstance().then((value) async{
-      await value.setString(_keyUserName, userName);
-    })
-   ;
+ 
+ 
+   Future setUserName(String userName)async{
+     _sharedPrefs = await SharedPreferences.getInstance();
+      return _sharedPrefs?.setString(_keyUserName, jsonEncode(userName));
   }
   
-  static getUserName() async{
-    await  SharedPreferences.getInstance().then((value) async{
-       return await value.getString(_keyUserName).toString();
-    });
-   
+   getUserName() async{
+   _sharedPrefs ??= await SharedPreferences.getInstance();
+    String? name;
+    name=  _sharedPrefs?.getString(_keyUserName);
+    return name;
     }
 
-//صلحي هذا بعدين
-  static Future setUserPosition(String userPosition)async{
-  SharedPreferences _preferences =await  SharedPreferences.getInstance();
-   await _preferences.setString(_keyUserPosition, userPosition);
+   Future setUserPosition(String userPosition)async{
+   _sharedPrefs = await SharedPreferences.getInstance();
+   await _sharedPrefs?.setString(_keyUserPosition, jsonEncode(userPosition));
   }
   
-  static getUserPosition() async{
-    SharedPreferences _preferences =await  SharedPreferences.getInstance();
-    String position =_preferences.getString(_keyUserPosition).toString();
+   getUserPosition() async{
+    _sharedPrefs ??= await SharedPreferences.getInstance();
+    String? position;
+     position =_sharedPrefs?.getString(_keyUserPosition);
     return position;
     }
 }

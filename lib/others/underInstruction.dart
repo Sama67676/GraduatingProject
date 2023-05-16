@@ -14,8 +14,8 @@ final stageItems = [
 final departmentitems = [
     'Computer dep',
     'Network dep',
-    'Civil??? dep',
-    '?????? dep'
+    'Civil dep',
+    'electrical  dep'
   ];
 var pages=[groupsList(), Allusers()];
 class UnderInstructions extends StatefulWidget {

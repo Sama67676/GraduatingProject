@@ -17,8 +17,8 @@ String department = 'Computer dep' ;
 var items = [
     'Computer dep',
     'Network dep',
-    'Civil??? dep',
-    '?????? dep'
+    'Civil dep',
+    'electrical  dep'
   ];
 class S_Allusers extends StatefulWidget {
   static const String ScreanRoute = 'allUsers_Screen';
@@ -235,7 +235,7 @@ void callChatScreen(BuildContext context, Name, frienduid, _authNotifer, profile
           builder: (contex) => Cahtscrean(
                 friendName: Name,
                 frienduid: frienduid,
-                authNotifier: _authNotifer,
+
                 profilePic: profilePic,
                 chatRoomId: chatRoomId,
                 currentUser: currentUser,

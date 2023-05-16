@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:graduating_project_transformed/others/GlobalVariables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -153,8 +152,8 @@ class DatabaseMethods {
       if (snapshot.exists) {
           position = snapshot.data()!['position']; 
           name=  snapshot.data()!['Name']; 
-          await UserPrefrences.setUserName(name!);
-          // Variables().changePosition(snapshot.data()!['position']);
+          await UserPrefrences().setUserName(name!);
+          await UserPrefrences().setUserPosition(position!);
       }
     });
   }

@@ -2,11 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:intl/intl.dart';
+
+import 'SingleStudentSubmit.dart';
 
 class StudentsWork extends StatelessWidget {
-   StudentsWork({String? courseId, String? postId,super.key});
-String? courseId;
- String? postId;
+   StudentsWork({super.key, this.courseId, this.postId});
+ String? courseId;
+  String? postId;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,8 +52,9 @@ String? courseId;
                      child: Padding(
                        padding: const EdgeInsets.symmetric(horizontal:24),
                        child: Text('Students submits:',
-                       style: TextStyle(fontSize: 34,
-                        fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,color:const Color.fromARGB(255, 8, 61, 104)),),
+                         style: TextStyle(fontSize: 34,
+                          fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,color:const Color.fromARGB(255, 8, 61, 104)),),
+                       
                      ),
                    ),
                     Expanded(
@@ -68,7 +72,7 @@ String? courseId;
                                   child: Column(
                                       children: [
                                       StudentWorkStreamBuilder(courseId: courseId, postId: postId,),
-                                        StudentStreamBuilder(),
+                            
                                         ],
                                     )
         ),
@@ -84,32 +88,41 @@ String? courseId;
   }
 }
 
+// ignore: must_be_immutable
 class StudentWorkStreamBuilder extends StatelessWidget {
-   StudentWorkStreamBuilder({String? courseId, String? postId,super.key});
-  String? courseId;
-  String? postId;
+   const StudentWorkStreamBuilder({this.courseId, this.postId});
+  final String? courseId;
+  final String? postId;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('courses')
             .doc(courseId).collection('posts')
-            .doc(postId).collection('submits')
+            .doc(postId!).collection('submits')
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<StudentsWorkLine> TeacherWidgets = [];
             final Users = snapshot.data!.docs;
             for (var user in Users) {
-              final userName = user.get('studentName');
-              final imageUrl = user.get('imgUrl');
               final uid = user.get('studentId');
+              final time = user.get('time');
+              final submitId = user.get('submitId');
+              final isMarked = user.get('isMarked');
+
+final DateTime convtime= DateTime.parse(time!.toDate().toString());
+String outputTime = DateFormat('MMM d, h:mm a').format(convtime);
 
               final userWidget = StudentsWorkLine(
-                  userName: userName,
                   uid: uid,
-                  imageUrl: imageUrl ??
-                      "https://www.google.com/imgres?imgurl=https%3A%2F%2Ficons.veryicon.com%2Fpng%2Fo%2Finternet--web%2F55-common-web-icons%2Fperson-4.png&imgrefurl=https%3A%2F%2Fwww.veryicon.com%2Ficons%2Finternet--web%2F55-common-web-icons%2Fperson-4.html&tbnid=I_U0g8AGNfXjhM&vet=12ahUKEwjvsfzR58n8AhWhXaQEHXydAgsQMygAegUIARC9AQ..i&docid=hkoQ1AXoszUhQM&w=512&h=512&q=person%20image%20icon&ved=2ahUKEwjvsfzR58n8AhWhXaQEHXydAgsQMygAegUIARC9AQ");
+                  time: outputTime,
+                    courseId: courseId,
+                    postId: postId,
+                    submitId: submitId,
+                    isMarked:isMarked,
+                      );
+             
               TeacherWidgets.add(userWidget);
             }
             return Expanded(
@@ -127,11 +140,13 @@ class StudentWorkStreamBuilder extends StatelessWidget {
 }
 
 class StudentsWorkLine extends StatelessWidget {
-  const StudentsWorkLine({this.userName, this.imageUrl, super.key, this.uid});
-  final String? userName;
+  const StudentsWorkLine({this.uid, this.time, this.courseId, this.postId, this.submitId, this.isMarked});
   final String? uid;
-  final String? imageUrl;
-
+  final String? time;
+  final String? courseId;
+  final String? postId;
+  final String? submitId;
+  final String? isMarked;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -142,7 +157,7 @@ class StudentsWorkLine extends StatelessWidget {
           elevation: 4,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
-              Radius.circular(30),
+              Radius.circular(35),
             ),
           ),
           child: Padding(
@@ -151,124 +166,80 @@ class StudentsWorkLine extends StatelessWidget {
               vertical: 10,
             ),
             child: Row(children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundImage: NetworkImage(imageUrl!),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: SizedBox(
-                  width: 180,
-                  child: Text(
-                    '$userName',
-                    style: const TextStyle(
+              StreamBuilder<DocumentSnapshot>(
+                            stream:FirebaseFirestore.instance.collection("users").doc(uid).snapshots(),
+                             builder: (context, snapshot) {
+                                  if (snapshot.data != null) {
+                                  return  Row(
+                             mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                   Padding(
+                                     padding: const EdgeInsets.only(top:8.0, bottom: 8, right: 8, left: 3),
+                                     child: CircleAvatar(
+                                      radius: 24,
+                                      backgroundColor: Colors.white,
+                                     backgroundImage: NetworkImage(snapshot.data?['imgUrl']),
+                                      ),
+                                   ),
+                                  Container(
+                                     constraints: const BoxConstraints(
+                                     maxWidth: 140,
+                                  ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top:8.0, right: 8, bottom: 8),
+                                      child: Text( '${snapshot.data?['Name']}' ,
+                                         style: const TextStyle(color: const Color.fromARGB(255, 8, 61, 104),
+                                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                                fontSize: 22,)),
+                                    ),
+                                  ),
+                                      Padding(
+                                          padding:const EdgeInsets.symmetric( horizontal: 14),
+                                          child:
+                                          Container(
+                                             constraints: const BoxConstraints(
+                                             maxWidth: 80,
+                                          ),             
+                                              child: Text(time!, style: const TextStyle(
+                                             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                            fontSize: 14, color: Colors.white54),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,),
+                                          ),
+                                                                  
+                                    ),
+                                  ],
+                                  );
+                            } else{
+                             return  Container();
+                             }
+                          } 
+                          ),
+              isMarked =='true'?
+              Expanded(child: Icon(Icons.done, color: Colors.green,size: 30,)):
+              Container(height: 1, width: 1,),
+               Expanded(
+                 child: Padding(
+                   padding: const EdgeInsets.only(left:0, right: 8),
+                   child: Text(time!, 
+                   style: const TextStyle(
                        fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                      fontSize: 20, color: Colors.black),
-                    maxLines: 2,
-                    overflow: TextOverflow.fade,
-                  ),
-                ),
-              ),
+                        fontSize: 14, color: Colors.black45),),
+                 ),
+               ),
             ]),
           ),
         ),
           onTap: () {
+             Navigator.push(context, MaterialPageRoute(builder: (context) =>SingleStudentSubmit(
+              courseId:courseId , postId: postId,
+              userId: uid, time: time, submitId:submitId, isMarked: isMarked,
+              )
              
+             ));
         },
       ),
     );
   }
 }
 
-class StudentStreamBuilder extends StatelessWidget {
-  const StudentStreamBuilder({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('users')
-            .where('position', isEqualTo: "Student")
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            List<StudentLine> StudentWidgets = [];
-            final Users = snapshot.data!.docs;
-            for (var user in Users) {
-              final userName = user.get('Name');
-              final imageUrl = user.get('imgUrl');
-              final uid = user.get('uid');
-
-              final userWidget = StudentLine(
-                  userName: userName,
-                  uid: uid,
-                  imageUrl: imageUrl ??
-                      "https://www.google.com/imgres?imgurl=https%3A%2F%2Ficons.veryicon.com%2Fpng%2Fo%2Finternet--web%2F55-common-web-icons%2Fperson-4.png&imgrefurl=https%3A%2F%2Fwww.veryicon.com%2Ficons%2Finternet--web%2F55-common-web-icons%2Fperson-4.html&tbnid=I_U0g8AGNfXjhM&vet=12ahUKEwjvsfzR58n8AhWhXaQEHXydAgsQMygAegUIARC9AQ..i&docid=hkoQ1AXoszUhQM&w=512&h=512&q=person%20image%20icon&ved=2ahUKEwjvsfzR58n8AhWhXaQEHXydAgsQMygAegUIARC9AQ");
-              StudentWidgets.add(userWidget);
-            }
-            return Expanded(
-              child: ListView(
-                children: StudentWidgets,
-              ),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        });
-  }
-}
-
-class StudentLine extends StatelessWidget {
-  const StudentLine({this.userName, this.imageUrl, super.key, this.uid});
-  final String? userName;
-  final String? uid;
-  final String? imageUrl;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      child: InkWell(
-        child: Material(
-          color: Colors.white,
-          elevation: 4,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(30),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 5,
-              vertical: 10,
-            ),
-            child: Row(children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundImage: NetworkImage(imageUrl!),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: SizedBox(
-                  width: 180,
-                  child: Text(
-                    '$userName',
-                    style: const TextStyle(
-                       fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                      fontSize: 20, color: Colors.black),
-                    maxLines: 2,
-                    overflow: TextOverflow.fade,
-                  ),
-                ),
-              ),
-            ]),
-          ),
-        ),
-   onTap: () {
-   }
-      ),
-    );
-  }
-}

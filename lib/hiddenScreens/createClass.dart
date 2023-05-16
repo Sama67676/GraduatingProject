@@ -16,8 +16,8 @@ String department = 'Computer dep' ;
 var items = [
     'Computer dep',
     'Network dep',
-    'Civil??? dep',
-    '?????? dep'
+    'Civil dep',
+    'electrical dep'
   ];
   late List<Map<String, dynamic>> memberList =[];
 

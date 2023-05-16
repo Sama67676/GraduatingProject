@@ -1,11 +1,11 @@
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-
+import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
@@ -79,10 +79,7 @@ class _GroupChatscreanState extends State<GroupChatscrean> {
     initRecorder();
     getGroupDetails();
     _authintication.initializeCurrentUser(authNotifier);
-   FlutterDownloader.initialize(
-    debug: true, // optional: set to false to disable printing logs to console (default: true)
-    ignoreSsl: true // option: set to false to disable working with http links (default: false)
-  );
+  
 
   }
 
@@ -211,9 +208,11 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
               Container(
                 decoration: const BoxDecoration(
                     color: Color(0xFFCCCED3),
-                    border: Border(
-                        top: BorderSide(
-                            color: Color.fromARGB(255, 8, 61, 104), width: 2))),
+                    // border: Border(
+                    //     top: BorderSide(
+                    //         color: Color.fromARGB(255, 8, 61, 104), width: 2)
+                    //         )
+                            ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -346,7 +345,7 @@ class messageStreamBuilder extends StatelessWidget {
           final type = message.get('type');
           final memberImage = message.get('imgUrl');
           final currentuser = currentUser;
-
+if (time!=null){
 final DateTime convtime= DateTime.parse(time.toDate().toString());
 String outputTime = DateFormat.jm().format(convtime);
 
@@ -362,6 +361,7 @@ String outputTime = DateFormat.jm().format(convtime);
           );
 
           messageWidgets.add(messageWidget);
+        }
         }
         return Expanded(
           child: ListView(
@@ -421,7 +421,7 @@ class MessageLine extends StatelessWidget {
               ):Container(width: 1, height: 1,),
               Container(
                  constraints: const BoxConstraints(
-                  maxWidth: 290,
+                  maxWidth: 260,
                 ),
                 child: Material(
                   color: isMe ? Colors.white : const Color.fromARGB(255, 8, 61, 104),
@@ -462,7 +462,7 @@ class MessageLine extends StatelessWidget {
     ): type== 'image'? Padding(
       padding: isMe? const EdgeInsets.only(left: 75,bottom: 5,top: 5, right: 5) : const EdgeInsets.only(left: 5,bottom: 5,top: 5, right: 75),
       child: InkWell(
-        onTap: (){downloadFile(text!);},
+        onTap: (){downloadFiles(text!);},
         child: Container(
               decoration: BoxDecoration(border: Border.all(width: 2, color: const Color.fromARGB(255, 8, 61, 104),),
           borderRadius: BorderRadius.circular(40),),
@@ -491,7 +491,7 @@ class MessageLine extends StatelessWidget {
       child:  InkWell(
         onTap: (){
 
-         downloadFile(text!);
+         downloadFiles(text!);
         },
         child: Material(
           
@@ -542,7 +542,7 @@ class MessageLine extends StatelessWidget {
       padding: isMe? const EdgeInsets.only(left: 75,bottom: 5,top: 5, right: 5) : const EdgeInsets.only(left: 5,bottom: 5,top: 5, right: 75),
       child:  InkWell(
         onTap: (){
-          downloadFile(text!);
+          downloadFiles(text!);
         },
         child: Material(
           
@@ -598,7 +598,7 @@ class MessageLine extends StatelessWidget {
     : type== 'Video'?Padding(
       padding: isMe? const EdgeInsets.only(left: 75,bottom: 5,top: 5, right: 5) : const EdgeInsets.only(left: 5,bottom: 5,top: 5, right: 75),
       child: InkWell(
-        onTap: (){downloadFile(text!);},
+        onTap: (){downloadFiles(text!);},
         child: Container(
               decoration: BoxDecoration(border: Border.all(width: 5, color: const Color.fromARGB(255, 8, 61, 104),),
           borderRadius: BorderRadius.circular(40),),
@@ -962,19 +962,45 @@ await firestore.collection('groups').doc(groupId).collection('messages').doc(doc
       );
 }
 
-Future downloadFile(String url)async{
-  final status =await Permission.storage.status;
+
+void downloadFiles(String url)async{
+ try {
+   final httpsReference = FirebaseStorage.instance.refFromURL(url);
+  final appDocDir = await getApplicationDocumentsDirectory();
+  final filePath = appDocDir.absolute.path +'/' + httpsReference.name;
+  Directory? directory;
+    if (Platform.isIOS) {
+      directory = await getDownloadsDirectory();
+      print(directory?.path);
+    } else if (Platform.isAndroid) {
+      // For Android get the application's scoped cache directory
+      directory = await getTemporaryDirectory();
+    }
+      if (directory == null) {
+      throw Exception('Could not access local storage for '
+          'download. Please try again.');
+    }
+    print('Temp cache save path: ${directory.path}/${httpsReference.name}');
+      // Use Dio package to download the short lived url to application cache
+      final dio = Dio();
+    await dio.download(
+      url,
+      '${directory.path}/${httpsReference.name}',
+    );
+     /// For Android call the flutter_file_dialog package, which will give the option to save the now downloaded file by Dio (to temp application cache) to wherever the user wants including Downloads!
+      if (Platform.isAndroid) {
+      final params = SaveFileDialogParams(
+          sourceFilePath: '${directory.path}/${httpsReference.name}');
+      final filePath =
+          await FlutterFileDialog.saveFile(params: params);
+
+      print('Download path: $filePath');
+    }
+     OpenFile.open(directory.path);
+ } catch (e) {
+   
+ }
   
-if (status.isGranted){
-  final  externaldir =await getApplicationDocumentsDirectory();
- FlutterDownloader.enqueue(url: url, savedDir: externaldir.path,
-showNotification: true,
-fileName: 'newpicidownloadedfromflutter',
-openFileFromNotification: true,
-);
-}else{
-  await Permission.storage.request();
-}
 }
 
 Future<void> getUserName() async {

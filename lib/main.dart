@@ -1,45 +1,35 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 // ignore: unused_import
 import '../main.dart';
-
+import 'Others/Prefrences.dart';
 import 'Others/auth_notifier.dart';
 import 'Screan/Classes.dart';
-
+import 'Screan/News.dart';
 import 'Screan/OpeningScreen1.dart';
 import 'Screan/ScheduleScreen.dart';
-
 import 'Screan/SwaipableChats.dart';
 import 'Screan/menuScreen.dart';
-import 'Screan/newUserScreen.dart';
-
-import 'Screan/ChatList.dart';
-import 'Screan/OpeningScreen1.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 import 'StudentsScreens/S_Callender.dart';
 import 'StudentsScreens/S_Classes.dart';
 import 'StudentsScreens/S_Menu.dart';
 import 'StudentsScreens/S_Swipeable_chats.dart';
-import 'Widgets/MyIcons.dart';
-import 'others/GlobalVariables.dart';
-import 'others/Prefrences.dart';
-import 'others/groupList.dart';
-import 'others/underInstruction.dart';
+String? position;
 
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  position=await UserPrefrences().getUserPosition()??'';
+//  await UserPrefrences().init();
   runApp(ChangeNotifierProvider(create: (_) => AuthNotifier(), child: My()));
 }
 
@@ -66,7 +56,6 @@ class _MyState extends State<My> {
         print('User is currently signed out!');
       } else {
         print('User is signed in!');
-        print(Variables.glopalPosition);
       }
     });
         
@@ -78,11 +67,11 @@ class _MyState extends State<My> {
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
     
     return MaterialApp(
-      home:  Variables.glopalPosition =='Teacher'?const ButtomNavigationBar():
-      ButtomNavigationBarStudents(),
+      home:  const ButtomNavigationBar(),
+      // ButtomNavigationBarStudents(),
       initialRoute: FirebaseAuth.instance.currentUser == null 
           ? 'OpeningScreen'
-          : Variables.glopalPosition =='Teacher'? ButtomNavigationBar.ScreanRoute:
+          : position =='Teacher'? ButtomNavigationBar.ScreanRoute:
           ButtomNavigationBarStudents.ScreanRoute,
       routes: {
         'OpeningScreen': (context) => const OpeningScreen1(),
@@ -111,7 +100,7 @@ class _ButtomNavigationBarState extends State<ButtomNavigationBar> with WidgetsB
   int _currentIndex = 0;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final List<Widget> children = [
-    UnderInstructions(),
+    const ApplyScreen(baseUrl: 'https://mohesr.gov.iq/ar/homeNews/newsTerm_more/6',),
     const SwipableChats(),
     const ClassesScreen(),
     const calender(),
@@ -212,6 +201,7 @@ void setStatus(String status)async{
             SalomonBottomBarItem(
               icon: const Icon(Icons.edit_calendar),
               title: const Text("schedule", style: TextStyle( fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),),
+              unselectedColor: Colors.indigo.shade900,
               selectedColor: Colors.indigo.shade900,
             ),
 
@@ -244,7 +234,7 @@ class _ButtomNavigationBarStudentsState extends State<ButtomNavigationBarStudent
   int _currentIndex = 0;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final List<Widget> children = [
-    UnderInstructions(),
+     const ApplyScreen(baseUrl: 'https://mohesr.gov.iq/ar/homeNews/newsTerm_more/6',),
     const S_SwipableChats(),
     const S_ClassesScreen(),
     const S_calender(),
@@ -347,6 +337,7 @@ void setStatus(String status)async{
             SalomonBottomBarItem(
               icon: const Icon(Icons.edit_calendar),
               title: const Text("schedule", style: TextStyle( fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),),
+              unselectedColor: Colors.indigo.shade900,
               selectedColor: Colors.indigo.shade900,
             ),
 

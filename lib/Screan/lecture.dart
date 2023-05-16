@@ -1,15 +1,21 @@
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 
 
 
 final CommentsController = TextEditingController();
 class LectureScreen extends StatefulWidget {
-  LectureScreen({this.postId,this.title, this.type, this.classId,this.teacherId, this.description,this.attachment, this.time});
+  LectureScreen({this.postId,this.title, this.type, this.classId,this.teacherId, this.description,this.attachment,this.attachmentType, this.time});
   String? postId;
   String? classId;
   String? teacherId;
@@ -17,9 +23,10 @@ class LectureScreen extends StatefulWidget {
  String? title;
  String? description;
  String? attachment;
+ String? attachmentType;
  String? time;
   @override
-  State<LectureScreen> createState() => _LectureScreenState(this.postId,this.title, this.type, this.teacherId, this.classId, this.description,this.attachment,this.time);
+  State<LectureScreen> createState() => _LectureScreenState(this.postId,this.title, this.type, this.teacherId, this.classId, this.description,this.attachment,this.attachmentType, this.time);
 }
 
 class _LectureScreenState extends State<LectureScreen> {
@@ -30,9 +37,9 @@ class _LectureScreenState extends State<LectureScreen> {
  String? title;
   String? description;
   String? attachment;
-
+String? attachmentType;
 String? time;
-    _LectureScreenState(this.postId,this.title,this.type, this.teacherId, this.classId,  this.description,this.attachment,this.time);
+    _LectureScreenState(this.postId,this.title,this.type, this.teacherId, this.classId,  this.description,this.attachment,this.attachmentType,this.time);
 
 
   
@@ -136,24 +143,34 @@ void initState(){
                                         ),
                                      ),
                                    
-                           Padding(
-                                      padding: const EdgeInsets.only(top:8.0, right: 8, bottom: 8),
-                                      child: Text( '${snapshot.data?['Name']} :' ,
-                                         style: const TextStyle(color: Colors.white,
-                                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                                fontSize: 22,)),
-                                    ),
+                           Container(
+                            constraints: const BoxConstraints(
+                                     maxWidth: 200,
+                                  ),
+                             child: Padding(
+                                        padding: const EdgeInsets.only(top:8.0, right: 8, bottom: 8),
+                                        child: Text( '${snapshot.data?['Name']} :' ,
+                                           style: const TextStyle(color: Colors.white,
+                                                  fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                                  fontSize: 22,)),
+                                      ),
+                           ),
                                   
                         
-                              Padding(
-                                                                 padding:const EdgeInsets.symmetric( horizontal: 14),
-                                                                 child:
+                              Container(
+                                             constraints: const BoxConstraints(
+                                             maxWidth: 80,
+                                          ),         
+                                child: Padding(
+                                                                   padding:const EdgeInsets.symmetric( horizontal: 14),
+                                                                   child:
+                                                                      
+                                                                       Text(time!, style: const TextStyle(
+                                               fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                              fontSize: 14, color: Colors.white54),),
                                                                     
-                                                                     Text(time!, style: const TextStyle(
-                                             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                            fontSize: 14, color: Colors.white54),),
-                                                                  
-                                                               ),
+                                                                 ),
+                              ),
                                    
                                   ],
                                   );
@@ -193,6 +210,72 @@ void initState(){
                                               fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                               fontSize: 20,
                                              ),),
+                                             attachment !=null?
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical:12, ),
+                                      child: InkWell(
+                                        child: Container(height: 50, 
+                                        width: 100, 
+                                        decoration: BoxDecoration( borderRadius: BorderRadius.circular(20),
+                                        color: Colors.white,),
+                                        child: attachmentType =='image'?
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal:4),
+                                              child: Icon(Icons.image, color: Color.fromARGB(255, 8, 61, 104),),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal:2),
+                                              child: Text('Image', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
+                                                                                   fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                                                                   fontSize: 20,
+                                                                                  ),),
+                                            ),
+                                          ],
+                                        ):attachmentType =='pdf'?
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal:6),
+                                              child: Icon(Icons.file_copy, color: Color.fromARGB(255, 8, 61, 104),),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal:2),
+                                              child: Text('pdf', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
+                                                                                   fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                                                                   fontSize: 20,
+                                                                                  ),),
+                                            ),
+                                          ],
+                                        ):attachmentType =='Audio'?
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal:6),
+                                              child: Icon(Icons.audio_file, color: Color.fromARGB(255, 8, 61, 104),),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal:2),
+                                              child: Text('Audio', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
+                                                                                   fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                                                                   fontSize: 20,
+                                                                                  ),),
+                                            ),
+                                          ],
+                                        ):
+                                      
+                                        Icon(Icons.error),
+                                        ),
+                                      onTap: (){
+                                        downloadFiles(attachment!);
+                                      },
+                                      ),
+                                    ):
+                                    Container(height: 1, width: 1,),
+                                    
+                                    const  SizedBox(height: 10,),
+                                     
                                   
                                     ],
                                   ),
@@ -498,4 +581,42 @@ class CommentsLine extends StatelessWidget {
       ),
     );
   }
+}
+void downloadFiles(String url)async{
+ try {
+   final httpsReference = FirebaseStorage.instance.refFromURL(url);
+  final appDocDir = await getApplicationDocumentsDirectory();
+  final filePath = appDocDir.absolute.path +'/' + httpsReference.name;
+  Directory? directory;
+    if (Platform.isIOS) {
+      directory = await getDownloadsDirectory();
+      print(directory?.path);
+    } else if (Platform.isAndroid) {
+      // For Android get the application's scoped cache directory
+      directory = await getTemporaryDirectory();
+    }
+      if (directory == null) {
+      throw Exception('Could not access local storage for '
+          'download. Please try again.');
+    }
+    print('Temp cache save path: ${directory.path}/${httpsReference.name}');
+      // Use Dio package to download the short lived url to application cache
+      final dio = Dio();
+    await dio.download(
+      url,
+      '${directory.path}/${httpsReference.name}',
+    );
+     /// For Android call the flutter_file_dialog package, which will give the option to save the now downloaded file by Dio (to temp application cache) to wherever the user wants including Downloads!
+      if (Platform.isAndroid) {
+      final params = SaveFileDialogParams(
+          sourceFilePath: '${directory.path}/${httpsReference.name}');
+      final filePath =
+          await FlutterFileDialog.saveFile(params: params);
+
+      print('Download path: $filePath');
+    }
+ } catch (e) {
+   
+ }
+  
 }

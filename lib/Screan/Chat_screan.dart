@@ -8,14 +8,14 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+
 import 'package:graduating_project_transformed/hiddenScreens/FriendProfile.dart';
 import 'package:graduating_project_transformed/others/managefiles/chatRoomPdf.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import '../Others/auth.dart';
-import '../Others/auth_notifier.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../others/managefiles/chatRoomAudio.dart';
@@ -30,9 +30,7 @@ import 'package:flutter/services.dart'; //to copy paste
 late String friendToken;
 SendRecords sendRecords= SendRecords(); 
 final firestore = FirebaseFirestore.instance;
-final _auth = FirebaseAuth.instance;
-Authintication _authintication = Authintication();
-final ReceivePort _port = ReceivePort();  //مال فلتر دونلودر حتى ليخرب التطبيق بين ما ينزل ملف
+
 class Cahtscrean extends StatefulWidget {
   static const String ScreanRoute = 'Chat_Screan';
   const Cahtscrean({
@@ -40,21 +38,21 @@ class Cahtscrean extends StatefulWidget {
     required this.frienduid,
     required this.friendName,
     required this.profilePic,
-    required this.authNotifier,
+
     required this.currentUser,
     required this.chatRoomId,
   });
   final String frienduid;
   final String friendName;
   final String profilePic;
-  final AuthNotifier authNotifier;
+
   final String chatRoomId;
   final String currentUser;
 
   @override
   // ignore: no_logic_in_create_state
   State<Cahtscrean> createState() => _CahtscreanState(
-      frienduid, friendName, profilePic, authNotifier, chatRoomId, currentUser);
+      frienduid, friendName, profilePic, chatRoomId, currentUser);
 }
 
 class _CahtscreanState extends State<Cahtscrean> {
@@ -64,11 +62,10 @@ class _CahtscreanState extends State<Cahtscrean> {
   final String friendName;
   final String profilePic;
   final String chatRoomId;
-  final AuthNotifier authNotifier;
+ 
   final String currentUser;
 
-  _CahtscreanState(this.frienduid, this.friendName, this.profilePic,
-      this.authNotifier, this.chatRoomId, this.currentUser);
+  _CahtscreanState(this.frienduid, this.friendName, this.profilePic, this.chatRoomId, this.currentUser);
 bool recordingIcon= false;
 bool isRecording = false;
 bool isRequrderReady= false;
@@ -80,34 +77,9 @@ bool isRequrderReady= false;
     initRecorder();
     getFriendDeviceToken(frienduid);
  messageTextController.addListener(_printLatestValue);
-    _authintication.initializeCurrentUser(authNotifier);
-   FlutterDownloader.initialize(
-    debug: true, // optional: set to false to disable printing logs to console (default: true)
-    ignoreSsl: true // option: set to false to disable working with http links (default: false)
-  );
-IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port'); //مال فلتر دونلودر حتى ليخرب التطبيق بين ما ينزل ملف
-    _port.listen((dynamic data) {  //مال فلتر دونلودر حتى ليخرب التطبيق بين ما ينزل ملف
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-      setState((){ });
-    });
-    FlutterDownloader.registerCallback(downloadCallback); //مال فلتر دونلودر حتى ليخرب التطبيق بين ما ينزل ملف
-  }
-//مال فلتر دونلودر حتى ليخرب التطبيق بين ما ينزل ملف
-   static void downloadCallback(String id, DownloadTaskStatus status, int progress) { 
-    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port')!;
-    send.send([id, status, progress]);
+
   }
 
-Future downloaderinit()async{
-final status = await Permission.storage.request();
-if(status != PermissionStatus.granted){
-  throw 'Microphone permission not granted!';
-}await recorder.openRecorder();
-isRequrderReady= true;
-recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
-}
 
    Future stop()async{
 final path =await recorder.stopRecorder();
@@ -120,6 +92,7 @@ sendRecords.uploadRecord(chatRoomId,currentUser, frienduid);
   }
 
 
+  @override
   void dispose(){
     recorder.stopRecorder();
     super.dispose();
@@ -387,7 +360,7 @@ class messageStreamBuilder extends StatelessWidget {
           final type = message.get('type');
           final isRead = message.get('isRead');
           final currentuser = currentUser;
-
+if (time!=null){
 final DateTime convtime= DateTime.parse(time.toDate().toString());
 String outputTime = DateFormat.jm().format(convtime);
 
@@ -401,6 +374,7 @@ String outputTime = DateFormat.jm().format(convtime);
             type: type,
           );
           messageWidgets.add(messageWidget);
+}
         }
         return Expanded(
           child: ListView(
@@ -753,87 +727,7 @@ void getFriendDeviceToken(frienduid)async{
   });
 }
 
-// void downloadImage(String url)async{
-//   final httpsReference = FirebaseStorage.instance.refFromURL(url);
-//   final appDocDir = await getApplicationDocumentsDirectory();
-//   final filePath = appDocDir.absolute.path +'/' + httpsReference.name;
-//   final file = File(filePath);
-//   new File('$filePath').create(recursive: true); 
 
-//   final downloadTask = httpsReference.writeToFile(file);
-// downloadTask.snapshotEvents.listen((downloadTask) {
-//   switch (downloadTask.state) {
-//     case TaskState.running:
-//     print("running");
-//       break;
-//     case TaskState.paused:
-//     print("paused");
-//       break;
-//     case TaskState.success:
-//     print("success");
-//       break;
-//     case TaskState.canceled:
-//     print("canceled");
-//       break;
-//     case TaskState.error:
-//     print("error");
-//       break;
-//   }
-// });
-// }
-
-// void downloadImage2( url)async{
-//   final uri = Uri.parse(url);
-//   var response= await http.get(uri);
-//   Directory documentDirectory = await getApplicationDocumentsDirectory();
-//   final httpsReference = FirebaseStorage.instance.refFromURL(url);
-//   final filePath = "${documentDirectory.absolute.path}/${httpsReference.name}";
-//   final file = File(filePath);
-//   await file.writeAsBytes(response.bodyBytes);
-
-//   // new File('$filePath').create(recursive: true); 
-
-  
-// }
-
-// void downloadFileWithDownloader(String text)async{
-//   //  final uri = Uri.parse(text);
-//   final httpsReference = FirebaseStorage.instance.refFromURL(text);
-//   final appDocDir = await getApplicationDocumentsDirectory();
-//   final filePath = appDocDir.absolute.path  ;
-//    final savedDir = Directory(filePath);
-//           bool hasExisted = await savedDir.exists();
-//           if (!hasExisted) {
-//             savedDir.create().then((value) async{
-//               final taskId = await FlutterDownloader.enqueue(
-//   url: text,
-//   savedDir: filePath,
-//   saveInPublicStorage: true,
-
-// showNotification: true,
-//       openFileFromNotification: true,
-// );
-
-//             }
-//             );
-       
- 
-//           } else
-//           {
-//             final taskId = await FlutterDownloader.enqueue(
-//   url: text,
-//   savedDir: filePath,
-
-// );
- 
- 
-//           }
-
-  //   final file = File(filePath);
-  //  File('$filePath').create(recursive: true); 
-
-  
-// }
 void downloadFiles(String url)async{
  try {
    final httpsReference = FirebaseStorage.instance.refFromURL(url);
@@ -873,16 +767,7 @@ void downloadFiles(String url)async{
  }
   
 }
-// Future downloadFile(String url)async{
-// //  var response = await get(Uri.parse(url)); 
-// //    debugPrint(response.statusCode.toString());
-  
-// //       var filePath = await ImagePickerSaver.saveFile(
-// //           fileData: response.bodyBytes);
-  
-// //       var savedFile= File.fromUri(Uri.file(filePath));
 
-// }
  void downloadFileDialog(context, String text) {
   
         showDialog(

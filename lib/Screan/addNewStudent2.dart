@@ -9,8 +9,8 @@ final departmentitems = [
   
     'Computer dep',
     'Network dep',
-    'Civil??? dep',
-    '?????? dep'
+    'Civil dep',
+    'electrical  dep'
   ];
 
 final stageItems = [

@@ -1,7 +1,3 @@
-import 'package:graduating_project_transformed/Screan/OpeningScreen1.dart';
-import 'package:graduating_project_transformed/Screan/newUserScreen.dart';
-
-import '../hiddenScreens/groupProfile.dart';
 import '../others/Prefrences.dart';
 import 'StudentsList.dart';
 
@@ -11,7 +7,7 @@ import 'profile_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'TeachersList.dart';
-String name ='';
+String name ='loading';
 class MenuScreen extends StatefulWidget {
   static const String ScreanRoute = 'menu_Screen';
    MenuScreen({super.key});
@@ -24,16 +20,17 @@ class _MenuScreenState extends State<MenuScreen> {
 
 @override
   void initState() {
-    // TODO: implement initState
     getprefrences();
     super.initState();
   }
-  void getprefrences()async{
-          name =await UserPrefrences.getUserPosition().toString();
-          setState(() {
-            
-          });
-
+  void getprefrences(){
+     UserPrefrences().getUserName().then((value){
+    setState(() {
+           name= value.toString();
+             print(name.toString());
+    });
+    }
+    );
 }
 
   @override
@@ -83,6 +80,7 @@ class _MenuScreenState extends State<MenuScreen> {
                               child: CircleAvatar(
                                 backgroundImage:
                                     AssetImage('images/personPic.jpg'),
+                                    
                                 radius: 30,
                               ),
                             ),
@@ -93,8 +91,28 @@ class _MenuScreenState extends State<MenuScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children:  [
-                                    Text(
-                                      name?? 'wait',
+                                    // FutureBuilder(
+                                    //   future: UserPrefrences().getUserName(),
+                                    //   builder: (context, snapshot){
+                                    //     if (snapshot.data !=null){
+                                    //       return Text(
+                                    //   name,
+                                    //   style: const TextStyle(
+                                    //      fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                    //       fontSize: 20, color: Colors.black),
+                                    // );
+                                    //     } else{
+                                    //        return  Text(
+                                    //   'no value',
+                                    //   style: const TextStyle(
+                                    //      fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                    //       fontSize: 20, color: Colors.black),
+                                    // );
+                                    //     }
+                                    //   }
+                                    // ),
+                                   Text(
+                                      name,
                                       style: const TextStyle(
                                          fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                           fontSize: 20, color: Colors.black),

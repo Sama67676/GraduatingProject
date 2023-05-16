@@ -1,15 +1,19 @@
-
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:graduating_project_transformed/hiddenScreens/StudentsWork.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 
 
 final CommentsController = TextEditingController();
 class PostScreen extends StatefulWidget {
-  PostScreen({this.postId,this.title, this.type, this.classId,this.teacherId, this.description,this.attachment, this.points,this.DateFromFirebase, this.time});
+  PostScreen({this.postId,this.title, this.type, this.classId,this.teacherId, this.description,this.attachment,this.attachmentType, this.points,this.DateFromFirebase, this.time});
   String? postId;
   String? classId;
   String? teacherId;
@@ -17,11 +21,12 @@ class PostScreen extends StatefulWidget {
  String? title;
  String? description;
  String? attachment;
+ String? attachmentType;
  String? points;
 Map<String, dynamic>? DateFromFirebase;
 String? time;
   @override
-  State<PostScreen> createState() => _PostScreenState(this.postId,this.title, this.type, this.teacherId, this.classId, this.description,this.attachment, this.points, this.DateFromFirebase, this.time);
+  State<PostScreen> createState() => _PostScreenState(this.postId,this.title, this.type, this.teacherId, this.classId, this.description,this.attachment,this.attachmentType, this.points, this.DateFromFirebase, this.time);
 }
 
 class _PostScreenState extends State<PostScreen> {
@@ -32,10 +37,11 @@ class _PostScreenState extends State<PostScreen> {
  String? title;
   String? description;
   String? attachment;
+  String? attachmentType;
   String? points;
 Map<String, dynamic>? DateFromFirebase;
 String? time;
-    _PostScreenState(this.postId,this.title,this.type, this.teacherId, this.classId,  this.description,this.attachment, this.points,this.DateFromFirebase, this.time);
+    _PostScreenState(this.postId,this.title,this.type, this.teacherId, this.classId,  this.description,this.attachment,this.attachmentType, this.points,this.DateFromFirebase, this.time);
 
 
   
@@ -68,13 +74,13 @@ void initState(){
                         children: [
                          Expanded(
                            child: IconButton(
-                                    icon: const Icon(Icons.arrow_back_ios,
-                                        size: 30,
-                                        color: Color.fromARGB(255, 8, 61, 104)),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
+                           icon: const Icon(Icons.arrow_back_ios,
+                               size: 30,
+                               color: Color.fromARGB(255, 8, 61, 104)),
+                          onPressed: () {
+                             Navigator.pop(context);
+                          },
+                        ),
                          ),
                         Expanded(
                           flex: 2,
@@ -89,25 +95,12 @@ void initState(){
                            ),
                           ),
                       ),
-                        Expanded(
-                          flex: 2,
-                          child: SizedBox(width: 4,)),
-                           Expanded(
-                             child: Text(
-                             '-/10',
-                             style: TextStyle(
-                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                               color: Color.fromARGB(255, 8, 61, 104),
-                               fontSize:22,
-                             ),
-                              ), 
-                           ),
+                     Expanded(
+                      flex:2,
+                      child: Container(height: 2, width: 14,))
                         ],
                       ),
                ),
-                  
-                
-                
                  Expanded(
                   flex: 8,
                   child: Padding(
@@ -125,9 +118,7 @@ void initState(){
                                 children: [
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      
-                                                      
+                                    children: [          
                                       Row(
                                          children: [
                                            StreamBuilder<DocumentSnapshot>(
@@ -145,23 +136,33 @@ void initState(){
                                      backgroundImage: NetworkImage(snapshot.data?['imgUrl']),
                                       ),
                                    ),
-                                  
-                                  Padding(
-                                    padding: const EdgeInsets.only(top:8.0, right: 8, bottom: 8),
-                                    child: Text( '${snapshot.data?['Name']} :' ,
-                                       style: const TextStyle(color: Colors.white,
-                                              fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                              fontSize: 22,)),
+                                  Container(
+                                     constraints: const BoxConstraints(
+                                     maxWidth: 200,
+                                  ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top:8.0, right: 8, bottom: 8),
+                                      child: Text( '${snapshot.data?['Name']} :' ,
+                                         style: const TextStyle(color: Colors.white,
+                                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                                fontSize: 22,)),
+                                    ),
                                   ),
                                       Padding(
-                                                                 padding:const EdgeInsets.symmetric( horizontal: 14),
-                                                                 child:
-                                                                    
-                                                                     Text(time!, style: const TextStyle(
+                                          padding:const EdgeInsets.symmetric( horizontal: 14),
+                                          child:
+                                          Container(
+                                             constraints: const BoxConstraints(
+                                             maxWidth: 80,
+                                          ),             
+                                              child: Text(time!, style: const TextStyle(
                                              fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                            fontSize: 14, color: Colors.white54),),
+                                            fontSize: 14, color: Colors.white54),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,),
+                                          ),
                                                                   
-                                                               ),
+                                    ),
                                   ],
                                   );
                             } else{
@@ -199,13 +200,79 @@ void initState(){
                                               fontSize: 20,
                                              ),),
                                      
-                                   
-                                      Text('$points points',
-                                         style: TextStyle(color: Colors.white,
-                                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                               ),
-                                       ),
+                                    attachment !=null?
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical:12, ),
+                                      child: InkWell(
+                                        child: Container(height: 50, 
+                                        width: 100, 
+                                        decoration: BoxDecoration( borderRadius: BorderRadius.circular(20),
+                                        color: Colors.white,),
+                                        child: attachmentType =='image'?
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal:4),
+                                              child: Icon(Icons.image, color: Color.fromARGB(255, 8, 61, 104),),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal:2),
+                                              child: Text('Image', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
+                                                                                   fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                                                                   fontSize: 20,
+                                                                                  ),),
+                                            ),
+                                          ],
+                                        ):attachmentType =='pdf'?
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal:6),
+                                              child: Icon(Icons.file_copy, color: Color.fromARGB(255, 8, 61, 104),),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal:2),
+                                              child: Text('pdf', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
+                                                                                   fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                                                                   fontSize: 20,
+                                                                                  ),),
+                                            ),
+                                          ],
+                                        ):attachmentType =='Audio'?
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal:6),
+                                              child: Icon(Icons.audio_file, color: Color.fromARGB(255, 8, 61, 104),),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal:2),
+                                              child: Text('Audio', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
+                                                                                   fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                                                                   fontSize: 20,
+                                                                                  ),),
+                                            ),
+                                          ],
+                                        ):
+                                      
+                                        Icon(Icons.error),
+                                        ),
+                                      onTap: (){
+                                        downloadFiles(attachment!);
+                                      },
+                                      ),
+                                    ):
+                                    Container(height: 1, width: 1,),
+                                    
+                                    const  SizedBox(height: 10,),
+                                     
+                                       Text('$points points',
+                                           style: TextStyle(color: Colors.white,
+                                                  fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                 ),
+                                         ),
+                                      
                                      
                                  
                                     Text('due ${DateFromFirebase!['month']}/${DateFromFirebase!['day']} ${DateFromFirebase!['hour']}:${DateFromFirebase!['minute']} ${DateFromFirebase!['moreve']}',
@@ -226,19 +293,21 @@ void initState(){
                                   child: Container(
                                       width: 125,
                                       height: 65,
-                                       child: Material(
+                                       child: const Material(
                                         elevation: 4,
                                         
-                                        borderRadius: const BorderRadius.all(
+                                        borderRadius: BorderRadius.all(
                                          Radius.circular(35),
                                          ),
-                                        color:  const Color(0xFFCCCED3),
+                                        color:  Color(0xFFCCCED3),
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                                          padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                                           child: Text('students work',
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
+                                            
                                             fontSize: 20,
-                                            color: const Color.fromARGB(255, 8, 61, 104), fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),
+                                            color: Color.fromARGB(255, 8, 61, 104), fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),
                                           ),
                                         ),
                                        ),
@@ -307,7 +376,7 @@ String? messageText;
 void showComments(context,String classId, String postId, ){
 showModalBottomSheet(context: context, builder: (BuildContext bc){
   return Container(
-    color: const Color.fromARGB(255, 8, 61, 104),
+    color: Colors.white,
     height: MediaQuery.of(context).size.height * .60,
     child:  Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,7 +387,7 @@ showModalBottomSheet(context: context, builder: (BuildContext bc){
                 height: 30,
                 child: Text('Comments :', style: TextStyle(
                     fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: const Color.fromARGB(255, 8, 61, 104),
                     fontSize:24,
                   ),),
               ),
@@ -331,7 +400,7 @@ showModalBottomSheet(context: context, builder: (BuildContext bc){
           Container(
             height: 70,
                   decoration: const BoxDecoration(
-                      color: const Color.fromARGB(255, 8, 61, 104),
+                      color: Colors.white,
                       border: Border(
                           top: BorderSide(
                               color: Colors.white, width: 2))),
@@ -343,14 +412,14 @@ showModalBottomSheet(context: context, builder: (BuildContext bc){
                             padding: const EdgeInsets.symmetric(vertical:3),
                               
                               child:  TextField(
-                                style: const TextStyle(color: Colors.white),
+                                style: const TextStyle(color: const Color.fromARGB(255, 8, 61, 104)),
                                 controller: CommentsController,
                                 onChanged: (value) {
                                   messageText = value;
                                 },
                                 decoration: InputDecoration(
                                enabledBorder:  UnderlineInputBorder(
-                  borderSide:  BorderSide(color: Colors.white)
+                  borderSide:  BorderSide(color: const Color.fromARGB(255, 8, 61, 104))
               ),                            //this code for changing the under line of text field
                             
                                 contentPadding: const EdgeInsets.symmetric(
@@ -359,7 +428,7 @@ showModalBottomSheet(context: context, builder: (BuildContext bc){
                                 ),
                                
                                 hintText: 'Add comment ...',
-                                hintStyle: const TextStyle(fontSize: 20, color:  Colors.white, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),
+                                hintStyle: const TextStyle(fontSize: 20, color:  const Color.fromARGB(255, 8, 61, 104), fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),
                                                     ),
                                                   ),
                           )),
@@ -376,7 +445,7 @@ showModalBottomSheet(context: context, builder: (BuildContext bc){
                           child: const Text(
                             'send',
                             style: TextStyle(
-                              color:  Colors.white,
+                              color:  const Color.fromARGB(255, 8, 61, 104),
                               fontWeight: FontWeight.bold,
                                fontFamily: 'HP Simplified Light',
                               fontSize: 18,
@@ -495,10 +564,10 @@ class CommentsLine extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.only(top:8.0, left: 12, bottom: 3),
                                       child: Text( snapshot.data?['Name'] ,
-                                         style: const TextStyle(fontSize: 15, color: Colors.white, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold)),
+                                         style: const TextStyle(fontSize: 15, color: const Color.fromARGB(255, 8, 61, 104), fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold)),
                                     ),
                                    Material(
-                                    color: Colors.white,
+                                    color: const Color.fromARGB(255, 8, 61, 104),
                               shape:const RoundedRectangleBorder( borderRadius: BorderRadius.only(
                                 topRight: Radius.circular(30),
                                 bottomLeft:  Radius.circular(30),
@@ -514,7 +583,7 @@ class CommentsLine extends StatelessWidget {
                                              '$text',
                                              style: const TextStyle(
                                               fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                              fontSize: 16, color: Colors.black),
+                                              fontSize: 16, color: Colors.white),
                                              maxLines: 10,
                                              overflow: TextOverflow.fade,
                                       ),
@@ -523,7 +592,7 @@ class CommentsLine extends StatelessWidget {
                                        maxLines: 10,
                                           style: TextStyle(
                                                fontSize: 10,
-                                               color: Colors.black45),)
+                                               color: Colors.white38),)
                                          ],
                                        ),
                                       
@@ -549,4 +618,42 @@ class CommentsLine extends StatelessWidget {
       ),
     );
   }
+}
+void downloadFiles(String url)async{
+ try {
+   final httpsReference = FirebaseStorage.instance.refFromURL(url);
+  final appDocDir = await getApplicationDocumentsDirectory();
+  final filePath = appDocDir.absolute.path +'/' + httpsReference.name;
+  Directory? directory;
+    if (Platform.isIOS) {
+      directory = await getDownloadsDirectory();
+      print(directory?.path);
+    } else if (Platform.isAndroid) {
+      // For Android get the application's scoped cache directory
+      directory = await getTemporaryDirectory();
+    }
+      if (directory == null) {
+      throw Exception('Could not access local storage for '
+          'download. Please try again.');
+    }
+    print('Temp cache save path: ${directory.path}/${httpsReference.name}');
+      // Use Dio package to download the short lived url to application cache
+      final dio = Dio();
+    await dio.download(
+      url,
+      '${directory.path}/${httpsReference.name}',
+    );
+     /// For Android call the flutter_file_dialog package, which will give the option to save the now downloaded file by Dio (to temp application cache) to wherever the user wants including Downloads!
+      if (Platform.isAndroid) {
+      final params = SaveFileDialogParams(
+          sourceFilePath: '${directory.path}/${httpsReference.name}');
+      final filePath =
+          await FlutterFileDialog.saveFile(params: params);
+
+      print('Download path: $filePath');
+    }
+ } catch (e) {
+   
+ }
+  
 }

@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 
 import 'Signin.dart';
 
-
 int pageNum=1;
-String title1 ='Welcome to our application !';
-String title2= 'Organzine your time and study';
-String title3= 'Grow your Edoucation  & level up with E-learning';
-String text1= 'Here you can stay in touch with your teacher &  friends in a better way';
-String text2= 'we make it easier for you to study correctly ';
-String text3= 'idk something else';
+String title1 ='Welcome to Aliraqia app!';
+String title2= 'The main purpose is communication';
+String title3= 'Organize time and materials';
+String text1= 'this app is an Educational platform developed for both students and teachers to make Education more easier';
+String text2= 'Easy communication with your teacher and your classmatesusing groupchats, classrooms and private chats also available';
+String text3= 'You can easily find the material orgnized in classes also organize studing time and preparing for exams with callender';
 String img1= 'images/OpeningScreen1edited.png';
 String img2= 'images/OpeningImage2.png';
 String img3= 'images/OpeningImage3.png';
@@ -107,10 +106,10 @@ class _OpeningScreen1State extends State<OpeningScreen1> {
                                       padding: const EdgeInsets.symmetric(horizontal: 10),
                                       child: Stack(
                                         children: [
-                                          Opacity(child: Image.asset(pageNum==1?img1: pageNum==2? img2: img3,color: Colors.black), opacity: 0.2),
+                                          Opacity(child: Image.asset(pageNum==1?img1: pageNum==2? img2: img3,color: Colors.black), opacity: 0.9),
                                           ClipRect(
                                             child: BackdropFilter(
-                                               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 9),
+                                               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 4),
                                               child: Image.asset(pageNum==1?img1: pageNum==2? img2: img3, 
                                               ),
                                             ),
