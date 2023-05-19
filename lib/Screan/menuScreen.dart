@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import 'TeachersList.dart';
 String name ='loading';
+String position='loading';
 class MenuScreen extends StatefulWidget {
   static const String ScreanRoute = 'menu_Screen';
    MenuScreen({super.key});
@@ -31,6 +32,12 @@ class _MenuScreenState extends State<MenuScreen> {
     });
     }
     );
+     UserPrefrences().getUserPosition().then((value){
+    setState(() {
+           position= value.toString();
+             print(position.toString());
+    });
+    });
 }
 
   @override
@@ -112,7 +119,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                     //   }
                                     // ),
                                    Text(
-                                      name,
+                                      position,
                                       style: const TextStyle(
                                          fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                           fontSize: 20, color: Colors.black),
@@ -141,7 +148,8 @@ class _MenuScreenState extends State<MenuScreen> {
                         ),
                       ),
                     ),
-                    onTap: () {
+                    onTap: ()  {
+         
                       Navigator.push(
                           context,
                           MaterialPageRoute(

@@ -1,6 +1,7 @@
 import 'package:graduating_project_transformed/Screan/OpeningScreen1.dart';
 import 'package:graduating_project_transformed/Screan/newUserScreen.dart';
 
+import '../Others/Prefrences.dart';
 import '../hiddenScreens/groupProfile.dart';
 import '../Screan/StudentsList.dart';
 
@@ -8,11 +9,31 @@ import '../Screan/profile_screen.dart';
 import 'package:flutter/material.dart';
 import '../Screan/TeachersList.dart';
 
-
-class S_MenuScreen extends StatelessWidget {
+String name ='loading';
+class S_MenuScreen extends StatefulWidget {
   static const String ScreanRoute = 'menu_Screen';
   const S_MenuScreen({super.key});
 
+  @override
+  State<S_MenuScreen> createState() => _S_MenuScreenState();
+}
+
+class _S_MenuScreenState extends State<S_MenuScreen> {
+  
+@override
+  void initState() {
+    getprefrences();
+    super.initState();
+  }
+  void getprefrences(){
+     UserPrefrences().getUserName().then((value){
+    setState(() {
+           name= value.toString();
+             print(name.toString());
+    });
+    }
+    );
+}
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -69,10 +90,10 @@ class S_MenuScreen extends StatelessWidget {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
+                                  children: [
                                     Text(
-                                      'Name',
-                                      style: TextStyle(
+                                      name,
+                                      style: const TextStyle(
                                          fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                           fontSize: 20, color: Colors.black),
                                     ),

@@ -219,72 +219,7 @@ class _SingleClassScreenState extends State<SingleClassScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 children: [
-                                  Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 15),
-                                  child: Material(
-                                    color: Colors.white,
-                                    elevation: 4,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(35),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(left:12,top: 10, bottom: 10),
-                                          child: CircleAvatar(
-                                            radius: 25,
-                                            backgroundImage: imageUrl != null
-                                          ? NetworkImage(imageUrl!)
-                                          : null,
-                                            child: imageUrl == null
-                                          ? const Icon(
-                                              Icons.person,
-                                           
-                                              color: Colors.white,
-                                            )
-                                          : null,
-                                            ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                            vertical: 16,
-                                          ),
-                                          child: Container(
-                                            height: 50,
-                                            width: 180,
-                                            child: TextField(
-                                              
-                                              controller: _shareWithClass ,
-                                            decoration:  InputDecoration(hintText: 'share with your class..' ,
-                                            suffixIcon: IconButton(onPressed: (){
-                                             
-                                              StudentPost(classId );
-                                            }, icon: const Icon(Icons.check,
-                                            size: 30,)),
-                                            hintStyle: TextStyle(color: Colors.black38)
-                                              ),
-                                              ),
-                                          )
-                                            ),
-                                            Container(
-                            child: IconButton(
-                                    onPressed: () {
-                                  SendAttachementToClass(context, classId);
-                                    },
-                                    icon: const Icon(
-                                      Icons.attachment,
-                                      
-                                      color: Colors.black38,
-                                    ),
-                                  ),
-                          ),
-                                      ],
-                                    ),
-                                      ),
-                                          ),
+                                 
                                 PostStreamBuilder(classId: classId, teacherId:teacherId),
                                 ],
                               ),

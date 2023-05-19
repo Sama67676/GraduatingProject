@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:graduating_project_transformed/Screan/Signin.dart';
 import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,15 +23,28 @@ import 'StudentsScreens/S_Classes.dart';
 import 'StudentsScreens/S_Menu.dart';
 import 'StudentsScreens/S_Swipeable_chats.dart';
 String? position;
-
+String? reposition;
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  position=await UserPrefrences().getUserPosition()??'';
-//  await UserPrefrences().init();
+  getprefrences().then((value) {
   runApp(ChangeNotifierProvider(create: (_) => AuthNotifier(), child: My()));
+  },);
+//  await UserPrefrences().init();
+
+}
+Future<String?> getprefrences()async {
+ 
+     UserPrefrences().getUserPosition().then((value){
+      position= value.toString();
+      print(position);
+      reposition= position!.substring( 1, position!.length - 1 );
+      print(reposition);
+    }
+    );
+return position;
 }
 
 
@@ -67,19 +81,19 @@ class _MyState extends State<My> {
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
     
     return MaterialApp(
-      home:  const ButtomNavigationBar(),
-      // ButtomNavigationBarStudents(),
+      home: reposition =='Teacher'? const ButtomNavigationBar():
+      reposition =='Student'?ButtomNavigationBarStudents():
+      SignIn(),
       initialRoute: FirebaseAuth.instance.currentUser == null 
           ? 'OpeningScreen'
-          : position =='Teacher'? ButtomNavigationBar.ScreanRoute:
+          : reposition =='Teacher'? ButtomNavigationBar.ScreanRoute:
           ButtomNavigationBarStudents.ScreanRoute,
-      routes: {
-        'OpeningScreen': (context) => const OpeningScreen1(),
-        ButtomNavigationBar.ScreanRoute: (context) =>
-            const ButtomNavigationBar(),
-        ButtomNavigationBarStudents.ScreanRoute: (context) =>
-            const ButtomNavigationBarStudents()
-      },
+      // routes: {
+      //   'OpeningScreen': (context) => const OpeningScreen1(),
+      //   ButtomNavigationBar.ScreanRoute: (context) =>
+      //       const ButtomNavigationBar(),
+   
+      // },
     );
   }
 }

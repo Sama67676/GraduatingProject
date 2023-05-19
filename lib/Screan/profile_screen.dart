@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:image_picker/image_picker.dart';
+import '../Others/Prefrences.dart';
 import '../Others/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -243,10 +244,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: Colors.indigo[800],
                           borderRadius: BorderRadius.circular(45),
                           child: MaterialButton(
-                            onPressed: () {
+                            onPressed: ()async {
                               AuthNotifier authNotifier =
                                   Provider.of<AuthNotifier>(context, listen: false);
-                              
+                                await UserPrefrences().setUserName('');
+                                await UserPrefrences().setUserPosition('');
                                 _authintication.signout(authNotifier, context);
                               
                             },
@@ -393,7 +395,7 @@ Future<void> changeProfile(context, imageUrl) async{
               width: 80,
               height: 40,
               child: TextField(controller: NewName,
-               decoration: const InputDecoration(hintText: 'New name'),
+               decoration: const InputDecoration(hintText: 'New Bio'),
               ),
             ),
             

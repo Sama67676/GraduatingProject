@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import '../Others/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -70,7 +72,19 @@ class _SignInState extends State<SignIn> {
                         children: [
                           Container(
                             height: 240,
-                            child: Image.asset('images/homescreenphoto.png'),
+                            child: Stack(
+                                        children: [
+                                          Opacity(child: Image.asset('images/homescreenphoto.png',color: Colors.black), opacity: 0.9),
+                                          ClipRect(
+                                            child: BackdropFilter(
+                                               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 4),
+                                              child: Image.asset('images/homescreenphoto.png', 
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                            // child: Image.asset('images/homescreenphoto.png'),
                           ),
                           const SizedBox(height: 10),
                           Padding(
