@@ -11,6 +11,8 @@ import '../main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+
+import 'Guest.dart';
 bool isLoading= false;
 //هاي الصفحة مال تسجيل دخوول
 class SignIn extends StatefulWidget {
@@ -207,8 +209,8 @@ class _SignInState extends State<SignIn> {
                                   title: 'Guest',
                                   textColor: const Color.fromARGB(255, 8, 61, 104),
                                   onPressed: () {
-                                    Navigator.pushNamed(
-                                        context, ButtomNavigationBar.ScreanRoute);
+                                       Navigator.push(context,
+                MaterialPageRoute(builder: (contex) => GuestClass()));
                                   },
                                 ),
                               ),

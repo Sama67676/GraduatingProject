@@ -107,8 +107,9 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
 }
 
    Future stop()async{
-final path =await recorder.stopRecorder();
-RecordedAudio=File(path!);
+final rec =await recorder.stopRecorder();
+RecordedAudio=File(rec!);
+print(rec);
 uploadRecord(groupId,currentUser);
   }
    Future record() async{
@@ -136,10 +137,11 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       extendBodyBehindAppBar: true,
       appBar: AppBar(
       
-        backgroundColor:Colors.white,
+        backgroundColor:Color(0xFFCCCED3),
        centerTitle: true,
            title: Center(child: Column(
              children: [
@@ -151,17 +153,14 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
                
            
         
-        leadingWidth: 100,
-        leading: TextButton.icon(
+   
+        leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back_ios,
               color: Color.fromARGB(255, 8, 61, 104)),
-          label: const Text(
-            'Back',
-            style: TextStyle(color: Color.fromARGB(255, 8, 61, 104)),
-          ),
+         
         ),
         actions: [
           IconButton(
@@ -260,12 +259,12 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
                       onPressed: ()async {
                         if(recorder.isRecording){
                           setState(() {
-                            recordingIcon= false;
+                            recordingIcon= true;
                           });
                           await stop();
                         } else{
                           setState(() {
-                            recordingIcon= true;
+                            recordingIcon= false;
                           });
                           await record();
                         }
@@ -629,12 +628,13 @@ class MessageLine extends StatelessWidget {
        
         },
         child: Material(
+          elevation: 4,
           color:Colors.white,
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(30),
               ),
-              side: BorderSide(color: Color.fromRGBO(17, 58, 99, 1), width: 1),
+              // side: BorderSide(color: Color.fromRGBO(17, 58, 99, 1), width: 1),
             ),
           child: Padding(
             padding: const EdgeInsets.all(13),

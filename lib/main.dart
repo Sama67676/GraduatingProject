@@ -6,9 +6,6 @@ import 'package:graduating_project_transformed/Screan/Signin.dart';
 import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-// ignore: unused_import
-import '../main.dart';
 import 'Others/Prefrences.dart';
 import 'Others/auth_notifier.dart';
 import 'Screan/Classes.dart';
@@ -32,7 +29,7 @@ void main() async {
   getprefrences().then((value) {
   runApp(ChangeNotifierProvider(create: (_) => AuthNotifier(), child: My()));
   },);
-//  await UserPrefrences().init();
+
 
 }
 Future<String?> getprefrences()async {
@@ -83,7 +80,7 @@ class _MyState extends State<My> {
     return MaterialApp(
       home: reposition =='Teacher'? const ButtomNavigationBar():
       reposition =='Student'?ButtomNavigationBarStudents():
-      SignIn(),
+      OpeningScreen1(),
       initialRoute: FirebaseAuth.instance.currentUser == null 
           ? 'OpeningScreen'
           : reposition =='Teacher'? ButtomNavigationBar.ScreanRoute:
@@ -102,7 +99,7 @@ class _MyState extends State<My> {
 //  for teachers
 class ButtomNavigationBar extends StatefulWidget  {
   static const String ScreanRoute = 'SalmonBar_Screen';
-  static const title = 'salomon_bottom_bar';
+
 
   const ButtomNavigationBar({super.key});
 
@@ -177,9 +174,8 @@ void setStatus(String status)async{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: ButtomNavigationBar.title,
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
+        primarySwatch: Colors.grey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
@@ -313,7 +309,7 @@ void setStatus(String status)async{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: ButtomNavigationBar.title,
+  
       theme: ThemeData(
         primarySwatch: Colors.indigo,
         visualDensity: VisualDensity.adaptivePlatformDensity,

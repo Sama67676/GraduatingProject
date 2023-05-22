@@ -31,10 +31,38 @@ class ClassesScreen extends StatelessWidget {
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: const [
-                  SizedBox(
-                    height: 25,
-                  ),
+                children:  [
+              
+                             Padding(
+                               padding: const EdgeInsets.symmetric(vertical:4, horizontal:15),
+                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                 children: [
+                                   PopupMenuButton(
+                                      icon: const Icon(Icons.menu,
+                                      size: 35,
+                                          color: Color.fromARGB(255, 8, 61, 104)),
+                                           itemBuilder: (context) => [ const PopupMenuItem(
+                                      child: Text('Edit group Details', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104), fontSize: 20),), value: '1'),
+                                   const PopupMenuItem<String>(
+                                       child: Text('Leave Group', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104), fontSize: 20),), value: '2'),
+                                   const PopupMenuItem<String>(
+                                       child: Text('Delete group', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104), fontSize: 20),), value: '3'),
+                                                        ],
+                                       elevation: 4,
+                                   shape: const RoundedRectangleBorder(
+                                     borderRadius: BorderRadius.all(
+                                                    Radius.circular(35),
+                                     ),
+                                         ),
+                                         onSelected: (result) {
+                                         },
+                                    ),
+                                 ],
+                               ),
+                             ),
+                            
+               
                 calssStreamBuilder(),
                  
                 ],

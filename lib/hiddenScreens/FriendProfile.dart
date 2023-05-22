@@ -1,18 +1,12 @@
 // ignore_for_file: sort_child_properties_last
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
-import 'package:graduating_project_transformed/hiddenScreens/createClass.dart';
-
-import 'package:provider/provider.dart';
-
-import '../Others/auth_notifier.dart';
+import '../Others/Prefrences.dart';
 import '../Screan/Chat_screan.dart';
-import '../main.dart';
-
+String name ='loading';
+String reName='loading';
 
 
 
@@ -38,6 +32,18 @@ class _FriendProfileState extends State<FriendProfile> {
   String? chatRoomId; //هاي صفنيلها بعدين
    _FriendProfileState( this.friendId);
 
+     void getprefrences(){
+     UserPrefrences().getUserName().then((value){
+    setState(() {
+           name= value.toString();
+             print(name.toString());
+              reName= name.substring( 1, name.length - 1 );
+    });
+    }
+    );
+   
+}
+
   Future getFriendDetails() async {
     await _firestore
         .collection('users')
@@ -61,6 +67,7 @@ class _FriendProfileState extends State<FriendProfile> {
   @override
   void initState() {
     super.initState();
+     getprefrences();
     getFriendDetails();
   }
 
@@ -83,212 +90,59 @@ class _FriendProfileState extends State<FriendProfile> {
           padding:
               const EdgeInsets.all(20),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    
-                  Expanded(
-                    flex: 2,
-                    child:
-                        MaterialButton(
-                          child: Row(children: const [
-                            Icon( Icons.arrow_back_ios,
-                                    color: Color.fromARGB(255, 8, 61, 104)),
-                            Text('Back', style: TextStyle(fontSize: 20, color:Color.fromARGB(255, 8, 61, 104), fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),)
-                          ],),
+                    MaterialButton(
+                          child: const Icon( Icons.arrow_back_ios,
+                                    color: Color.fromARGB(255, 8, 61, 104),
+                                    size: 30,),
                           onPressed: (){
                                Navigator.pop(context);
-                          })
-                       
-                            
-                      
-                  ),
-
-                  ],
-                ),
-       
-             Padding(
-               padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20, top: 5),
-               child: Column(
-                children: [
-                  CircleAvatar(
-                      radius: 60,
-                      backgroundImage:friendImage != null?
-                      NetworkImage(friendImage!): null),
-                      SizedBox(height: 10,),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Text(friendName!, style: const TextStyle(fontSize: 30, color: Color.fromARGB(255, 8, 61, 104)),),
-                      ),
-                    Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Text(
-                            '$department $year year',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                               fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                fontSize: 30, color: Colors.indigo[900]),
+                          }),
+                          Stack(children: [
+               Column(
+                 children: [
+                   Padding(
+                padding: const EdgeInsets.all(5),
+                child: Container(
+                  height: 170,
+                  width: 400,
+                  child: const Material(
+                     color: Colors.white,
+                        elevation: 1, //shadows
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(35),
                           ),
                         ),
-                ],
+                  ),
+                ),
+              ),
+                  SizedBox(height: 70,),
+                 ],
                ),
-             ),
-            Expanded(
-              child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          elevation: 0,
-                          color: const Color.fromARGB(255, 8, 61, 104),
-                          child:Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal:8.0),
-                                child: Expanded(
-                                  child: Material(
-                                        color:Colors.white,
-                                          
-                                          shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                        Radius.circular(30),
-                                        ),),
-                                        child: MaterialButton(
-                                          minWidth: 30,
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 0),
-                                            child: Column(children: const [
-                                              Icon(Icons.message_outlined,
-                                                  color: Color.fromARGB(255, 8, 61, 104),
-                                                  size: 40,),
-                                                  Text('Message', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
-                                                  fontSize: 16,),)
-                                            ],),
-                                          ),
-                                          onPressed: (){
-                                            AuthNotifier _authNotifer =
-                                                  Provider.of<AuthNotifier>(context, listen: false);
-                                             if (_authNotifer.user != null) {
-                                                final String? currentUserName =
-                                                    _authNotifer.userDetails!.displayName;
-                                               generateChatRoomId(
-                                                    context,
-                                                    currentUserName!,
-                                                    friendName!,
-                                                    friendId,
-                                                    _authNotifer,
-                                                    friendImage,
-                                                    FirebaseAuth.instance.currentUser!.uid);
-                                             }
-                                        }
-                                        ),
-                                      ),
-                                ),
-                              ),
-                                
-                              Padding(
-                                padding: const EdgeInsets.only(right:8.0),
-                                child: Expanded(
-                                  child: Material(
-                                          color:Colors.white,
-                                            
-                                          shape: const RoundedRectangleBorder(
-                                         borderRadius: BorderRadius.all(
-                                          Radius.circular(30),
-                                          ),), 
-                                          child: MaterialButton(
-                                             minWidth: 20,
-                                             
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 2),
-                                              child: Column(children: const [
-                                                Icon(Icons.call,
-                                                    color: Color.fromARGB(255, 8, 61, 104),
-                                                    size: 40,),
-                                                    Text('Call', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
-                                                    fontSize: 16,),)
-                                              ],),
-                                            ),
-                                            onPressed: (){
-                                        
-                                          }
-                                          ),
-                                        ),
-                                  
-                                ),
-                              ),
-                               Padding(
-                                 padding: const EdgeInsets.only(right:8.0),
-                                 child: Expanded(
-                                   child: Material(
-                                        color:Colors.white,
-                                          
-                                       shape: const RoundedRectangleBorder(
-                                       borderRadius: BorderRadius.all(
-                                        Radius.circular(30),
-                                        ),),
-                                        child: MaterialButton(
-                                           minWidth: 35,
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 2),
-                                            child: Column(children: const [
-                                              Icon(Icons.notifications_outlined,
-                                                  color: Color.fromARGB(255, 8, 61, 104),
-                                                  size: 40,),
-                                                  Text('Mute', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
-                                                  fontSize: 16,),)
-                                            ],),
-                                          ),
-                                          onPressed: (){
-                                      
-                                        }
-                                        ),
-                                      ),
-                                 ),
-                               ),
-                                Expanded(
-                                  child: Padding(
-                                   padding:  const EdgeInsets.only(right:8),
-                                   child: Material(
-                                    color:Colors.white,
-                                    shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(30),
-                                        ),),
-                                        child: PopupMenuButton(
-                                         itemBuilder: (context) => [ const PopupMenuItem(
-                                             child: Text('Delete Chatroom', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104), fontSize: 20),), value: '1'),
-                                              
-                                           ],
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 2),
-                                            child: Column(children: const [
-                                              Icon(Icons.more_vert,
-                                                  color: Color.fromARGB(255, 8, 61, 104),
-                                                  size: 40,),
-                                                  Text('More', style: TextStyle( color: Color.fromARGB(255, 8, 61, 104),
-                                                  fontSize: 16,),)
-                                            ],),
-                                          ),
-                                         onSelected: (result) {
-                                             if (result == '1'){
-                                     AlertDeletingChatRoom(context, chatRoomId, friendId, FirebaseAuth.instance.currentUser!.uid);
-                                                 }
-                                            },
-                                        ),
-                                      ),
-                                                               ),
-                                ),
-                              
-                            ],),
-                         )),
-            ),
-              
+             
+              Positioned(
+                top: 110,
+                left: 130,
+                child: Column(
+                      children: [
+                        CircleAvatar(
+                            radius: 50,
+                            backgroundImage:friendImage != null?
+                            NetworkImage(friendImage!): null),
+                            SizedBox(height: 5,),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              child: Text(friendName!, style: const TextStyle(fontSize: 26, color: Color.fromARGB(255, 8, 61, 104)),),
+                            ),
+                      ],
+                     ),
+              ),
+            ]
+          ),
+         
               Expanded(
                   flex:4,
                   child: Card(
@@ -298,9 +152,17 @@ class _FriendProfileState extends State<FriendProfile> {
                       elevation: 0,
                       color: const Color.fromARGB(255, 8, 61, 104),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(10),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal:16, vertical: 12),
+                              child: Text('Info',
+                              style: TextStyle(fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                              color:  Colors.white, fontSize: 20
+                              ),),
+                            ),
                            Padding(
                              padding: const EdgeInsets.all(3),
                              child: Container(
@@ -314,31 +176,86 @@ class _FriendProfileState extends State<FriendProfile> {
                                 Radius.circular(35),
                               ),
                                ),
-                                child: Column(
-                             
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                                child:
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 15, left: 16, right: 16),
-                                  child: Text('bio', style: TextStyle(
-                                           fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                                  child: Text('$year $department engineering department', style: TextStyle(
+                                           fontFamily: 'HP Simplified Light', 
                                             fontSize: 20, color: Colors.indigo[900])),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                                  child: Text(friendstatus != null?
-                                  friendstatus! : 'Say hi',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                         fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                          fontSize: 20, color: Colors.indigo[900])),
-                                ),
-                              ],
-                                                     ),
                                                    ),
                                                  ),
                            ),
-                            
+                             const Padding(
+                              padding: EdgeInsets.symmetric(horizontal:16, vertical: 12),
+                              child: Text('bio',
+                              style: TextStyle(fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                              color:  Colors.white, fontSize: 20
+                              ),),
+                            ),
+                           Padding(
+                             padding: const EdgeInsets.all(3),
+                             child: Container(
+                               width: 370,
+                               height: 80,
+                               child: Material(
+                                 color: Colors.white,
+                                 elevation: 1, //shadows
+                                 shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(35),
+                              ),
+                               ),
+                                child:
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                                  child: Text(friendstatus != ''?friendstatus!: 'Say hi', style: TextStyle(
+                                           fontFamily: 'HP Simplified Light', 
+                                            fontSize: 20, color: Colors.indigo[900])),
+                                ),
+                                                   ),
+                                                 ),
+                           ),
+                           Padding(
+                             padding: const EdgeInsets.all(18),
+                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                               children: [
+                                 Container(
+                                                   width: 140,
+                                                   height: 60,
+                                                   child: Material(
+                                                     color: Colors.white,
+                                                     borderRadius: BorderRadius.circular(45),
+                                                     child: MaterialButton(
+                                  child: Row(
+                                    children: const [
+                                       Padding(
+                                        padding:  EdgeInsets.all(8),
+                                        child:  Text(
+                                          'Message',
+                                          style: TextStyle(
+                                             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                              color:  Color.fromARGB(255, 8, 61, 104)
+,
+                                              fontSize: 18),
+                                        ),
+                                      ),
+                                     Icon(Icons.message_outlined,
+                                   color:  Color.fromARGB(255, 8, 61, 104),
+                                   size: 22,),
+                                    ],
+                                  ),
+                                   onPressed: ()async {
+                                 generateChatRoomId(context,reName, friendName!,friendId,friendImage,_auth.currentUser!.uid);
+                                    
+                                  },
+                                                     ),
+                                                   ),
+                                                 ),
+                               ],
+                             ),
+                           ),
                           ],
                         ),
                       )),
@@ -352,7 +269,7 @@ class _FriendProfileState extends State<FriendProfile> {
 }
 
 void generateChatRoomId(BuildContext context, String currentUserName,
-    String friendName, frienduid, _authNotifer, profilePic, currentUser) async {
+    String friendName, frienduid, profilePic, currentUser) async {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
   String chatRoomId= getChatRoomId(currentUserName, friendName);
   List<String?> chatUsers = [friendName, currentUserName];
@@ -362,7 +279,7 @@ void generateChatRoomId(BuildContext context, String currentUserName,
 DocumentSnapshot chatRoomExisting= await firestore.collection('chatRoom').doc(chatRoomId).get();
   if (chatRoomExisting.exists){
    // ignore: use_build_context_synchronously
-   callChatScreen(context, friendName, frienduid, _authNotifer, profilePic,
+   callChatScreen(context, friendName, frienduid, profilePic,
             chatRoomId, currentUser);}
             else if(!chatRoomExisting.exists){
               Map<String, dynamic> myDetails ={'chatRoom': chatRoomId, 'friend': currentUser};
@@ -374,7 +291,7 @@ DocumentSnapshot chatRoomExisting= await firestore.collection('chatRoom').doc(ch
             firestore.collection('users').doc(currentUser).update({
               "friendsId": FieldValue.arrayUnion([friendDetails])
             });
-              firestore.collection('chatRoom').doc(chatRoomId).set(chatRoomMap).then((value) => callChatScreen(context, friendName, frienduid, _authNotifer, profilePic,
+              firestore.collection('chatRoom').doc(chatRoomId).set(chatRoomMap).then((value) => callChatScreen(context, friendName, frienduid, profilePic,
             chatRoomId, currentUser));
 
             
@@ -390,7 +307,7 @@ String getChatRoomId(String user1, String user2){
   }
 }
 
-void callChatScreen(BuildContext context, Name, frienduid, _authNotifer, profilePic,
+void callChatScreen(BuildContext context, Name, frienduid, profilePic,
     chatRoomId, currentUser) {
   Navigator.push(
       context,

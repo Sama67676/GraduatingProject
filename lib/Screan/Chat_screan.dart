@@ -131,8 +131,8 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
       
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
     
         elevation: 0.6,
@@ -159,18 +159,14 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
              }
            }
         ),
-        leadingWidth: 80,
-        leading: TextButton.icon(
+
+        leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back_ios,
               color: Color.fromARGB(255, 8, 61, 104)),
-          label: const Text(
-            'Back',
-            style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
-             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),
-          ),
+          
         ),
         actions: [
           GestureDetector(
@@ -237,6 +233,8 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
                           padding: const EdgeInsets.symmetric(vertical:3),
                             
                             child:  TextField(
+                              
+                              cursorColor: Colors.white,
                               style: const TextStyle(color: Colors.white),
                               controller: messageTextController,
                               onChanged: (value) {
@@ -625,12 +623,13 @@ class MessageLine extends StatelessWidget {
       //  onTap: (){downloadFiles(text!);},
       onLongPress: () {downloadFileDialog(context, text!);},
         child: Material(
+           elevation: 4,
           color:Colors.white,
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(30),
               ),
-              side: BorderSide(color: Color.fromRGBO(17, 58, 99, 1), width: 1),
+              // side: BorderSide(color: Color.fromRGBO(17, 58, 99, 1), width: 1),
             ),
           child: Padding(
             padding: const EdgeInsets.all(13),

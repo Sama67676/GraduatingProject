@@ -1,41 +1,7 @@
-import '../others/Prefrences.dart';
-import 'StudentsList.dart';
-
-import 'addNewStudent2.dart';
-import 'addNewTeacher.dart';
-import 'profile_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'TeachersList.dart';
-String name ='loading';
-String reName= 'loading';
-
-class MenuScreen extends StatefulWidget {
-  static const String ScreanRoute = 'menu_Screen';
-   MenuScreen({super.key});
-
-  @override
-  State<MenuScreen> createState() => _MenuScreenState();
-}
-
-class _MenuScreenState extends State<MenuScreen> {
-
-@override
-  void initState() {
-    getprefrences();
-    super.initState();
-  }
-  void getprefrences(){
-     UserPrefrences().getUserName().then((value){
-    setState(() {
-           name= value.toString();
-             print(name.toString());
-             reName= name.substring( 1, name.length - 1 );
-    });
-    }
-    );
-   
-}
+class GuestMenu extends StatelessWidget {
+  const GuestMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +27,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   const SizedBox(
                     height: 50,
                   ),
-                  InkWell(
-                    child: Material(
+               Material(
                       color: Colors.white,
                       elevation: 4,
                       shape: const RoundedRectangleBorder(
@@ -96,7 +61,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children:  [
                                    Text(
-                                      reName,
+                                      'Name',
                                       style: const TextStyle(
                                          fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                           fontSize: 20, color: Colors.black),
@@ -125,14 +90,7 @@ class _MenuScreenState extends State<MenuScreen> {
                         ),
                       ),
                     ),
-                    onTap: ()  {
-         
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (contex) => ProfileScreen()));
-                    },
-                  ),
+                  
                   const SizedBox(
                     height: 10,
                   ),
@@ -143,33 +101,17 @@ class _MenuScreenState extends State<MenuScreen> {
                               horizontal: 5, vertical: 8),
                           child: Expanded(
                               flex: 1,
-                              child: InkWell(
-                                child: creatMenu('Teachers',
+                              child:  creatMenu('Teachers',
                                     Image.asset('images/teacher.png')),
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (contex) =>
-                                              const TeachersListScreen()));
-                                },
-                              ))),
+                                )),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 5, vertical: 8),
                         child: Expanded(
                             flex: 1,
-                            child: InkWell(
-                              child: creatMenu('Students',
+                            child:creatMenu('Students',
                                   Image.asset('images/students (2).png')),
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (contex) =>
-                                            const StudentsListScreen()));
-                              },
-                            )),
+                             ),
                       ),
                     ],
                   ),
@@ -230,49 +172,7 @@ class _MenuScreenState extends State<MenuScreen> {
                             ),
                           ],
                         ),
-                       Row(
-                          children: [
-                            Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 8),
-                                child: Expanded(
-                                    flex: 1,
-                                    child: FittedBox(
-                                        fit: BoxFit.contain,
-                                        child: InkWell(
-                                          child: creatMenu(
-                                              'Add teacher',
-                                              Image.asset(
-                                                  'images/addTeacher.png')),
-                                          onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                 MaterialPageRoute(
-                                                 builder: (contex) => AddNewTeacher()));
-                                          },
-                                        )))),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 8),
-                              child: Expanded(
-                                  flex: 1,
-                                  child: FittedBox(
-                                      fit: BoxFit.contain,
-                                      child: InkWell(
-                                        child: creatMenu(
-                                            'Add student',
-                                            Image.asset(
-                                                'images/addStudent.png')),
-                                        onTap: () {
-                                             Navigator.push(
-                                                context,
-                                                 MaterialPageRoute(
-                                                 builder: (contex) => AddNewStudent2()));
-                                        },
-                                      ))),
-                            ),
-                          ],
-                        ),
+                      
                       ],
                     ),
                   ),

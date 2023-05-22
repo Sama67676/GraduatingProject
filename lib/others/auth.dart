@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:graduating_project_transformed/hiddenScreens/createClass.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -13,6 +14,10 @@ import 'auth_notifier.dart';
 import 'user_Entity.dart';
 String? position;
 String? name;
+String? newdepartment;
+String? status;
+String? reyear;
+String? imageUrl;
 class Authintication {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -113,19 +118,6 @@ class Authintication {
         .doc(authNotifier.user?.uid)
         .get()
         .catchError((e) => print(e));
-        // .then((userMap) => (userMap != null)
-            // ? {authNotifier.userDetails!.displayName=userMap['Name'],
-            //   authNotifier.userDetails!.uid=userMap['uid'],
-            //   authNotifier.userDetails!.department=userMap['department'],
-            //   authNotifier.userDetails!.status=userMap['status'],
-            //   authNotifier.userDetails!.year=userMap['year'],
-            //   authNotifier.userDetails!.email=userMap['email'],
-            //   authNotifier.userDetails!.position=userMap['position'],
-            //   authNotifier.userDetails!.password=userMap['password'],
-            //   authNotifier.userDetails!.imgUrl=userMap['imgUrl'],
-            //   }
-            // : print('user details did not intialize!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'));
-            // print(authNotifier.userDetails!.position)
   }
 }
 
@@ -152,8 +144,16 @@ class DatabaseMethods {
       if (snapshot.exists) {
           position = snapshot.data()!['position']; 
           name=  snapshot.data()!['Name']; 
+          newdepartment=  snapshot.data()!['department']; 
+          status=  snapshot.data()!['status'];
+          reyear = snapshot.data()!['year'];
+          imageUrl = snapshot.data()!['imgUrl'];
           await UserPrefrences().setUserName(name!);
           await UserPrefrences().setUserPosition(position!);
+          await UserPrefrences().setdepartment(newdepartment!);
+          await UserPrefrences().setStatus(status!);
+          await UserPrefrences().setYear(reyear!);
+          await UserPrefrences().setImageUrl(imageUrl!);
       }
     });
   }

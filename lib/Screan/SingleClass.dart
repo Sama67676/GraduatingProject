@@ -297,7 +297,7 @@ class PostStreamBuilder extends StatelessWidget {
             
   
 final DateTime convtime= DateTime.parse(time.toDate().toString());
-String outputTime = DateFormat.yMMMMd('en_US').format(convtime);
+String outputTime = DateFormat('MMM d, h:mm:a').format(convtime);
 
 
               final postWidget = postLine(
@@ -460,9 +460,14 @@ int comentsNumber=0;
                               padding:const EdgeInsets.symmetric( horizontal: 14),
                               child:
                                  
-                                  Text(widget.time!, style: const TextStyle(
-                                           fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                          fontSize: 14, color: Colors.black45),),
+                                  Container(
+                                     constraints: const BoxConstraints(
+                                   maxWidth: 50,
+                                ),
+                                    child: Text(widget.time!, style: const TextStyle(
+                                             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                            fontSize: 12, color: Colors.black45),),
+                                  ),
                                
                             )
                          ],

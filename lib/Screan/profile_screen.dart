@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import '../Others/Prefrences.dart';
 import '../Others/auth_notifier.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import '../Others/auth.dart';
 import '../Others/fireBase_Storage.dart';
@@ -26,46 +25,87 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final currentUser = FirebaseAuth.instance.currentUser!.uid;
   Authintication _authintication = Authintication();
 
-  String? Name;
+  String? name;
+ String? reName;
 
-  String? email;
-
+  String? redepartment;
   String? department;
 
   String? status;
+  String? reStatus;
 
   String? year;
-
+  String? reYear;
+  
   String? imageUrl;
-
-  Future<void> fetchData() async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((snapshot) async {
-      if (snapshot.exists) {
-        setState(() {
-          Name = snapshot.data()!['Name'];
-          department = snapshot.data()!['department'];
-          status = snapshot.data()!['status'];
-          year = snapshot.data()!['year'];
-          email = snapshot.data()!['email'];
-          imageUrl = snapshot.data()!['imgUrl'];
-        });
-      }
-    });
+  String? reImgUrl;
+  // Future<void> fetchData() async {
+  //   await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(FirebaseAuth.instance.currentUser!.uid)
+  //       .get()
+  //       .then((snapshot) async {
+  //     if (snapshot.exists) {
+  //       setState(() {
+        
+      
+  
+  //         imageUrl = snapshot.data()!['imgUrl'];
+  //       });
+  //     }
+  //   });
     
-  }
+  // }
 
   Future getCurrentUserId() async {
     return await FirebaseAuth.instance.currentUser!.uid;
   }
 
+ void getprefrences(){
+  UserPrefrences().getUserName().then((value){
+    setState(() {
+          name= value.toString();
+          reName= name!.substring( 1, name!.length - 1 );
+    });
+    }
+    );
+  UserPrefrences().getDepartment().then((value){
+    setState(() {
+          department= value.toString();
+          redepartment= department!.substring( 1, department!.length - 1 );
+    });
+    }
+    );
+     UserPrefrences().getStatus().then((value){
+    setState(() {
+          status= value.toString();
+          reStatus= status!.substring( 1, status!.length - 1 );
+    });
+    }
+    );
+   
+  UserPrefrences().getYear().then((value){
+    setState(() {
+          year= value.toString();
+          reYear= year!.substring( 1, year!.length - 1 );
+    });
+    }
+    );
+  UserPrefrences().getImageUrl().then((value){
+    setState(() {
+          imageUrl= value.toString();
+          reImgUrl= imageUrl!.substring( 1, imageUrl!.length - 1 );
+    });
+    }
+    );
+    
+
+}
   @override
   void initState() {
     super.initState();
-    fetchData();
+    getprefrences();
+    // fetchData();
   }
 
   @override
@@ -107,24 +147,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
-                    // Expanded(
-                    //   flex: 1,
-                    //   child: IconButton(
-                    //     icon: const Icon(Icons.edit,
-                    //         color: Color.fromARGB(255, 8, 61, 104)),
-                    //     onPressed: () {},
-                    //   ),
-                    // ),
                   ],
                 ),
                         
                             InkWell(
                                     child: CircleAvatar(
                                       radius: 60,
-                                      backgroundImage: imageUrl != null
-                                          ? NetworkImage(imageUrl!)
+                                      backgroundImage: reImgUrl != null
+                                          ? NetworkImage(reImgUrl!)
                                           : null,
-                                      child: imageUrl == null
+                                      child: reImgUrl == null
                                           ? Icon(
                                               Icons.person,
                                               size: 60,
@@ -133,16 +165,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           : null,
                                     ),
                                     onTap: () {
-                                      changeProfile(context, imageUrl);
+                                      changeProfile(context, reImgUrl);
                                       setState(() { });
                                     }
                                     ),
                        
                    Padding(
                           padding: const EdgeInsets.only(top: 10),
-                          child: Name != null?
+                          child: reName != null?
                           Text(
-                            '$Name',
+                            '$reName',
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
@@ -154,7 +186,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: const EdgeInsets.only(bottom: 20),
                           child:department != null? 
                           Text(
-                            '$department' + ' ' + '$year' + ' ' + 'year',
+                            '$redepartment' + ' ' + '$reYear' + ' ' + 'year',
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
@@ -171,55 +203,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child:Padding(
                             padding: const EdgeInsets.all(18),
                             child: status != null?
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                             InkWell(
-                                child:  Material(
-                              color: Colors.white,
-                              elevation: 1, //shadows
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(35),
+                            SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                               InkWell(
+                                  child:  Material(
+                                color: Colors.white,
+                                elevation: 1, //shadows
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(35),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                       Padding(
+                                  padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 2),
+                                  child: Text(
+                                    'bio',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                       fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                        fontSize: 20, color: Colors.indigo[900]),
+                                  ),
+                                ),
+                                      Padding(
+                                       padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                                        child: 
+                                        Text(reStatus!,
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                               fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                                fontSize: 20, color: Colors.indigo[900])),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(5),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                     Padding(
-                                padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 2),
-                                child: Text(
-                                  'bio',
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                     fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                      fontSize: 20, color: Colors.indigo[900]),
-                                ),
-                              ),
-                                    Padding(
-                                     padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
-                                      child: 
-                                      Text('$status',
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                             fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                              fontSize: 20, color: Colors.indigo[900])),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                                                 
-                                                 onTap: () {
-                            ChangeBio(context);
-                            setState(() {});
-                                                 },
-                                               ),
-                                                ],
-                                               ):
+                                                   
+                                                   onTap: () {
+                              ChangeBio(context);
+                              setState(() {});
+                                                   },
+                                                 ),
+                                                  ],
+                                                 ),
+                            ):
                                               Center(
              child: SizedBox(
                   height: 60,
