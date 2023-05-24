@@ -48,12 +48,12 @@ class StudentsWork extends StatelessWidget {
                              
                       ],),
                     ),
-                   Expanded(
+                   const Expanded(
                      child: Padding(
-                       padding: const EdgeInsets.symmetric(horizontal:24),
+                       padding: EdgeInsets.symmetric(horizontal:24),
                        child: Text('Students submits:',
                          style: TextStyle(fontSize: 34,
-                          fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,color:const Color.fromARGB(255, 8, 61, 104)),),
+                          fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,color:Color.fromARGB(255, 8, 61, 104)),),
                        
                      ),
                    ),
@@ -216,7 +216,7 @@ class StudentsWorkLine extends StatelessWidget {
                           } 
                           ),
               isMarked =='true'?
-              Expanded(child: Icon(Icons.done, color: Colors.green,size: 30,)):
+              const Expanded(child: Icon(Icons.done, color: Colors.green,size: 30,)):
               Container(height: 1, width: 1,),
                Expanded(
                  child: Padding(

@@ -92,16 +92,36 @@ class _groupsListState extends State<groupsList> {
                         ],
                       ),
                   ),
-                   Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children:  [
                      Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-                    child: Text('Groups', style:  TextStyle(
-                       fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                                  fontSize:25, color: Color.fromARGB(255, 8, 61, 104))),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 8, 61, 104),
+                         borderRadius: BorderRadius.circular(40),),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal:14, vertical: 4),
+                        child: Text('Groups', style:  TextStyle(
+                           fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                      fontSize:20, color: Colors.white)),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 30,
+                    child: const VerticalDivider(thickness: 3,color: Colors.black,)),
+                     const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                    child:  Text('Chats', style:  TextStyle(
+                           fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                      fontSize:20, color: Color.fromARGB(255, 8, 61, 104),)),
+                      
+                    
                   ),
                   ],),
+                  
                  const SizedBox(height: 10,),
                   const groupStreamBuilder()
                 ],
@@ -114,14 +134,14 @@ class _groupsListState extends State<groupsList> {
                    child: Container(
                        width: 75,
                         height: 50,
-                       child: Material(
+                       child: const Material(
                         elevation: 4,
                         
-                        borderRadius: const BorderRadius.all(
+                        borderRadius: BorderRadius.all(
                          Radius.circular(35),
                          ),
-                        color:  const Color(0xFFCCCED3),
-                        child: const Icon(Icons.add,  color: Color.fromARGB(255, 8, 61, 104)),
+                        color:  Color(0xFFCCCED3),
+                        child: Icon(Icons.add,  color: Color.fromARGB(255, 8, 61, 104)),
                        ),
                       ),
                       onTap: (){

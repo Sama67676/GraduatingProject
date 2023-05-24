@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final TextEditingController _search=TextEditingController();
    
    
@@ -50,7 +49,7 @@ class _AddStudentssState extends State<AddStudents> {
                     flex: 0,
                     child: Column(
                       children: [
-                          SizedBox(height: 30,),
+                          const SizedBox(height: 30,),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal:10),
                           child: GestureDetector(child: const Text('Cancel',style:TextStyle(fontSize: 20, color: Color.fromARGB(255, 8, 61, 104))),
@@ -70,7 +69,7 @@ class _AddStudentssState extends State<AddStudents> {
                             flex: 0,
                              child: Column(
                                children: [
-                                  SizedBox(height: 30,),
+                                  const SizedBox(height: 30,),
                                  Padding(
                                    padding: const EdgeInsets.symmetric(horizontal:10),
                                    child: GestureDetector(child: const Text('Done',style:TextStyle(fontSize: 20, color: Color.fromARGB(255, 8, 61, 104))),

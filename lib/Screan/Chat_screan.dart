@@ -1,3 +1,4 @@
+// ignore: unused_import
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
@@ -10,6 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:graduating_project_transformed/hiddenScreens/FriendProfile.dart';
+import 'package:graduating_project_transformed/hiddenScreens/ShowFullImage.dart';
 import 'package:graduating_project_transformed/others/managefiles/chatRoomPdf.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
@@ -444,7 +446,10 @@ class MessageLine extends StatelessWidget {
       padding: isMe? const EdgeInsets.only(left: 75,bottom: 5,top: 5, right: 5) : const EdgeInsets.only(left: 5,bottom: 5,top: 5, right: 75),
       child: InkWell(
         onTap: (){
-        // downloadFiles(text!);
+        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (contex) => ShowFullImage(image:text!)));
          },
          onLongPress: () {
           downloadFileDialog(context, text!);

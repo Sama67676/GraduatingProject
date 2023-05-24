@@ -5,6 +5,7 @@ import '../Others/auth_notifier.dart';
 import '../others/groupList.dart';
 import 'ChatList.dart';
 
+
 var pages=[groupsList(), Allusers()];
 class SwipableChats extends StatefulWidget {
   const SwipableChats({super.key});
@@ -22,9 +23,12 @@ class _SwipableChatsState extends State<SwipableChats> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        children: pages
-          )
+      body: 
+       
+          PageView(
+            children: pages
+              ),
+      
           
           );
        

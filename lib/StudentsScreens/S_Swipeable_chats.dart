@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:graduating_project_transformed/others/auth_notifier.dart';
+
 import 'S_ChatList.dart';
 import 'S_GroupList.dart';
 

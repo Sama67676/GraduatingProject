@@ -2,11 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:graduating_project_transformed/hiddenScreens/SearchChat.dart';
-import 'package:provider/provider.dart';
 
-import '../Others/auth_notifier.dart';
+
 import '../hiddenScreens/FriendProfile.dart';
-import 'Chat_screan.dart';
+
 
 class TeachersListScreen extends StatelessWidget {
   const TeachersListScreen({super.key});

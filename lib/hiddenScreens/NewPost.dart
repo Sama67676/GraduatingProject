@@ -102,7 +102,7 @@ void post(context, classId)async{
    isSelectChecked = false;
    attachmentType = 'Assignment' ;
    memberList.clear();
-    new Future.delayed(const Duration(seconds: 3), () {
+     Future.delayed(const Duration(seconds: 3), () {
     Navigator.pop(context);
 });
  
@@ -590,7 +590,7 @@ void post(context, classId)async{
                       ),
                     ),
                   ],
-                ), isLoading ? Center(
+                ), isLoading ? const Center(
              child: SizedBox(
                   height: 60,
                   width: 60,
@@ -634,9 +634,9 @@ void post(context, classId)async{
 
 Widget showDone(){
 return Container(
-  decoration: BoxDecoration(shape: BoxShape.circle,
+  decoration: const BoxDecoration(shape: BoxShape.circle,
   color: Colors.green),
-child: Icon(Icons.done, size: 60 , color: Colors.white,)
+child: const Icon(Icons.done, size: 60 , color: Colors.white,)
 );
 }
 
@@ -648,8 +648,8 @@ Future<void> setAttachment(context,) async{
     barrierDismissible: false, 
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('choose Attachement', 
-        style: TextStyle(color: const Color.fromARGB(255, 8, 61, 104),
+        title: const Text('choose Attachement', 
+        style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
         fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
         ),),
         contentPadding: const EdgeInsets.all(30),

@@ -119,7 +119,7 @@ class _FriendProfileState extends State<FriendProfile> {
                   ),
                 ),
               ),
-                  SizedBox(height: 70,),
+                  const SizedBox(height: 70,),
                  ],
                ),
              
@@ -132,7 +132,7 @@ class _FriendProfileState extends State<FriendProfile> {
                             radius: 50,
                             backgroundImage:friendImage != null?
                             NetworkImage(friendImage!): null),
-                            SizedBox(height: 5,),
+                            const SizedBox(height: 5,),
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 15),
                               child: Text(friendName!, style: const TextStyle(fontSize: 26, color: Color.fromARGB(255, 8, 61, 104)),),

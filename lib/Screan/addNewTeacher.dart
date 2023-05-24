@@ -364,7 +364,7 @@ bool isFailed = false;
                     )
               ],
         ),
-           isLoading ? Center(
+           isLoading ? const Center(
              child: SizedBox(
                   height: 60,
                   width: 60,
@@ -400,15 +400,15 @@ bool isFailed = false;
 }
 Widget showDone(){
 return Container(
-  decoration: BoxDecoration(shape: BoxShape.circle,
+  decoration: const BoxDecoration(shape: BoxShape.circle,
   color: Colors.green),
-child: Icon(Icons.done, size: 60 , color: Colors.white,)
+child: const Icon(Icons.done, size: 60 , color: Colors.white,)
 );
 }
 Widget showError(){
 return Container(
-  decoration: BoxDecoration(shape: BoxShape.circle,
+  decoration: const BoxDecoration(shape: BoxShape.circle,
   color: Colors.red),
-child: Icon(Icons.close, size: 60 , color: Colors.white,)
+child: const Icon(Icons.close, size: 60 , color: Colors.white,)
 );
 }

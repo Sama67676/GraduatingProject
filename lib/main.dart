@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:graduating_project_transformed/Screan/Signin.dart';
 import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -79,8 +78,8 @@ class _MyState extends State<My> {
     
     return MaterialApp(
       home: reposition =='Teacher'? const ButtomNavigationBar():
-      reposition =='Student'?ButtomNavigationBarStudents():
-      OpeningScreen1(),
+      reposition =='Student'?const ButtomNavigationBarStudents():
+      const OpeningScreen1(),
       initialRoute: FirebaseAuth.instance.currentUser == null 
           ? 'OpeningScreen'
           : reposition =='Teacher'? ButtomNavigationBar.ScreanRoute:
@@ -115,7 +114,7 @@ class _ButtomNavigationBarState extends State<ButtomNavigationBar> with WidgetsB
     const SwipableChats(),
     const ClassesScreen(),
     const calender(),
-     MenuScreen(),
+     const MenuScreen(),
     
   ];
   
@@ -188,8 +187,8 @@ void setStatus(String status)async{
             SalomonBottomBarItem(
              icon: const Icon(Icons.home),
               title: const Text("Home", style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),  fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),),
-              unselectedColor: Color.fromARGB(255, 8, 61, 104),
-              selectedColor: Color.fromARGB(255, 8, 61, 104),
+              unselectedColor: const Color.fromARGB(255, 8, 61, 104),
+              selectedColor: const Color.fromARGB(255, 8, 61, 104),
             ),
 
             /// Likes
@@ -324,8 +323,8 @@ void setStatus(String status)async{
             SalomonBottomBarItem(
              icon: const Icon(Icons.home),
               title: const Text("Home", style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),  fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),),
-              unselectedColor: Color.fromARGB(255, 8, 61, 104),
-              selectedColor: Color.fromARGB(255, 8, 61, 104),
+              unselectedColor: const Color.fromARGB(255, 8, 61, 104),
+              selectedColor: const Color.fromARGB(255, 8, 61, 104),
             ),
 
             /// Likes

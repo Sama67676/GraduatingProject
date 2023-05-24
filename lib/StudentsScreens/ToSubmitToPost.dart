@@ -5,8 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:graduating_project_transformed/hiddenScreens/NewPost.dart';
 import 'package:image_picker/image_picker.dart';
 String? description;
@@ -126,9 +124,9 @@ _ToSubmitToPostState( this.courseId, this.postId,  );
                          constraints: const BoxConstraints(
                             maxWidth: 300,
                          ),
-                         child:  Text("send submit:",
+                         child:  const Text("send submit:",
                            style: TextStyle(fontSize: 34,
-                            fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,color:const Color.fromARGB(255, 8, 61, 104)),),
+                            fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,color:Color.fromARGB(255, 8, 61, 104)),),
                          
                        ),
                      ),
@@ -151,28 +149,28 @@ _ToSubmitToPostState( this.courseId, this.postId,  );
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                           Padding(
-                                      padding: const EdgeInsets.all(18.0),
+                                           const Padding(
+                                      padding: EdgeInsets.all(18.0),
                                       child: Text('description: ', style: TextStyle(color: Colors.white,
                                        fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                        fontSize: 20,
                                       ),),
                                      ),
                                      Padding(
-                                         padding: EdgeInsets.only(
+                                         padding: const EdgeInsets.only(
                                             left: 10.0, right: 10, bottom: 18 ),
                                         child: Container(
                                           height: 100,
                                            child: Material(
                                              color: Colors.white,
                                              elevation: 4,
-                                            shape: RoundedRectangleBorder(
+                                            shape: const RoundedRectangleBorder(
                                                borderRadius: BorderRadius.all(
                                                  Radius.circular(30),
                                                ),
                                               ),
                                              child: Padding(
-                                                 padding: EdgeInsets.symmetric(
+                                                 padding: const EdgeInsets.symmetric(
                                                     horizontal: 10,
                                                     vertical: 12,
                                                   ),
@@ -180,7 +178,7 @@ _ToSubmitToPostState( this.courseId, this.postId,  );
                                                     padding: const EdgeInsets.all(6),
                                                     child: TextField(
                                         controller: _description,
-                                         decoration: InputDecoration(
+                                         decoration: const InputDecoration(
                                             border: InputBorder.none,
                                             hintText:
                                                 'Write your description',
@@ -193,21 +191,21 @@ _ToSubmitToPostState( this.courseId, this.postId,  );
                                            ),
                                          ),
                                            ),
-                                           Padding(
-                                      padding: const EdgeInsets.all(18.0),
+                                           const Padding(
+                                      padding: EdgeInsets.all(18.0),
                                       child: Text('choose attachement: ', style: TextStyle(color: Colors.white,
                                        fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                        fontSize: 20,
                                       ),),
                                      ),
                                       Padding(
-                                         padding: EdgeInsets.only(
+                                         padding: const EdgeInsets.only(
                                             left: 28.0, right: 10, bottom: 18 ),
                                         child: Container(
                                           height: 65,
                                           width: 65,
                                            child: InkWell(
-                                             child: Material(
+                                             child: const Material(
                                                color: Colors.white,
                                                elevation: 4,
                                               shape: RoundedRectangleBorder(
@@ -221,9 +219,9 @@ _ToSubmitToPostState( this.courseId, this.postId,  );
                                                       vertical: 12,
                                                     ),
                                                     child: Padding(
-                                                      padding: const EdgeInsets.all(6),
+                                                      padding: EdgeInsets.all(6),
                                                       child: Icon(Icons.add,
-                                                      color: const Color.fromARGB(255, 8, 61, 104),
+                                                      color: Color.fromARGB(255, 8, 61, 104),
                                                       size: 30,
                                                    )
                                                    ),
@@ -247,15 +245,15 @@ _ToSubmitToPostState( this.courseId, this.postId,  );
                                   child: Container(
                                       width: 80,
                                       height: 55,
-                                       child: Material(
+                                       child: const Material(
                                         elevation: 4,
                                         
-                                        borderRadius: const BorderRadius.all(
+                                        borderRadius: BorderRadius.all(
                                          Radius.circular(35),
                                          ),
-                                        color:  const Color(0xFFCCCED3),
+                                        color:  Color(0xFFCCCED3),
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                                          padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                                           child: Icon( Icons.done,
                                           size: 30,
                                           color: Color.fromARGB(255, 8, 61, 104)),
@@ -272,7 +270,7 @@ _ToSubmitToPostState( this.courseId, this.postId,  );
                                      },
                                 ),
                               ),
-                              isLoading ? Center(
+                              isLoading ? const Center(
              child: SizedBox(
                   height: 60,
                   width: 60,
@@ -316,8 +314,8 @@ Future<void> setAttachment(context,) async{
     barrierDismissible: false, 
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('choose Attachement', 
-        style: TextStyle(color: const Color.fromARGB(255, 8, 61, 104),
+        title: const Text('choose Attachement', 
+        style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
         fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
         ),),
         contentPadding: const EdgeInsets.all(30),

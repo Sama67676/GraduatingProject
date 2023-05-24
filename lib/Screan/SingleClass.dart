@@ -234,14 +234,14 @@ class _SingleClassScreenState extends State<SingleClassScreen> {
                    child: Container(
                        width: 75,
                         height: 50,
-                       child: Material(
+                       child: const Material(
                         elevation: 4,
                         
-                        borderRadius: const BorderRadius.all(
+                        borderRadius: BorderRadius.all(
                          Radius.circular(35),
                          ),
-                        color:  const Color(0xFFCCCED3),
-                        child: const Icon(Icons.add,  color: Color.fromARGB(255, 8, 61, 104)),
+                        color:  Color(0xFFCCCED3),
+                        child: Icon(Icons.add,  color: Color.fromARGB(255, 8, 61, 104)),
                        ),
                       ),
                       onTap: (){
@@ -379,7 +379,7 @@ int comentsNumber=0;
 @override
   void initState() {
     getCommentsNumber(classId,postId);
-    // TODO: implement initState
+
     super.initState();
   }
 
@@ -409,7 +409,7 @@ int comentsNumber=0;
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal:5, vertical: 20),
                     child: CircleAvatar(radius: 30,
-                    backgroundColor: Color.fromRGBO(255, 255, 255, 1),
+                    backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
                     child:  Image.asset('images/${widget.type}.png'),),
                   ),
                 ),
@@ -433,8 +433,8 @@ int comentsNumber=0;
                           
                         ),
                     
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
+                      const Padding(
+                        padding: EdgeInsets.only(right: 10),
                         child: Divider(
                             thickness:2,
                             color: Colors.black45,
@@ -510,7 +510,7 @@ int comentsNumber=0;
                   ),
                 ),
                                  ),
-                                 SizedBox(width: 5,),
+                                 const SizedBox(width: 5,),
                               Expanded(
                   flex: 3,
                   child: Column(
@@ -531,8 +531,8 @@ int comentsNumber=0;
                           
                         ),
                     
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
+                      const Padding(
+                        padding: EdgeInsets.only(right: 10),
                         child: Divider(
                             thickness:2,
                             color: Colors.black45,
@@ -655,8 +655,8 @@ Future<void> SendAttachementToClass(context, classId) async{
     barrierDismissible: false, 
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('choose Attachement', 
-        style: TextStyle(color: const Color.fromARGB(255, 8, 61, 104),
+        title: const Text('choose Attachement', 
+        style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
         fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
         ),),
         contentPadding: const EdgeInsets.all(30),

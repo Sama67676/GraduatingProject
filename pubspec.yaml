@@ -118,6 +118,8 @@ flutter:
     - images/Quiz.png
     - images/Assignment.png
     - images/midTerm.png
+    - images/guestClases.png
+    - images/GuestChats.png
  
   fonts:
     - family: MyFlutterApp

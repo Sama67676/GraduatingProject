@@ -1,5 +1,4 @@
-import 'package:flutter/gestures.dart';
-import 'package:graduating_project_transformed/Screan/CreatNewGroupScreen.dart';
+
 
 import '../Others/auth_notifier.dart';
 import '../Others/user_Entity.dart';
@@ -9,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 import '../Screan/Chat_screan.dart';
-import '../Screan/groupChatRoom.dart';
+
 import '../hiddenScreens/SearchChat.dart';
 
 
@@ -81,7 +80,7 @@ class _AllusersState extends State<Allusers> {
                            Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (contex) =>  SearchChats(title: 'Search through chats',  topic: 'Student')));
+                                builder: (contex) =>  const SearchChats(title: 'Search through chats',  topic: 'Student')));
                         },
                          icon: const Icon(Icons.search,
                               size: 40,
@@ -90,17 +89,34 @@ class _AllusersState extends State<Allusers> {
                     ],
                   ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-                child: Text('Chats', style:  TextStyle(
-                   fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                              fontSize:25, color: Color.fromARGB(255, 8, 61, 104))),
-              ),
-              ],),
-             SizedBox(height: 10,),
+               Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:  [
+                     const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                    child: Text('Groups', style:  TextStyle(
+                           fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                      fontSize:20, color: Color.fromARGB(255, 8, 61, 104))),
+                  
+                  ),
+                  Container(
+                    height: 30,
+                    child: const VerticalDivider(thickness: 3,color: Colors.black,)),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 8, 61, 104),
+                         borderRadius: BorderRadius.circular(40),),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal:14, vertical: 4),
+                        child: Text('Chats', style:  TextStyle(
+                           fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                      fontSize:20, color: Colors.white)),
+                      ),
+                    ),
+                  
+                  ],),
+             
+             const SizedBox(height: 10,),
               usersStreamBuilder()
             ],
           ),

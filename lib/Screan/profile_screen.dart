@@ -8,7 +8,6 @@ import '../Others/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Others/auth.dart';
-import '../Others/fireBase_Storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -110,7 +109,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final FireBaseStorage storage = FireBaseStorage();
     return SafeArea(
       child: Scaffold(
          resizeToAvoidBottomInset: true,
@@ -157,7 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ? NetworkImage(reImgUrl!)
                                           : null,
                                       child: reImgUrl == null
-                                          ? Icon(
+                                          ? const Icon(
                                               Icons.person,
                                               size: 60,
                                               color: Colors.white,
@@ -254,7 +252,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   ],
                                                  ),
                             ):
-                                              Center(
+                                              const Center(
              child: SizedBox(
                   height: 60,
                   width: 60,

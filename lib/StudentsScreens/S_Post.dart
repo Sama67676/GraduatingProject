@@ -218,7 +218,7 @@ void initState(){
                                               fontSize: 20,
                                              ),),
                                      
-                                   attachment !=null?
+                                   attachment !=""?
                                     Padding(
                                       padding: const EdgeInsets.symmetric(vertical:12, ),
                                       child: InkWell(
@@ -228,13 +228,13 @@ void initState(){
                                         color: Colors.white,),
                                         child: attachmentType =='image'?
                                         Row(
-                                          children: [
+                                          children: const [
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:4),
+                                              padding: EdgeInsets.symmetric(horizontal:4),
                                               child: Icon(Icons.image, color: Color.fromARGB(255, 8, 61, 104),),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:2),
+                                              padding: EdgeInsets.symmetric(horizontal:2),
                                               child: Text('Image', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
                                                                                    fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                                                                    fontSize: 20,
@@ -243,13 +243,13 @@ void initState(){
                                           ],
                                         ):attachmentType =='pdf'?
                                         Row(
-                                          children: [
+                                          children: const [
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:6),
+                                              padding: EdgeInsets.symmetric(horizontal:6),
                                               child: Icon(Icons.file_copy, color: Color.fromARGB(255, 8, 61, 104),),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:2),
+                                              padding: EdgeInsets.symmetric(horizontal:2),
                                               child: Text('pdf', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
                                                                                    fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                                                                    fontSize: 20,
@@ -258,13 +258,13 @@ void initState(){
                                           ],
                                         ):attachmentType =='Audio'?
                                         Row(
-                                          children: [
+                                          children: const [
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:6),
+                                              padding: EdgeInsets.symmetric(horizontal:6),
                                               child: Icon(Icons.audio_file, color: Color.fromARGB(255, 8, 61, 104),),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:2),
+                                              padding: EdgeInsets.symmetric(horizontal:2),
                                               child: Text('Audio', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
                                                                                    fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                                                                    fontSize: 20,
@@ -345,8 +345,8 @@ void initState(){
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
                           child: Row(
-                                children: [
-                                  const Expanded(
+                                children: const [
+                                  Expanded(
                                     flex: 4,
                                     child: Padding(
                                       padding: EdgeInsets.all(8.0),
@@ -360,7 +360,7 @@ void initState(){
                                       ),
                                     ),
                                   ),
-                                  const Expanded(
+                                  Expanded(
                                     flex: 1,
                                     child: Icon(
                                       Icons.arrow_drop_down,

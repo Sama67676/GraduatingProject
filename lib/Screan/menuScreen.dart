@@ -12,7 +12,7 @@ String reName= 'loading';
 
 class MenuScreen extends StatefulWidget {
   static const String ScreanRoute = 'menu_Screen';
-   MenuScreen({super.key});
+   const MenuScreen({super.key});
 
   @override
   State<MenuScreen> createState() => _MenuScreenState();
@@ -101,7 +101,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                          fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                           fontSize: 20, color: Colors.black),
                                     ),
-                                    Text(
+                                    const Text(
                                       'See your profile',
                                       style: TextStyle(
                                          fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
@@ -248,7 +248,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                               Navigator.push(
                                                 context,
                                                  MaterialPageRoute(
-                                                 builder: (contex) => AddNewTeacher()));
+                                                 builder: (contex) => const AddNewTeacher()));
                                           },
                                         )))),
                             Padding(
@@ -267,7 +267,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                              Navigator.push(
                                                 context,
                                                  MaterialPageRoute(
-                                                 builder: (contex) => AddNewStudent2()));
+                                                 builder: (contex) => const AddNewStudent2()));
                                         },
                                       ))),
                             ),

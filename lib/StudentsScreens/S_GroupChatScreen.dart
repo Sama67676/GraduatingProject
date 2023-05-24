@@ -18,6 +18,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../hiddenScreens/ShowFullImage.dart';
 import 'S_GroupProfile.dart';
 
 final firestore = FirebaseFirestore.instance;
@@ -455,7 +456,15 @@ class MessageLine extends StatelessWidget {
     ): type== 'image'? Padding(
       padding: isMe? const EdgeInsets.only(left: 75,bottom: 5,top: 5, right: 5) : const EdgeInsets.only(left: 5,bottom: 5,top: 5, right: 75),
       child: InkWell(
-        onTap: (){downloadFiles(text!);},
+            onTap: (){
+            Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (contex) => ShowFullImage(image:text!)));
+          },
+           onLongPress: () {
+          downloadFileDialog(context, text!);
+        },
         child: Container(
               decoration: BoxDecoration(border: Border.all(width: 2, color: const Color.fromARGB(255, 8, 61, 104),),
           borderRadius: BorderRadius.circular(40),),
@@ -484,7 +493,10 @@ class MessageLine extends StatelessWidget {
       child:  InkWell(
         onTap: (){
 
-         downloadFiles(text!);
+     
+        },
+          onLongPress: () {
+          downloadFileDialog(context, text!);
         },
         child: Material(
           
@@ -535,7 +547,10 @@ class MessageLine extends StatelessWidget {
       padding: isMe? const EdgeInsets.only(left: 75,bottom: 5,top: 5, right: 5) : const EdgeInsets.only(left: 5,bottom: 5,top: 5, right: 75),
       child:  InkWell(
         onTap: (){
-          downloadFiles(text!);
+          
+        },
+          onLongPress: () {
+          downloadFileDialog(context, text!);
         },
         child: Material(
           
@@ -591,7 +606,10 @@ class MessageLine extends StatelessWidget {
     : type== 'Video'?Padding(
       padding: isMe? const EdgeInsets.only(left: 75,bottom: 5,top: 5, right: 5) : const EdgeInsets.only(left: 5,bottom: 5,top: 5, right: 75),
       child: InkWell(
-        onTap: (){downloadFiles(text!);},
+        onTap: (){},
+          onLongPress: () {
+          downloadFileDialog(context, text!);
+        },
         child: Container(
               decoration: BoxDecoration(border: Border.all(width: 5, color: const Color.fromARGB(255, 8, 61, 104),),
           borderRadius: BorderRadius.circular(40),),
@@ -620,6 +638,9 @@ class MessageLine extends StatelessWidget {
       child:  InkWell(
         onTap: (){
        
+        },
+          onLongPress: () {
+          downloadFileDialog(context, text!);
         },
         child: Material(
            elevation: 4,
@@ -1003,4 +1024,22 @@ Future<void> getUserName() async {
           currentUserName = snapshot.data()!['Name'];
       }
     });
+  }
+void downloadFileDialog(context, String text) {
+  
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: ListTile(
+                  onTap: () { 
+                    downloadFiles(text);
+                    Navigator.pop(context);
+                  },
+                  title: const Text("Download file"),
+                ),
+              );
+            });
+      
+    
   }

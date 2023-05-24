@@ -1,4 +1,6 @@
 
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -624,6 +626,7 @@ int comentsNumber=0;
               context,
               MaterialPageRoute(
                 builder: (contex) =>  S_LectureScreen(postId: widget.postId, classId: widget.classId, teacherId:widget.teacherId, type:widget.type, title: widget.title, description:widget.description, attachment:widget.attachment , attachmentType: widget.attachmentType, time:time))):
+               
                   Navigator.push(
               context,
               MaterialPageRoute(

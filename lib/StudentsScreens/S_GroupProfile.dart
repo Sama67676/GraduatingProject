@@ -305,14 +305,14 @@ final String? groupImage;
                            
                            Flexible(
                       child: ListView.separated(
-                        padding: EdgeInsets.symmetric(vertical:5),
+                        padding: const EdgeInsets.symmetric(vertical:5),
                           separatorBuilder: (BuildContext context, int index) {
-                           return SizedBox(height: 12);
+                           return const SizedBox(height: 12);
                             },
                       
                         itemCount: membersList.length,
                      shrinkWrap: true,
-                        physics:BouncingScrollPhysics(),
+                        physics:const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           return Container(
                             height: 70,
@@ -321,7 +321,7 @@ final String? groupImage;
                               onTap: () =>showRemoveMemberDialog(index,context, groupId),
                             tileColor: Colors.white,
                              dense: true,
-                              visualDensity: VisualDensity(vertical: 4), 
+                              visualDensity: const VisualDensity(vertical: 4), 
                                shape: RoundedRectangleBorder( //<-- SEE HERE
                               
                                  borderRadius: BorderRadius.circular(35),

@@ -1,12 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:graduating_project_transformed/Widgets/search.dart';
-import 'package:provider/provider.dart';
-
-import '../Others/auth_notifier.dart';
-import '../Screan/Chat_screan.dart';
 import 'FriendProfile.dart';
 
    TextEditingController _searchText=TextEditingController();
@@ -127,7 +120,7 @@ _SearchChatsState(this.title, this.topic);
                        
                         },
                         controller: _searchText ,
-                      decoration:  InputDecoration(hintText: 'Search chats ...' ,
+                      decoration:  const InputDecoration(hintText: 'Search chats ...' ,
                       hintStyle: TextStyle(color: Colors.black38)
                         ),
                         ),
@@ -163,7 +156,7 @@ _SearchChatsState(this.title, this.topic);
                                  padding: const EdgeInsets.symmetric(vertical:18, horizontal: 8),
                                  child: ListView.separated(
                                    separatorBuilder: (BuildContext context, int index) {
-                                  return SizedBox(height: 12);
+                                  return const SizedBox(height: 12);
                                     },
                                   itemCount: searchResult.length,
                                   itemBuilder: (context, Index)
@@ -177,12 +170,12 @@ _SearchChatsState(this.title, this.topic);
                                         
                                                   },
                                       dense: true,
-                              visualDensity: VisualDensity(vertical: 4), 
+                              visualDensity: const VisualDensity(vertical: 4), 
                                       leading: CircleAvatar(
                                         backgroundColor: Colors.white,
                                         radius: 30,
                                         backgroundImage: NetworkImage(searchResult[Index]['imgUrl'])),
-                                      title: Text(searchResult[Index]['Name'].toString(), style: TextStyle(color: Colors.white, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold, fontSize: 20),),
+                                      title: Text(searchResult[Index]['Name'].toString(), style: const TextStyle(color: Colors.white, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold, fontSize: 20),),
                                     ):
                                     Container(
                                       height: 1,

@@ -75,7 +75,7 @@ String outputTimeMonth = DateFormat.M().format(convtime);
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(35)),
                             child: TableCalendar(
-                              weekendDays: [DateTime.friday, DateTime.saturday],
+                              weekendDays: const [DateTime.friday, DateTime.saturday],
                                 calendarStyle: const CalendarStyle(
                                     defaultTextStyle: TextStyle(
                                       fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
@@ -164,7 +164,7 @@ String outputTimeMonth = DateFormat.M().format(convtime);
                               child: Stack(
                                 children: [
                                   Column(
-                                    children: [
+                                    children: const [
                                     notesStreamBuilder()
                                   ],),
                                  Positioned(

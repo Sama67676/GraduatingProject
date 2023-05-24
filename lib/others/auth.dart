@@ -4,8 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:graduating_project_transformed/hiddenScreens/createClass.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 
 import '../main.dart';
@@ -73,11 +72,11 @@ class Authintication {
           print('done');
           await fetchData(FirebaseAuth.instance.currentUser!.uid).then((value) {
             if (position == 'Teacher') {
-            Navigator.push(context,
+            Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (contex) => ButtomNavigationBar()));
             initializeCurrentUser(authNotifier);
           } else if (position == 'Student') {
-            Navigator.push(context,
+            Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (contex) => ButtomNavigationBarStudents()));
             initializeCurrentUser(authNotifier);
           }

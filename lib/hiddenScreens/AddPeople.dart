@@ -56,7 +56,7 @@ class _AddMembersState extends State<AddMembers> {
                     flex: 0,
                     child: Column(
                       children: [
-                          SizedBox(height: 30,),
+                          const SizedBox(height: 30,),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal:10),
                           child: GestureDetector(child: const Text('Cancel',style:TextStyle(fontSize: 20, color: Color.fromARGB(255, 8, 61, 104))),
@@ -76,7 +76,7 @@ class _AddMembersState extends State<AddMembers> {
                             flex: 0,
                              child: Column(
                                children: [
-                                  SizedBox(height: 30,),
+                                  const SizedBox(height: 30,),
                                  Padding(
                                    padding: const EdgeInsets.symmetric(horizontal:10),
                                    child: GestureDetector(child: const Text('Done',style:TextStyle(fontSize: 20, color: Color.fromARGB(255, 8, 61, 104))),

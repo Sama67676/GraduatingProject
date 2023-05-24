@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:graduating_project_transformed/Screan/SingleClass.dart';
 
 import 'S_SingleClass.dart';
 

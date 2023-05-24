@@ -23,53 +23,66 @@ class GuestClasses extends StatelessWidget {
               ],
             )),
         child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children:  [
-              SizedBox(height: 20,),
-              Padding(
-                padding: const EdgeInsets.all(24),
-                child: Container(
-                  height: 150,
-                  width: 300,
-                  child: const Material(
-                     color: Colors.white,
-                        elevation: 1, //shadows
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(35),
-                          ),
-                        ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical:24, horizontal: 30),
-                child: Row(
-                  children:  [
-                    const Text('if you have an account just ',
-                    style: TextStyle(fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                    color:  Colors.black38,
-                    fontSize: 21
-                    ),),
-                    InkWell(
-                      child: const Text('login ',
-                      style: TextStyle(fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                      color:   Color.fromARGB(255, 8, 61, 104),
-                      fontSize: 21
-                      ),),
-                      onTap: (){
-                            Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (contex) =>
-                                               const SignIn()));
-                      },
+          child: Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children:  [
+                  const SizedBox(height: 20,),
+                  Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Container(
+                      height: 180,
+                      width: 300,
+                      child: const Material(
+                         color: Colors.white,
+                            elevation: 1, //shadows
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(35),
+                              ),
+                            ),
+                      ),
                     ),
-                  ],
-                ),
-              )
+                  ),
+                  
+                const SizedBox(height: 30,),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical:24, horizontal: 30),
+                    child: Row(
+                      children:  [
+                        const Text('if you have an account just ',
+                        style: TextStyle(fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                        color:  Colors.black38,
+                        fontSize: 21
+                        ),),
+                        InkWell(
+                          child: const Text('login ',
+                          style: TextStyle(fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                          color:   Color.fromARGB(255, 8, 61, 104),
+                          fontSize: 21
+                          ),),
+                          onTap: (){
+                                Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (contex) =>
+                                                   const SignIn()));
+                          },
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              Positioned(
+                top: 80,
+                left: 100,
+                child: Container(
+                  height: 200,
+                  child: Image.asset('images/guestClases.png',)),
+              ),
             ],
           ),
         ),

@@ -91,7 +91,7 @@ class StudentsListScreen extends StatelessWidget {
                                    Navigator.push(
                                         context,
                                        MaterialPageRoute(
-                                           builder: (contex) => SearchChats(title: 'Search for students', topic: 'Student',)));
+                                           builder: (contex) => const SearchChats(title: 'Search for students', topic: 'Student',)));
                                 },
                                 icon: const Icon(
                                   Icons.search,
@@ -120,7 +120,7 @@ class StudentsListScreen extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
-                          children: [StudentStreamBuilder()],
+                          children: [const StudentStreamBuilder()],
                         ),
                       )),
                 ),

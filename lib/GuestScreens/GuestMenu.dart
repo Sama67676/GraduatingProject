@@ -59,10 +59,10 @@ class GuestMenu extends StatelessWidget {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children:  [
+                                  children:  const [
                                    Text(
                                       'Name',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                          fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                           fontSize: 20, color: Colors.black),
                                     ),

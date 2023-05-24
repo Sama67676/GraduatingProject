@@ -343,7 +343,7 @@ class _CreatNewClassScreenState extends State<CreatNewClassScreen> {
                     ),
                   ],
                 ),
-               isLoading ? Center(
+               isLoading ? const Center(
              child: SizedBox(
                   height: 60,
                   width: 60,
@@ -388,8 +388,8 @@ class _CreatNewClassScreenState extends State<CreatNewClassScreen> {
   }
 Widget showDone(){
 return Container(
-  decoration: BoxDecoration(shape: BoxShape.circle,
+  decoration: const BoxDecoration(shape: BoxShape.circle,
   color: Colors.green),
-child: Icon(Icons.done, size: 60 , color: Colors.white,)
+child: const Icon(Icons.done, size: 60 , color: Colors.white,)
 );
 }

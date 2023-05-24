@@ -81,23 +81,23 @@ void initState(){
                                     },
                                   ),
                          ),
-                        Expanded(
+                        const Expanded(
                           flex: 2,
                           child: SizedBox(width: 4,)),
                       Expanded(
                         flex: 0,
                         child: Text(type!,
-                           style: TextStyle(
+                           style: const TextStyle(
                              fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                             color: Color.fromARGB(255, 8, 61, 104),
                             fontSize:35,
                            ),
                           ),
                       ),
-                        Expanded(
+                        const Expanded(
                           flex: 2,
                           child: SizedBox(width: 4,)),
-                           Expanded(
+                           const Expanded(
                              child: SizedBox(width: 2,)
                            ),
                         ],
@@ -186,7 +186,7 @@ void initState(){
                                   Padding(
                                       padding: const EdgeInsets.symmetric(vertical:8.0),
                                     child: Text(title!,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                                color: Colors.white,
                                                 fontSize:30,
@@ -195,22 +195,22 @@ void initState(){
                                   ),
                           
                                   Padding(
-                                   padding: EdgeInsets.symmetric(vertical:8.0),
+                                   padding: const EdgeInsets.symmetric(vertical:8.0),
                                    child:description !=''? 
-                                   Text(
+                                   const Text(
                                     'Description :',
                                           style: TextStyle(color: Colors.white,
                                                 fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                                 fontSize: 20,
                                                ),):
-                                              SizedBox(width: 0, height: 0,)
+                                              const SizedBox(width: 0, height: 0,)
                                  ),
                                  Text(description ?? '',
                                         style: const TextStyle(color: Colors.white70,
                                               fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                               fontSize: 20,
                                              ),),
-                                             attachment !=null?
+                                             attachment !=""?
                                     Padding(
                                       padding: const EdgeInsets.symmetric(vertical:12, ),
                                       child: InkWell(
@@ -221,12 +221,12 @@ void initState(){
                                         child: attachmentType =='image'?
                                         Row(
                                           children: [
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:4),
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(horizontal:4),
                                               child: Icon(Icons.image, color: Color.fromARGB(255, 8, 61, 104),),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:2),
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(horizontal:2),
                                               child: Text('Image', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
                                                                                    fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                                                                    fontSize: 20,
@@ -236,12 +236,12 @@ void initState(){
                                         ):attachmentType =='pdf'?
                                         Row(
                                           children: [
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:6),
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(horizontal:6),
                                               child: Icon(Icons.file_copy, color: Color.fromARGB(255, 8, 61, 104),),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:2),
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(horizontal:2),
                                               child: Text('pdf', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
                                                                                    fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                                                                    fontSize: 20,
@@ -251,12 +251,12 @@ void initState(){
                                         ):attachmentType =='Audio'?
                                         Row(
                                           children: [
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:6),
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(horizontal:6),
                                               child: Icon(Icons.audio_file, color: Color.fromARGB(255, 8, 61, 104),),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:2),
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(horizontal:2),
                                               child: Text('Audio', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
                                                                                    fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                                                                    fontSize: 20,
@@ -265,7 +265,7 @@ void initState(){
                                           ],
                                         ):
                                       
-                                        Icon(Icons.error),
+                                        const Icon(Icons.error),
                                         ),
                                       onTap: (){
                                         downloadFiles(attachment!);
@@ -347,7 +347,7 @@ showModalBottomSheet(context: context, builder: (BuildContext bc){
               padding: const EdgeInsets.all(28),
               child: Container(
                 height: 30,
-                child: Text('Comments :', style: TextStyle(
+                child: const Text('Comments :', style: TextStyle(
                     fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                     color: Colors.white,
                     fontSize:24,
@@ -379,18 +379,18 @@ showModalBottomSheet(context: context, builder: (BuildContext bc){
                                 onChanged: (value) {
                                   messageText = value;
                                 },
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                enabledBorder:  UnderlineInputBorder(
                   borderSide:  BorderSide(color: Colors.white)
               ),                            //this code for changing the under line of text field
                             
-                                contentPadding: const EdgeInsets.symmetric(
+                                contentPadding: EdgeInsets.symmetric(
                                   vertical: 10,
                                   horizontal: 20,
                                 ),
                                
                                 hintText: 'Add comment ...',
-                                hintStyle: const TextStyle(fontSize: 20, color:  Colors.white, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),
+                                hintStyle: TextStyle(fontSize: 20, color:  Colors.white, fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold ),
                                                     ),
                                                   ),
                           )),
@@ -552,7 +552,7 @@ class CommentsLine extends StatelessWidget {
                                         const SizedBox(height: 2,),
                                          Text((time).toString(),
                                        maxLines: 10,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                                fontSize: 10,
                                                color: Colors.black45),)
                                          ],

@@ -31,7 +31,7 @@ class _CreatNewGroupScreenState extends State<CreatNewGroupScreen> {
   setState(() {
     isLoading = true;
   });
-  var uuid = Uuid();
+  var uuid = const Uuid();
 
    
   
@@ -187,7 +187,7 @@ void initializeApp(){
                                         children:  [
                                          InkWell(
                                            child: CircleAvatar(
-                                                backgroundColor: Color.fromARGB(255, 205, 206, 212),
+                                                backgroundColor: const Color.fromARGB(255, 205, 206, 212),
                                                 // ignore: sort_child_properties_last
                                                 
                                               
@@ -214,7 +214,7 @@ void initializeApp(){
                                                 height: 60,
                                                 child: TextField(
                                                   controller: _groupname,
-                                                  decoration: InputDecoration(hintText: 'Group name'),
+                                                  decoration: const InputDecoration(hintText: 'Group name'),
                                                 ),
                                               )
                                             ),
@@ -259,7 +259,7 @@ void initializeApp(){
                     ),
                   ],
                 ),
-                 isLoading ? Center(
+                 isLoading ? const Center(
              child: SizedBox(
                   height: 60,
                   width: 60,
@@ -431,15 +431,15 @@ class _StudentLineState extends State<StudentLine> {
 
  Widget showDone(){
 return Container(
-  decoration: BoxDecoration(shape: BoxShape.circle,
+  decoration: const BoxDecoration(shape: BoxShape.circle,
   color: Colors.green),
-child: Icon(Icons.done, size: 60 , color: Colors.white,)
+child: const Icon(Icons.done, size: 60 , color: Colors.white,)
 );
 }
 Widget showError(){
 return Container(
-  decoration: BoxDecoration(shape: BoxShape.circle,
+  decoration: const BoxDecoration(shape: BoxShape.circle,
   color: Colors.red),
-child: Icon(Icons.close, size: 60 , color: Colors.white,)
+child: const Icon(Icons.close, size: 60 , color: Colors.white,)
 );
 }

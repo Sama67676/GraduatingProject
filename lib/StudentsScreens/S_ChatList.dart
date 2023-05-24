@@ -49,20 +49,37 @@ class _S_AllusersState extends State<S_Allusers> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children:  [
-             SizedBox(
+             const SizedBox(
               height: 30,
              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-                child: Text('Chats', style:  TextStyle(
-                   fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
-                              fontSize:25, color: Color.fromARGB(255, 8, 61, 104))),
-              ),
-              ],),
-             SizedBox(height: 10,),
+               Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:  [
+                     const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                    child: Text('Groups', style:  TextStyle(
+                           fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                      fontSize:20, color: Color.fromARGB(255, 8, 61, 104))),
+                  
+                  ),
+                  Container(
+                    height: 30,
+                    child: const VerticalDivider(thickness: 3,color: Colors.black,)),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 8, 61, 104),
+                         borderRadius: BorderRadius.circular(40),),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal:14, vertical: 4),
+                        child: Text('Chats', style:  TextStyle(
+                           fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
+                                      fontSize:20, color: Colors.white)),
+                      ),
+                    ),
+                  
+                  ],),
+             
+             const SizedBox(height: 10,),
               usersStreamBuilder()
             ],
           ),

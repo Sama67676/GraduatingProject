@@ -167,7 +167,7 @@ String outputTimeMonth = DateFormat.M().format(convtime);
                                 children: [
                                   Column(
                                     children: [
-                                    notesStreamBuilder()
+                                    const notesStreamBuilder()
                                   ],),
                                  Positioned(
                                     left: 268,
@@ -191,7 +191,7 @@ String outputTimeMonth = DateFormat.M().format(convtime);
                                          Navigator.push(
                                                 context,
                                                  MaterialPageRoute(
-                                                 builder: (contex) => Addevent()));
+                                                 builder: (contex) => const Addevent()));
                                         }),
                                   
                                 ),
@@ -285,7 +285,7 @@ class noteLine extends StatelessWidget {
              Padding(
              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
                child: CircleAvatar(radius: 35,
-                      backgroundColor: Color.fromRGBO(255, 255, 255, 1),
+                      backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
                       child:  Image.asset('images/$noteType.png'),),
              ),
                   

@@ -43,28 +43,8 @@ class _ApplyScreenState extends State<ApplyScreen> {
       print(widget.baseUrl);
     }
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: WillPopScope(
-        onWillPop: () {
-          final now = DateTime.now();
-          if (_currentBackPressTime == null ||
-              now.difference(_currentBackPressTime!) >
-                  _backDoubleClickDuration) {
-            _currentBackPressTime = now;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                // backgroundColor: context.colorScheme.primary,
-                duration: _backDoubleClickDuration,
-                content: Text('context.l10n.pressAgainToGoBack'),
-              ),
-            );
-
-            return Future.value(false);
-          }
-          return Future.value(true);
-        },
-        child: Scaffold(
+    return 
+       Scaffold(
           backgroundColor: Colors.transparent,
           body: SafeArea(
             child: Stack(
@@ -110,7 +90,7 @@ class _ApplyScreenState extends State<ApplyScreen> {
                   // backgroundColor: context.colorScheme.background,
                 ),
                 if (isLoading)
-                  Center(
+                  const Center(
                     child: CircularProgressIndicator(
                       // color: context.colorScheme.primary,
                     ),
@@ -118,9 +98,8 @@ class _ApplyScreenState extends State<ApplyScreen> {
               ],
             ),
           ),
-        ),
-      ),
-    );
+        );
+  
   }
 
   JavascriptChannel _toasterJavascriptChannel(BuildContext context) {

@@ -24,7 +24,7 @@ class _GuestClassState extends State<GuestClass> with WidgetsBindingObserver{
     const GuestChatList(),
     const GuestClasses(),
     const GuestCalender(),
-     GuestMenu(),
+     const GuestMenu(),
     
   ];
   
@@ -57,8 +57,8 @@ class _GuestClassState extends State<GuestClass> with WidgetsBindingObserver{
             SalomonBottomBarItem(
              icon: const Icon(Icons.home),
               title: const Text("Home", style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),  fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold),),
-              unselectedColor: Color.fromARGB(255, 8, 61, 104),
-              selectedColor: Color.fromARGB(255, 8, 61, 104),
+              unselectedColor: const Color.fromARGB(255, 8, 61, 104),
+              selectedColor: const Color.fromARGB(255, 8, 61, 104),
             ),
 
             /// Likes

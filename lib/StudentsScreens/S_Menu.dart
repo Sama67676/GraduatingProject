@@ -1,8 +1,5 @@
-import 'package:graduating_project_transformed/Screan/OpeningScreen1.dart';
-import 'package:graduating_project_transformed/Screan/newUserScreen.dart';
 
 import '../Others/Prefrences.dart';
-import '../hiddenScreens/groupProfile.dart';
 import '../Screan/StudentsList.dart';
 
 import '../Screan/profile_screen.dart';
@@ -97,7 +94,7 @@ class _S_MenuScreenState extends State<S_MenuScreen> {
                                          fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                           fontSize: 20, color: Colors.black),
                                     ),
-                                    Text(
+                                    const Text(
                                       'See your profile',
                                       style: TextStyle(
                                          fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
@@ -345,7 +342,7 @@ Container creatMenu(String MenuName, Image image) {
             Padding(
               padding: const EdgeInsets.all(8),
               child: Text(
-                '$MenuName',
+                MenuName,
                 maxLines: 2,
                 overflow: TextOverflow.clip,
                 style: const TextStyle(fontSize: 18, color: Colors.black,

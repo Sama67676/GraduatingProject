@@ -209,8 +209,8 @@ class _SignInState extends State<SignIn> {
                                   title: 'Guest',
                                   textColor: const Color.fromARGB(255, 8, 61, 104),
                                   onPressed: () {
-                                       Navigator.push(context,
-                MaterialPageRoute(builder: (contex) => GuestClass()));
+                                       Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (contex) => const GuestClass()));
                                   },
                                 ),
                               ),
@@ -237,7 +237,7 @@ class _SignInState extends State<SignIn> {
                           )
                         ],
                       ),
-                       isLoading ? Center(
+                       isLoading ? const Center(
              child: SizedBox(
                   height: 60,
                   width: 60,

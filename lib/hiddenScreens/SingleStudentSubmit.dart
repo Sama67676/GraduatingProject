@@ -213,7 +213,7 @@ _SingleStudentSubmitState( this.courseId, this.postId,this.userId, this.time, th
                                           ),
                                      Padding(
                                        padding: const EdgeInsets.symmetric(vertical:8.0, horizontal: 18),
-                                       child: Text(description?? '', style: TextStyle(color: Colors.white,
+                                       child: Text(description?? '', style: const TextStyle(color: Colors.white,
                                        fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                        fontSize: 20,
                                        ),),
@@ -229,12 +229,12 @@ _SingleStudentSubmitState( this.courseId, this.postId,this.userId, this.time, th
                                         child: attachmentType =='image'?
                                         Row(
                                           children: [
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:4),
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(horizontal:4),
                                               child: Icon(Icons.image, color: Color.fromARGB(255, 8, 61, 104),),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:2),
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(horizontal:2),
                                               child: Text('Image', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
                                                                                    fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                                                                    fontSize: 20,
@@ -244,12 +244,12 @@ _SingleStudentSubmitState( this.courseId, this.postId,this.userId, this.time, th
                                         ):attachmentType =='pdf'?
                                         Row(
                                           children: [
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:6),
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(horizontal:6),
                                               child: Icon(Icons.file_copy, color: Color.fromARGB(255, 8, 61, 104),),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:2),
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(horizontal:2),
                                               child: Text('pdf', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
                                                                                    fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                                                                    fontSize: 20,
@@ -259,12 +259,12 @@ _SingleStudentSubmitState( this.courseId, this.postId,this.userId, this.time, th
                                         ):attachmentType =='Audio'?
                                         Row(
                                           children: [
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:6),
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(horizontal:6),
                                               child: Icon(Icons.audio_file, color: Color.fromARGB(255, 8, 61, 104),),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal:2),
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(horizontal:2),
                                               child: Text('Audio', style: TextStyle(color: Color.fromARGB(255, 8, 61, 104),
                                                                                    fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                                                                    fontSize: 20,
@@ -273,7 +273,7 @@ _SingleStudentSubmitState( this.courseId, this.postId,this.userId, this.time, th
                                           ],
                                         ):
                                       
-                                        Icon(Icons.error),
+                                        const Icon(Icons.error),
                                         ),
                                       onTap: (){
                                         downloadFiles(attachment!);
@@ -323,19 +323,19 @@ _SingleStudentSubmitState( this.courseId, this.postId,this.userId, this.time, th
                                       ):
                                       Padding(
                                         padding: const EdgeInsets.symmetric(vertical:8.0, horizontal: 18),
-                                        child: Text('$points points',style: TextStyle(color: Colors.white,
+                                        child: Text('$points points',style: const TextStyle(color: Colors.white,
                                           fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                           fontSize: 20,) ),
                                       ),
-                                       isMarked!= 'true'?Padding(
-                                        padding: const EdgeInsets.all(18.0),
+                                       isMarked!= 'true'?const Padding(
+                                        padding: EdgeInsets.all(18.0),
                                         child: Text('add comment: ', style: TextStyle(color: Colors.white,
                                         fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                         fontSize: 20,
                                         ),),
                                       ):
-                                      comment != null?Padding(
-                                        padding: const EdgeInsets.only(bottom:8.0, left: 18, right: 18, top: 24),
+                                      comment != null?const Padding(
+                                        padding: EdgeInsets.only(bottom:8.0, left: 18, right: 18, top: 24),
                                         child: Text('Comment: ', style: TextStyle(color: Colors.white,
                                           fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                           fontSize: 24,
@@ -344,27 +344,27 @@ _SingleStudentSubmitState( this.courseId, this.postId,this.userId, this.time, th
                                       Container(height: 1, width: 1,),
                                       comment != null?Padding(
                                         padding: const EdgeInsets.symmetric(vertical:8.0, horizontal: 18),
-                                        child: Text(comment!, style: TextStyle(color: Colors.white,
+                                        child: Text(comment!, style: const TextStyle(color: Colors.white,
                                           fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                           fontSize: 20,
                                           ),),
                                       ):
                                       Container(height: 1, width: 1,),
                                       isMarked!= 'true'?Padding(
-                                         padding: EdgeInsets.only(
+                                         padding: const EdgeInsets.only(
                                             left: 10.0, right: 10, bottom: 18 ),
                                         child: Container(
                                           height: 100,
                                            child: Material(
                                              color: Colors.white,
                                              elevation: 4,
-                                            shape: RoundedRectangleBorder(
+                                            shape: const RoundedRectangleBorder(
                                                borderRadius: BorderRadius.all(
                                                  Radius.circular(30),
                                                ),
                                               ),
                                              child: Padding(
-                                                 padding: EdgeInsets.symmetric(
+                                                 padding: const EdgeInsets.symmetric(
                                                     horizontal: 10,
                                                     vertical: 12,
                                                   ),
@@ -372,7 +372,7 @@ _SingleStudentSubmitState( this.courseId, this.postId,this.userId, this.time, th
                                                     padding: const EdgeInsets.all(6),
                                                     child: TextField(
                                         controller: _comment,
-                                         decoration: InputDecoration(
+                                         decoration: const InputDecoration(
                                             border: InputBorder.none,
                                             hintText:
                                                 'Write your Comment',
@@ -398,15 +398,15 @@ _SingleStudentSubmitState( this.courseId, this.postId,this.userId, this.time, th
                                   child: Container(
                                       width: 80,
                                       height: 55,
-                                       child: Material(
+                                       child: const Material(
                                         elevation: 4,
                                         
-                                        borderRadius: const BorderRadius.all(
+                                        borderRadius: BorderRadius.all(
                                          Radius.circular(35),
                                          ),
-                                        color:  const Color(0xFFCCCED3),
+                                        color:  Color(0xFFCCCED3),
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                                          padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                                           child: Icon( Icons.done,
                                           size: 30,
                                           color: Color.fromARGB(255, 8, 61, 104)),

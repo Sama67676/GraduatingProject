@@ -106,7 +106,7 @@ class _S_AddeventState extends State<S_Addevent> {
                 child: Stack(
                   children: [
                     Column(children: [
-                      SizedBox(height: 10,),
+                      const SizedBox(height: 10,),
                       Expanded(
                         flex: 1,
                         child: Row(
@@ -152,7 +152,7 @@ class _S_AddeventState extends State<S_Addevent> {
                                  ),
                         ],),
                       ),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
                     Padding(
                                   padding: const EdgeInsets.symmetric(horizontal:18, vertical: 15),
                                     child: Material(
@@ -331,7 +331,7 @@ class _S_AddeventState extends State<S_Addevent> {
                                                     CrossAxisAlignment.stretch,
                                                 children: [
                                             
-                                              Padding(
+                                              const Padding(
                                                 padding: EdgeInsets.symmetric(
                                                     horizontal: 12.0,),
                                                 child: Text(
@@ -344,18 +344,18 @@ class _S_AddeventState extends State<S_Addevent> {
                                                 ),
                                               ),
                                               Padding(
-                                                  padding: EdgeInsets.symmetric(
+                                                  padding: const EdgeInsets.symmetric(
                                                       horizontal: 8.0, vertical: 15),
                                                   child: Material(
                                                       color: Colors.white,
                                                       elevation: 4,
-                                                      shape: RoundedRectangleBorder(
+                                                      shape: const RoundedRectangleBorder(
                                                         borderRadius: BorderRadius.all(
                                                           Radius.circular(30),
                                                         ),
                                                       ),
                                                       child: Padding(
-                                                          padding: EdgeInsets.symmetric(
+                                                          padding: const EdgeInsets.symmetric(
                                                             horizontal: 10,
                                                             vertical: 2,
                                                             ),
@@ -365,7 +365,7 @@ class _S_AddeventState extends State<S_Addevent> {
                                                               padding: const EdgeInsets.all(6),
                                                               child: TextField(
                                                                 controller: _title,
-                                                                  decoration: InputDecoration(
+                                                                  decoration: const InputDecoration(
                                                                       border:
                                                                           InputBorder.none,
                                                                       hintText: 'Enter Title',
@@ -377,7 +377,7 @@ class _S_AddeventState extends State<S_Addevent> {
 
                                                             ),
                                                           )))),
-                                              Padding(
+                                              const Padding(
                                                 padding: EdgeInsets.only(
                                                     left: 12.0,right:12, top: 10),
                                                 child: Text(
@@ -390,20 +390,20 @@ class _S_AddeventState extends State<S_Addevent> {
                                                 ),
                                               ),
                                               Padding(
-                                                padding: EdgeInsets.symmetric(
+                                                padding: const EdgeInsets.symmetric(
                                                     horizontal: 8.0, vertical: 15),
                                                 child: Container(
                                                   height: 150,
                                                   child: Material(
                                                     color: Colors.white,
                                                     elevation: 4,
-                                                    shape: RoundedRectangleBorder(
+                                                    shape: const RoundedRectangleBorder(
                                                       borderRadius: BorderRadius.all(
                                                         Radius.circular(30),
                                                       ),
                                                     ),
                                                     child: Padding(
-                                                        padding: EdgeInsets.symmetric(
+                                                        padding: const EdgeInsets.symmetric(
                                                           horizontal: 10,
                                                           vertical: 12,
                                                         ),
@@ -411,7 +411,7 @@ class _S_AddeventState extends State<S_Addevent> {
                                                           padding: const EdgeInsets.all(6),
                                                           child: TextField(
                                                             controller: _note,
-                                                            decoration: InputDecoration(
+                                                            decoration: const InputDecoration(
                                                                 border: InputBorder.none,
                                                                 hintText:
                                                                     'Write your important note',
@@ -425,7 +425,7 @@ class _S_AddeventState extends State<S_Addevent> {
                                                 ),
                                               ),
                                               Padding(
-                                                padding: EdgeInsets.symmetric(
+                                                padding: const EdgeInsets.symmetric(
                                                       horizontal: 8.0, vertical: 15),
                                                 child: Container(
                                                   height: 60,
@@ -474,7 +474,7 @@ class _S_AddeventState extends State<S_Addevent> {
                                           )
                     ]
                     ),
-                      isloading ? Center(
+                      isloading ? const Center(
              child: SizedBox(
                   height: 60,
                   width: 60,
@@ -518,8 +518,8 @@ class _S_AddeventState extends State<S_Addevent> {
   }
 Widget showDone(){
 return Container(
-  decoration: BoxDecoration(shape: BoxShape.circle,
+  decoration: const BoxDecoration(shape: BoxShape.circle,
   color: Colors.green),
-child: Icon(Icons.done, size: 60 , color: Colors.white,)
+child: const Icon(Icons.done, size: 60 , color: Colors.white,)
 );
 }
