@@ -113,7 +113,7 @@ class _SignInState extends State<SignIn> {
                               decoration: const InputDecoration(
                                 filled: true,
                                 fillColor: Colors.white,
-                                hintText: 'Enter your ID',
+                                hintText: 'Enter your Email',
                                 contentPadding: EdgeInsets.symmetric(
                                   vertical: 10,
                                   horizontal: 20,

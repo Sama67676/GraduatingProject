@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import '../Others/Prefrences.dart';
 import '../Others/auth.dart';
 import '../Others/auth_notifier.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -76,7 +77,7 @@ class _GroupChatscreanState extends State<GroupChatscrean> {
   
   void initState() {
     super.initState();
-    getUserName();
+    getprefrences();
     initRecorder();
     getGroupDetails();
     _authintication.initializeCurrentUser(authNotifier);
@@ -201,10 +202,12 @@ recorder.setSubscriptionDuration(const Duration(milliseconds: 100));
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+            
               messageStreamBuilder(
                 groupId: groupId,
            currentUser: currentUser,
               ),
+             
               Container(
                 decoration: const BoxDecoration(
                     color: Color(0xFFCCCED3),
@@ -334,8 +337,10 @@ class messageStreamBuilder extends StatelessWidget {
       //من وين حيجي الستريم
       builder: (context, snapshot) {
         List<MessageLine> messageWidgets = [];
-        if (!snapshot.hasData) {}
-
+        if (!snapshot.hasData) {
+           return CircularProgressIndicator();
+        }
+        
         final messages = snapshot.data!.docs.reversed;
         for (var message in messages) {
           final messageText = message.get('text');
@@ -1024,18 +1029,37 @@ void downloadFiles(String url)async{
   
 }
 
-Future<void> getUserName() async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((snapshot) async {
-      if (snapshot.exists) {
-         curentUserImage =  snapshot.data()!['imgUrl'];
-          currentUserName = snapshot.data()!['Name'];
-      }
-    });
-  }
+// Future<void> getUserName() async {
+//     await FirebaseFirestore.instance
+//         .collection('users')
+//         .doc(FirebaseAuth.instance.currentUser!.uid)
+//         .get()
+//         .then((snapshot) async {
+//       if (snapshot.exists) {
+//          curentUserImage =  snapshot.data()!['imgUrl'];
+//           currentUserName = snapshot.data()!['Name'];
+//       }
+//     });
+//   }
+  void getprefrences(){
+     UserPrefrences().getUserName().then((value){
+    
+           String Rawname= value.toString();
+             print(Rawname.toString());
+             currentUserName= Rawname.substring( 1, Rawname.length - 1 );
+    
+    }
+    );
+    UserPrefrences().getImageUrl().then((value){
+    
+           String RaImage= value.toString();
+             print(RaImage.toString());
+             curentUserImage= RaImage.substring( 1, RaImage.length - 1 );
+    
+    }
+    );
+   
+}
 void downloadFileDialog(context, String text) {
   
         showDialog(

@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'TeachersList.dart';
 String name ='loading';
 String reName= 'loading';
-
+String img='';
+String reImg='';
 class MenuScreen extends StatefulWidget {
   static const String ScreanRoute = 'menu_Screen';
    const MenuScreen({super.key});
@@ -34,7 +35,14 @@ class _MenuScreenState extends State<MenuScreen> {
     });
     }
     );
-   
+    UserPrefrences().getImageUrl().then((value){
+    setState(() {
+           img= value.toString();
+             print(img.toString());
+             reImg= img.substring( 1, img.length - 1 );
+    });
+    }
+    );
 }
 
   @override
@@ -79,11 +87,11 @@ class _MenuScreenState extends State<MenuScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Expanded(
+                             Expanded(
                               flex: 1,
                               child: CircleAvatar(
                                 backgroundImage:
-                                    AssetImage('images/personPic.jpg'),
+                                    NetworkImage(reImg),
                                     
                                 radius: 30,
                               ),

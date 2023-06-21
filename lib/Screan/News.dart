@@ -7,9 +7,9 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 
 class ApplyScreen extends StatefulWidget {
-  const ApplyScreen({Key? key,this.cookieManager,  required this.baseUrl}) : super(key: key);
+  const ApplyScreen({Key? key,  required this.baseUrl}) : super(key: key);
 
-  final CookieManager? cookieManager;
+
   final String baseUrl;
 
   @override
@@ -17,11 +17,9 @@ class ApplyScreen extends StatefulWidget {
 }
 
 class _ApplyScreenState extends State<ApplyScreen> {
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+  final Completer<WebViewController> _controller = Completer<WebViewController>();
 
-  DateTime? _currentBackPressTime;
-  static const Duration _backDoubleClickDuration = Duration(seconds: 2);
+
 
   bool isLoading = true;
 
@@ -87,12 +85,11 @@ class _ApplyScreenState extends State<ApplyScreen> {
                     }
                   },
                   gestureNavigationEnabled: true,
-                  // backgroundColor: context.colorScheme.background,
+
                 ),
                 if (isLoading)
                   const Center(
                     child: CircularProgressIndicator(
-                      // color: context.colorScheme.primary,
                     ),
                   ),
               ],

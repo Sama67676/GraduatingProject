@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import '../Screan/TeachersList.dart';
 
 String name ='loading';
+String reName= 'loading';
+String img='';
+String reImg='';
 class S_MenuScreen extends StatefulWidget {
   static const String ScreanRoute = 'menu_Screen';
   const S_MenuScreen({super.key});
@@ -27,6 +30,15 @@ class _S_MenuScreenState extends State<S_MenuScreen> {
     setState(() {
            name= value.toString();
              print(name.toString());
+              reName= name.substring( 1, name.length - 1 );
+    });
+    }
+    );
+     UserPrefrences().getImageUrl().then((value){
+    setState(() {
+           img= value.toString();
+             print(img.toString());
+             reImg= img.substring( 1, img.length - 1 );
     });
     }
     );
@@ -73,11 +85,11 @@ class _S_MenuScreenState extends State<S_MenuScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Expanded(
+                             Expanded(
                               flex: 1,
                               child: CircleAvatar(
                                 backgroundImage:
-                                    AssetImage('images/personPic.jpg'),
+                                    NetworkImage(reImg),
                                 radius: 30,
                               ),
                             ),
@@ -89,7 +101,7 @@ class _S_MenuScreenState extends State<S_MenuScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      name,
+                                      reName,
                                       style: const TextStyle(
                                          fontFamily: 'HP Simplified Light', fontWeight: FontWeight.bold,
                                           fontSize: 20, color: Colors.black),

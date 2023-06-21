@@ -350,7 +350,9 @@ class messageStreamBuilder extends StatelessWidget {
       
       builder: (context, snapshot) {
         List<MessageLine> messageWidgets = [];
-        if (!snapshot.hasData) {}
+        if (!snapshot.hasData) {
+           return CircularProgressIndicator();
+        }
 
         final messages = snapshot.data!.docs.reversed;
         for (var message in messages) {
